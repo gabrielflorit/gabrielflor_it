@@ -1,1 +1,1 @@
-web: gunicorn gabrielflor.it:app -b "0.0.0.0:$PORT"
+web: gunicorn gabrielflor_it:app -b "0.0.0.0:$PORT"
