@@ -20,18 +20,7 @@ d3.json('static/geojson/counties.json', function(json) {
         .data(json.features)
         .enter().append('svg:path')
         .attr('d', path)
-        .attr('fill', 'rgb(255, 255, 255)')
-        .on("mouseover", function(d) {
-        
-/*        	var state = d.properties.NAME;
-        	if (data[state][currentYearIndex]) {
-	            tooltip = state + ': <b>' + d3.format('.1f')(scale(data[state][currentYearIndex])) + '</b>';
-	        }
-	        else {
-	            tooltip = state + ': <b>N/A</b>';
-	        }
-*/
-        });
+        .attr('fill', noData);
 });
 
 var title = svg.append('svg:text')
@@ -44,16 +33,21 @@ var year = svg.append('svg:text')
     .attr('transform', 'translate(15, 60)')
     .text('');
     
+var searchCount = 0;
 function searchDataByYearAndFips(data, year, fips) {
 
-    var datum;
+    if (data[year]["f" + fips]) {
+    }
+
+/*    var datum;
     for (var i = 0; i < data.length; i++ ) {
     
+        searchCount++;
         datum = data[i];
         if (datum.Year == year && datum.Fips == fips) {
             return datum.Data;
         }
-    }
+    }*/
 }
     
 d3.csv('/static/data/saipe_2003_2009.csv', function(csv) {
@@ -61,13 +55,22 @@ d3.csv('/static/data/saipe_2003_2009.csv', function(csv) {
     // get the years from the csv (will do it later)
     years = d3.range(2003, 2010);
 
-    data = csv;
+    data = {};
 
-    // get min and max for legend
-    for (var i = 0; i < data.length; i++) {
+    // structure data better for searching counties
+    for (var i = 0; i < csv.length; i++) {
         
-        if (!isNaN(data[i].Data)) {
-            allValues.push(eval(data[i].Data));
+        var datum = csv[i];
+
+        if (!isNaN(datum.Data)) {
+
+            allValues.push(eval(datum.Data));
+            var fips = datum.Fips;
+            var year = datum.Year;
+            if (!data[year]) {
+                data[year] = {};
+            }
+            data[year]["f" + fips] = datum.Data;
         }
     }
 
@@ -283,7 +286,7 @@ function quantize(d) {
 
     var fips = d.properties.GEO_ID.substring(9, 14);
 
-    var datum = searchDataByYearAndFips(data, years[currentYearIndex], fips);
+    var datum = data[years[currentYearIndex]]["f" + fips];
 
     if (datum) {
         return convertPercentToColor(100 - scale(datum));
