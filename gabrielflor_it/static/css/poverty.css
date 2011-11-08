@@ -1,0 +1,73 @@
+#ie8 {
+    display:none;
+}
+
+body {
+  margin: 10px;
+  font-family: 'Open Sans', sans-serif;
+  color: #ccc;
+}
+
+html {
+  background-color: #222;
+}
+
+svg {
+  width: 960px;
+  height: 500px;
+}
+
+.states path {
+  stroke: white;
+}
+
+#chart {
+  border: solid #333 1px;
+  height: 500px;
+  width: 960px;
+}
+
+#controls-upperbound, 
+#controls-lowerbound, 
+#controls-leftright, 
+#controls-updown {
+  display: none;
+}
+
+.legend rect {
+  stroke: #333;
+  stroke-width: 0.25px;
+}
+
+.legend-title,
+.legend-tick,
+.legend text,
+.title,
+.year {
+  fill: #ccc;
+}
+
+.legend-tick {
+  font-size: 0.75em;
+}
+
+.legend-title {
+  font-size: 1em;
+}
+
+.legend text {
+  font-size: 0.75em;
+}
+
+.title {
+  font-size: 1.5em;
+}
+
+.year {
+  font-size: 3em;
+}
+
+.tooltip {
+  color: #222;
+  background-color: white;
+}
