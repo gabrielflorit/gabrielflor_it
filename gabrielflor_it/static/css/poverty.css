@@ -23,6 +23,10 @@ svg {
   width: 960px;
 }
 
+.region {
+  display: none;
+}
+
 #controls-leftright, 
 #controls-hue {
   display: none;
@@ -68,4 +72,9 @@ svg {
 
 .tooltip span {
   font-size: 0.9em;
+}
+
+.notes {
+  fill: #aaa;
+  font-size: 0.75em;
 }

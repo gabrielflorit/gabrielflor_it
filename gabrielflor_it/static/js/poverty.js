@@ -23,8 +23,18 @@ d3.json('static/data/states.json', function(json) {
     
 d3.json('static/geojson/counties.json', function(json) {
 
+    var features = [];
+
+    // ignore puerto rico
+    for (var i = 0; i < json.features.length; i++) {
+        var feature = json.features[i];
+        if (feature.properties && feature.properties.STATE && feature.properties.STATE <= 56) {
+            features.push(feature);        
+        }
+    }
+
     region.selectAll('path')
-        .data(json.features)
+        .data(features)
         .enter().append('svg:path')
         .attr('d', path)
         .attr('fill', noData)
@@ -49,20 +59,9 @@ d3.json('static/geojson/counties.json', function(json) {
 
             d3.select(this)
             .style('stroke', 'none')
-
         });
 });
 
-var title = svg.append('svg:text')
-    .attr('class', 'title')
-    .attr('transform', 'translate(515, 22)')
-    .text('Poverty estimates by county, 2003-2009');
-    
-var year = svg.append('svg:text')
-    .attr('class', 'year')
-    .attr('transform', 'translate(15, 60)')
-    .text('');
-    
 d3.json('/static/data/saipe_2003_2009.json', function(json) {
 
     // get the years from the csv (will do it later)
@@ -84,32 +83,63 @@ d3.json('/static/data/saipe_2003_2009.json', function(json) {
     // need to get min and max from data
     scale = d3.scale.linear().domain([minValue, maxValue]).range([0, 100]);
 
-    drawLegend();
-    drawMap();
-    
-    $('#loading').hide();
-    $('#controls-leftright').show();
-    $('#controls-hue').show();
-    $('#controls-upperbound').hide();
-    $('#controls-lowerbound').hide();
+    setTimeout(function() {
+        $('.region').show();
+        drawCopy();
+        drawLegend();
+        drawMap();
+        
+        $('#loading').hide();
+        $('#controls-leftright').show();
+        $('#controls-hue').show();
+        $('#controls-upperbound').hide();
+        $('#controls-lowerbound').hide();
+    }, 500);
 });
-
-var hue = 231;
 
 var legend = svg.append('svg:g')
     .attr('width', 200)
     .attr('height', 200)
     .attr('transform', 'translate(845, 240)');
 
-// this is a dumb way of creating a border!
-svg.append('svg:rect')
-    .attr('y', 240)
-    .attr('x', 905)
-    .attr('width', 30)
-    .attr('height', 200)
-    .attr('fill', 'none')
-    .attr('stroke', '#ccc')
-    .attr('style', 'shape-rendering: crispEdges');
+function drawCopy() {
+
+    var title = svg.append('svg:text')
+        .attr('class', 'title')
+        .attr('transform', 'translate(515, 22)')
+        .text('Poverty estimates by county, 2003-2009');
+        
+    var year = svg.append('svg:text')
+        .attr('class', 'year')
+        .attr('transform', 'translate(15, 60)')
+        .text('');
+
+    var notes = svg.append('svg:text')
+        .attr('class', 'notes')
+        .attr('x', 950)
+        .attr('y', 475)
+        .attr('text-anchor', 'end')
+        .text('By: GABRIEL FLORIT');
+
+    var notes = svg.append('svg:text')
+        .attr('class', 'notes')
+        .attr('x', 950)
+        .attr('y', 490)
+        .attr('text-anchor', 'end')
+        .text('Source: U.S. Census Bureau');
+
+    // this is a dumb way of creating a border!
+    svg.append('svg:rect')
+        .attr('y', 240)
+        .attr('x', 905)
+        .attr('width', 30)
+        .attr('height', 200)
+        .attr('fill', 'none')
+        .attr('stroke', '#ccc')
+        .attr('style', 'shape-rendering: crispEdges');
+}
+
+var hue = 231;
 
 function eraseLegendColorMap() {
 
@@ -176,17 +206,19 @@ d3.select(window).on("keydown", function() {
         // left
         case 37:
             $('#controls-leftright').fadeOut();
-            if (currentYearIndex > 0) 
+            if (currentYearIndex > 0) {
                 currentYearIndex--;
-            drawMap();
+                drawMap();
+            }
             break;
         
         // right
         case 39:
             $('#controls-leftright').fadeOut();
-            if (currentYearIndex < years.length - 1) 
+            if (currentYearIndex < years.length - 1) {
                 currentYearIndex++; 
-            drawMap();
+                drawMap();
+            }
             break;
     }
 });
