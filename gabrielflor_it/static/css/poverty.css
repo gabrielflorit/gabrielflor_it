@@ -17,8 +17,8 @@ svg {
   height: 500px;
 }
 
-.states path {
-  stroke: white;
+.region path {
+  stroke: none;
 }
 
 #chart {
@@ -68,4 +68,8 @@ svg {
 .tooltip {
   color: #222;
   background-color: white;
+}
+
+.tooltip span {
+  font-size: 0.9em;
 }

@@ -1,5 +1,6 @@
 var data; // loaded asynchronously
 var years = [];
+var states;
 var currentYearIndex = 0;
 var tooltip = '';
 var allValues = [];
@@ -14,6 +15,11 @@ var svg = d3.select('#chart')
 
 var region = svg.append('svg:g')
     .attr('class', 'region');
+
+d3.json('static/data/states.json', function(json) {
+    
+    states = json;
+});
     
 d3.json('static/geojson/counties.json', function(json) {
 
@@ -21,7 +27,30 @@ d3.json('static/geojson/counties.json', function(json) {
         .data(json.features)
         .enter().append('svg:path')
         .attr('d', path)
-        .attr('fill', noData);
+        .attr('fill', noData)
+        .on('mouseover', function(d) {
+
+            d3.select(this)
+            .style('stroke', 'white')
+            .style('stroke-width', '1px');
+
+            var name = d.properties.NAME;
+            var fips = getFips(d);
+
+            var datum = data[years[currentYearIndex]][fips];
+
+            if (datum) {
+                tooltip = name + ' County, ' + states[d.properties.STATE] + '<br/><span><b>' + years[currentYearIndex] + '</b> rate: <b>' + d3.format('.1f')(datum) + '%</b></span>';
+            } else {
+	            tooltip = name + ' County, ' + states[d.properties.STATE] + ': <b>N/A</b>';
+            }
+        })
+        .on('mouseout', function(d) {
+
+            d3.select(this)
+            .style('stroke', 'none')
+
+        });
 });
 
 var title = svg.append('svg:text')
@@ -94,18 +123,22 @@ function drawLegend() {
 
     svg.append('svg:text')
         .attr('class', 'legend-title')
-        .attr('transform', 'translate(870, 220)')
-        .text('Poverty');
+        .attr('transform', 'translate(879, 220)')
+        .text('percent');
 
     svg.append('svg:text')
         .attr('class', 'legend-tick')
-        .attr('transform', 'translate(865, 245)')
-        .text(maxValue + '%');
+        .attr('x', 902)
+        .attr('y', 245)
+        .attr('text-anchor', 'end')
+        .text(d3.format('.0f')(maxValue) + '%');
 
     svg.append('svg:text')
         .attr('class', 'legend-tick')
-        .attr('transform', 'translate(885, 443)')
-        .text(minValue + '%');
+        .attr('x', 902)
+        .attr('y', 443)
+        .attr('text-anchor', 'end')
+        .text(d3.format('.0f')(minValue) + '%');
 }
 
 function drawLegendColorMap() {
@@ -122,15 +155,9 @@ function drawLegendColorMap() {
         });
 }
 
-var colorMapMin = 0;
-var colorMapMax = 100;
-
 function convertPercentToColor(data) {
     
-    // respect color map ranges
-    var newData = ((data * (colorMapMax - colorMapMin)) / 100) + colorMapMin;
-
-    return d3.hsl('hsl(' + hue + ', 100%, ' + newData + '%)').toString(); 
+    return d3.hsl('hsl(' + hue + ', 100%, ' + data + '%)').toString(); 
 }
 
 d3.select(window).on("keydown", function() {
@@ -179,9 +206,14 @@ function drawMap() {
         .style('fill', quantize);
 }
 
+function getFips(d) {
+    
+    return d.properties.GEO_ID.substring(9, 14);
+}
+
 function quantize(d) {
 
-    var fips = d.properties.GEO_ID.substring(9, 14);
+    var fips = getFips(d);
 
     var datum = data[years[currentYearIndex]][fips];
 
@@ -192,9 +224,8 @@ function quantize(d) {
     }
 }
 
-/*
 $(function() {
-    $(".states").tooltip({
+    $(".region").tooltip({
 	    bodyHandler: function() {
 	        return tooltip; 
 	    },
@@ -206,4 +237,4 @@ $(function() {
         extraClass: "tooltip"
     });
 });
-*/
+
