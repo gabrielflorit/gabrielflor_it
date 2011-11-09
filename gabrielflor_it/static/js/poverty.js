@@ -3,6 +3,7 @@ var years = [];
 var currentYearIndex = 0;
 var tooltip = '';
 var allValues = [];
+var minValue, maxValue;
 var scale;
 var noData = 'rgb(255,255,255)';
 
@@ -33,109 +34,35 @@ var year = svg.append('svg:text')
     .attr('transform', 'translate(15, 60)')
     .text('');
     
-/*var searchCount = 0;
-function searchDataByYearAndFips(data, year, fips) {
-
-    if (data[year]["f" + fips]) {
-    }
-
-    var datum;
-    for (var i = 0; i < data.length; i++ ) {
-    
-        searchCount++;
-        datum = data[i];
-        if (datum.Year == year && datum.Fips == fips) {
-            return datum.Data;
-        }
-    }
-}*/
-    
-d3.json('/static/data/test.json', function(json) {
+d3.json('/static/data/saipe_2003_2009.json', function(json) {
 
     // get the years from the csv (will do it later)
     years = d3.range(2003, 2010);
 
     data = json;
 
-    // structure data better for searching counties
-/*    for (var i = 0; i < csv.length; i++) {
-        
-        var datum = csv[i];
-
-        if (!isNaN(datum.Data)) {
-
-            allValues.push(eval(datum.Data));
-            var fips = datum.Fips;
-            var year = datum.Year;
-            if (!data[year]) {
-                data[year] = {};
-            }
-            data[year]["f" + fips] = datum.Data;
+    // get max and min
+    for (var i = 0; i < years.length - 1; i++) {
+        var year = data[years[i]];
+        for (var datum in year) {
+            allValues.push(year[datum]);
         }
-    }*/
+    }
 
-/*    var minValue = d3.min(allValues);
-    var maxValue = d3.max(allValues);*/
+    minValue = d3.min(allValues);
+    maxValue = d3.max(allValues);
 
-    scale = d3.scale.linear().domain([0, 100]).range([0, 100]);
+    // need to get min and max from data
+    scale = d3.scale.linear().domain([minValue, maxValue]).range([0, 100]);
 
-    drawMap(0);
-
-
-
-
-
-
-/*    d3.csv(chorovars.csv, function(csv) { 
+    drawLegend();
+    drawMap();
     
-        
-        data = {};
-        allValues = [];
-    
-        for (var i = 0; i < popCsv.length; i++) {
-    
-            var state = popCsv[i];
-            var stateData = [];
-    
-            for (var j = 0; j < years.length; j++) {
-
-                var datum = searchDataByYearAndState(csv, years[j], state['name']);    
-                
-                if (datum) {
-                    var theValue = datum / state[years[j]];
-                    stateData.push(theValue);
-                    
-                    // hiding DC because it's too small, and skews everything else
-                    if (state['name'] != 'District of Columbia')
-                        allValues.push(theValue);
-                }
-                else {
-                    stateData.push(undefined);
-                }
-            }
-    
-            data[state['name']] = stateData;
-            
-            if (i == popCsv.length - 1) {
-
-                var minValue = d3.min(allValues);
-                var maxValue = d3.max(allValues);
-
-                scale = d3.scale.linear().domain([minValue, maxValue]).range([0, 100]);
-
-                drawLegend();
-                drawMap(0);
-                
-                currentYearIndex = 0;
-
-                $('#loading').hide();
-                $('#controls-leftright').show();
-                $('#controls-updown').show();
-                $('#controls-upperbound').show();
-                $('#controls-lowerbound').show();
-            }
-        }
-    });*/
+    $('#loading').hide();
+    $('#controls-leftright').show();
+    $('#controls-updown').show();
+    $('#controls-upperbound').hide();
+    $('#controls-lowerbound').hide();
 });
 
 var hue = 231;
@@ -168,17 +95,17 @@ function drawLegend() {
     svg.append('svg:text')
         .attr('class', 'legend-title')
         .attr('transform', 'translate(870, 220)')
-        .text('Intensity');
+        .text('Poverty');
 
     svg.append('svg:text')
         .attr('class', 'legend-tick')
-        .attr('transform', 'translate(881, 245)')
-        .text('100');
+        .attr('transform', 'translate(865, 245)')
+        .text(maxValue + '%');
 
     svg.append('svg:text')
         .attr('class', 'legend-tick')
-        .attr('transform', 'translate(895, 443)')
-        .text('0');
+        .attr('transform', 'translate(885, 443)')
+        .text(minValue + '%');
 }
 
 function drawLegendColorMap() {
@@ -210,38 +137,10 @@ d3.select(window).on("keydown", function() {
 
     switch (d3.event.keyCode) {
         
-        // q
-        case 81:
-            if (colorMapMax < 100)
-                colorMapMax++;
-            drawMapAndLegend();
-            break;
-
-        // a
-        case 65:
-            if (colorMapMax > 51)
-                colorMapMax--;
-            drawMapAndLegend();
-            break;
-
-        // o
-        case 79:
-            if (colorMapMin < 49)
-                colorMapMin++;
-            drawMapAndLegend();
-            break;
-
-        // l
-        case 76:
-            if (colorMapMin > 1)
-                colorMapMin--;
-            drawMapAndLegend();
-            break;
-
         // h
         case 72:
             $('#controls-updown').fadeOut();
-            hue++;
+            hue = hue + 5;
             if (hue > 360)
                 hue = 0;
             drawMapAndLegend();
@@ -252,7 +151,7 @@ d3.select(window).on("keydown", function() {
             $('#controls-leftright').fadeOut();
             if (currentYearIndex > 0) 
                 currentYearIndex--;
-            drawMap(150);
+            drawMap();
             break;
         
         // right
@@ -260,7 +159,7 @@ d3.select(window).on("keydown", function() {
             $('#controls-leftright').fadeOut();
             if (currentYearIndex < years.length - 1) 
                 currentYearIndex++; 
-            drawMap(150);
+            drawMap();
             break;
     }
 });
@@ -269,16 +168,14 @@ function drawMapAndLegend() {
 
     eraseLegendColorMap();
     drawLegendColorMap();
-    drawMap(0);
+    drawMap();
 }
 
-function drawMap(duration) {
+function drawMap() {
 
     svg.select('.year').text(years[currentYearIndex]);
 
     region.selectAll('path')
-        .transition()
-        .duration(duration)
         .style('fill', quantize);
 }
 
@@ -286,7 +183,7 @@ function quantize(d) {
 
     var fips = d.properties.GEO_ID.substring(9, 14);
 
-    var datum = data[years[currentYearIndex]]["f" + fips];
+    var datum = data[years[currentYearIndex]][fips];
 
     if (datum) {
         return convertPercentToColor(100 - scale(datum));

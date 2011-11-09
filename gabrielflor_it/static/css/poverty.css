@@ -27,8 +27,6 @@ svg {
   width: 960px;
 }
 
-#controls-upperbound, 
-#controls-lowerbound, 
 #controls-leftright, 
 #controls-updown {
   display: none;
