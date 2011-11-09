@@ -33,13 +33,13 @@ var year = svg.append('svg:text')
     .attr('transform', 'translate(15, 60)')
     .text('');
     
-var searchCount = 0;
+/*var searchCount = 0;
 function searchDataByYearAndFips(data, year, fips) {
 
     if (data[year]["f" + fips]) {
     }
 
-/*    var datum;
+    var datum;
     for (var i = 0; i < data.length; i++ ) {
     
         searchCount++;
@@ -47,18 +47,18 @@ function searchDataByYearAndFips(data, year, fips) {
         if (datum.Year == year && datum.Fips == fips) {
             return datum.Data;
         }
-    }*/
-}
+    }
+}*/
     
-d3.csv('/static/data/saipe_2003_2009.csv', function(csv) {
+d3.json('/static/data/saipe_2003_2009.json', function(json) {
 
     // get the years from the csv (will do it later)
     years = d3.range(2003, 2010);
 
-    data = {};
+    data = json;
 
     // structure data better for searching counties
-    for (var i = 0; i < csv.length; i++) {
+/*    for (var i = 0; i < csv.length; i++) {
         
         var datum = csv[i];
 
@@ -72,12 +72,12 @@ d3.csv('/static/data/saipe_2003_2009.csv', function(csv) {
             }
             data[year]["f" + fips] = datum.Data;
         }
-    }
+    }*/
 
-    var minValue = d3.min(allValues);
-    var maxValue = d3.max(allValues);
+/*    var minValue = d3.min(allValues);
+    var maxValue = d3.max(allValues);*/
 
-    scale = d3.scale.linear().domain([minValue, maxValue]).range([0, 100]);
+    scale = d3.scale.linear().domain([0, 100]).range([0, 100]);
 
     drawMap(0);
 
