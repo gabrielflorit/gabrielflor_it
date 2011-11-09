@@ -89,7 +89,7 @@ d3.json('/static/data/saipe_2003_2009.json', function(json) {
     
     $('#loading').hide();
     $('#controls-leftright').show();
-    $('#controls-updown').show();
+    $('#controls-hue').show();
     $('#controls-upperbound').hide();
     $('#controls-lowerbound').hide();
 });
@@ -166,7 +166,7 @@ d3.select(window).on("keydown", function() {
         
         // h
         case 72:
-            $('#controls-updown').fadeOut();
+            $('#controls-hue').fadeOut();
             hue = hue + 5;
             if (hue > 360)
                 hue = 0;
