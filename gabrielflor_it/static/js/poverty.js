@@ -50,7 +50,7 @@ function searchDataByYearAndFips(data, year, fips) {
     }
 }*/
     
-d3.json('/static/data/saipe_2003_2009.json', function(json) {
+d3.json('/static/data/test.json', function(json) {
 
     // get the years from the csv (will do it later)
     years = d3.range(2003, 2010);
