@@ -108,7 +108,7 @@ function drawCopy() {
     var title = svg.append('svg:text')
         .attr('class', 'title')
         .attr('transform', 'translate(515, 22)')
-        .text('Poverty estimates by county, 2003-2009');
+        .text('Poverty estimates by county, ' + d3.min(years) + '-' + d3.max(years));
         
     var year = svg.append('svg:text')
         .attr('class', 'year')
