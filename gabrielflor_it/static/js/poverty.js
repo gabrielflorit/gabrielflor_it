@@ -61,10 +61,10 @@ d3.json('static/geojson/counties.json', function(json) {
             .style('stroke', 'none')
         });
 
-    d3.json('/static/data/saipe_2003_2009.json', function(saipe) {
+    d3.json('/static/data/saipe_1997_2009.json', function(saipe) {
 
         // get the years from the csv (will do it later)
-        years = d3.range(2003, 2010);
+        years = d3.range(1997, 2010);
 
         data = saipe;
 
