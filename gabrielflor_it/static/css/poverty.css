@@ -23,10 +23,6 @@ svg {
   width: 960px;
 }
 
-.region {
-  display: none;
-}
-
 #controls-leftright, 
 #controls-hue {
   display: none;

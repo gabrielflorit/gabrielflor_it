@@ -1,4 +1,4 @@
-var data; // loaded asynchronously
+var data;
 var years = [];
 var states;
 var currentYearIndex = 0;
@@ -60,42 +60,43 @@ d3.json('static/geojson/counties.json', function(json) {
             d3.select(this)
             .style('stroke', 'none')
         });
-});
 
-d3.json('/static/data/saipe_2003_2009.json', function(json) {
+    d3.json('/static/data/saipe_2003_2009.json', function(saipe) {
 
-    // get the years from the csv (will do it later)
-    years = d3.range(2003, 2010);
+        // get the years from the csv (will do it later)
+        years = d3.range(2003, 2010);
 
-    data = json;
+        data = saipe;
 
-    // get max and min
-    for (var i = 0; i < years.length - 1; i++) {
-        var year = data[years[i]];
-        for (var datum in year) {
-            allValues.push(year[datum]);
+        // get max and min
+        for (var i = 0; i < years.length - 1; i++) {
+            var year = data[years[i]];
+            for (var datum in year) {
+                allValues.push(year[datum]);
+            }
         }
-    }
 
-    minValue = d3.min(allValues);
-    maxValue = d3.max(allValues);
+        minValue = d3.min(allValues);
+        maxValue = d3.max(allValues);
 
-    // need to get min and max from data
-    scale = d3.scale.linear().domain([minValue, maxValue]).range([0, 100]);
+        // need to get min and max from data
+        scale = d3.scale.linear().domain([minValue, maxValue]).range([0, 100]);
 
-    setTimeout(function() {
-        $('.region').show();
         drawCopy();
-        drawLegend();
-        drawMap();
-        
-        $('#loading').hide();
-        $('#controls-leftright').show();
-        $('#controls-hue').show();
-        $('#controls-upperbound').hide();
-        $('#controls-lowerbound').hide();
-    }, 500);
+        setTimeout(function() {
+            drawLegend();
+            drawLegendBorder();
+            drawMap();
+            
+            $('#loading').hide();
+            $('#controls-leftright').show();
+            $('#controls-hue').show();
+            $('#controls-upperbound').hide();
+            $('#controls-lowerbound').hide();
+        }, 500);
+    });
 });
+
 
 var legend = svg.append('svg:g')
     .attr('width', 200)
@@ -126,7 +127,10 @@ function drawCopy() {
         .attr('x', 950)
         .attr('y', 490)
         .attr('text-anchor', 'end')
-        .text('Source: U.S. Census Bureau');
+        .text('Source: Small Area Income & Poverty Estimates, U.S. Census Bureau');
+}
+
+function drawLegendBorder() {
 
     // this is a dumb way of creating a border!
     svg.append('svg:rect')
