@@ -69,7 +69,7 @@ d3.json('../static/geojson/counties.json', function(json) {
         data = saipe;
 
         // get max and min
-        for (var i = 0; i < years.length - 1; i++) {
+        for (var i = 0; i < years.length; i++) {
             var year = data[years[i]];
             for (var datum in year) {
                 allValues.push(year[datum]);
