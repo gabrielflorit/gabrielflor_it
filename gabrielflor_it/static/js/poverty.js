@@ -16,12 +16,12 @@ var svg = d3.select('#chart')
 var region = svg.append('svg:g')
     .attr('class', 'region');
 
-d3.json('static/data/states.json', function(json) {
+d3.json('../static/data/states.json', function(json) {
     
     states = json;
 });
     
-d3.json('static/geojson/counties.json', function(json) {
+d3.json('../static/geojson/counties.json', function(json) {
 
     var features = [];
 
@@ -61,7 +61,7 @@ d3.json('static/geojson/counties.json', function(json) {
             .style('stroke', 'none')
         });
 
-    d3.json('/static/data/saipe_1997_2009.json', function(saipe) {
+    d3.json('../static/data/saipe_1997_2009.json', function(saipe) {
 
         // get the years from the csv (will do it later)
         years = d3.range(1997, 2010);
