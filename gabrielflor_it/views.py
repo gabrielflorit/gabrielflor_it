@@ -7,15 +7,21 @@ from flask import render_template, send_from_directory
 def home():
     return render_template('home.html')
 
-@app.route('/leaflet/poverty')
-def leaflet_poverty():
-    return render_template('leaflet/poverty.html', vars=dict(
+@app.route('/polymaps/counties')
+def polymaps_counties():
+    return render_template('polymaps/counties.html', vars=dict(
         version=versioning()
         ))
 
-@app.route('/d3/poverty')
-def leaflet_d3():
-    return render_template('d3/poverty.html', vars=dict(
+@app.route('/leaflet/counties')
+def leaflet_counties():
+    return render_template('leaflet/counties.html', vars=dict(
+        version=versioning()
+        ))
+
+@app.route('/d3/counties')
+def d3_counties():
+    return render_template('d3/counties.html', vars=dict(
         version=versioning()
         ))
 
