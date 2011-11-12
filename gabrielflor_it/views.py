@@ -13,6 +13,12 @@ def polymaps_counties():
         version=versioning()
         ))
 
+@app.route('/polymaps/counties-bing')
+def polymaps_counties_bing():
+    return render_template('polymaps/counties-bing.html', vars=dict(
+        version=versioning()
+        ))
+
 @app.route('/leaflet/counties')
 def leaflet_counties():
     return render_template('leaflet/counties.html', vars=dict(
