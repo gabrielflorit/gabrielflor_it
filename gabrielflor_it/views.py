@@ -5,7 +5,7 @@ from flask import render_template, send_from_directory
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('index.html')
 
 @app.route('/polymaps/counties')
 def polymaps_counties():
