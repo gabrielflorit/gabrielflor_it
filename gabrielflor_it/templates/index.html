@@ -42,7 +42,11 @@
 <style>
 
 div.container {
-    padding-top: 60px;
+	padding-top: 60px;
+}
+
+span.bold {
+	font-weight: bold;
 }
 
 </style>
@@ -52,33 +56,39 @@ div.container {
 ================================================== -->
 <div class="container">
 
-    <div class="three columns sidebar">
-        <nav>
-            <h3>gabrielflor.it</h3>
-            <ul>
-                <li><a href="http://www.twitter.com/gabrielflorit">twitter</a></li>
-            </ul>
-        </nav>
-    </div>
+	<div class="three columns sidebar">
+		<nav>
+			<h3>gabrielflor.it</h3>
+			<ul>
+			<li><a href="http://www.twitter.com/gabrielflorit">twitter</a></li>
+			</ul>
+		</nav>
+	</div>
 
-    <div class="twelve columns offset-by-one content">
-<!--        <header>
-            <h1>A Beautiful Boilerplate for Responsive, Mobile-Friendly Development</h1>
-        </header>
-        <hr>-->
-        <div>
-            <h3>Choropleth on a continuous color map</h3>
-            <small>December 1, 2011</small>
-            <p>The following is my attempt at creating a county choropleth with the most optimal color map. My usual approach is to use a fixed number of classes, as suggested by the beloved <a href='http://colorbrewer2.org/'>Color Brewer</a>:</p>
-            <blockquote>Many cartographers advise that you use five to seven classes for a choropleth map. Isoline maps, or choropleth maps with very regular spatial patterns, can safely use more data classes because similar colors are seen next to each other, making them easier to distinguish.</blockquote>
-            <p>But what if we ignore classes altogether, and instead use a continuous color map?</p>
+	<div class="twelve columns offset-by-one content">
+		<div>
+			<h3>Choropleths, classes, and color maps</h3>
+			
+			<small>December 1, 2011</small>
 
-        </div>
-        <hr>
-        <div>
-            <p class="remove-bottom"><small><a href="http://gabrielflor.it">gabriel florit</a>, 2011 ©</small></p>
-        </div>
-    </div>
+			<p><span class='bold'>Let's make a map.</span> We'll display poverty by county for 2009 (data courtesy of the <a href='http://www.census.gov/did/www/saipe/'>U.S. Census Bureau</a>).</p>
+
+			<p>Here's a first attempt. Each county is colored based on its numerical value - in this case, the county's total percentage of people living in poverty. Since the lowest percentage is in the 0%'s, and the highest in the 60%'s, we'll go with 7 classes: 0%-10%, 10%-20%, 20%-30%, ..., 60%-70%. Lighter colors mean lower poverty, darker colors mean higher poverty.</p>
+
+			<p>"Wait what - <span class='bold'>no legend?!</span>", you yell in abject horror. Yep - for now let's simply focus on how the map is colored. We'll get to a legend-enabled map soon enough.</p>
+
+			<p>Great - now let's try a different classification. We'll sort the data numerically in an ascending fashion (e.g. 3, 6, 8, 23, 56), then divide the data into 4 groups of equal size. We call these groups <span class='bold'>quartiles</span>.</p>
+
+			<p>What happens if we increase the number of equally sized groups - say from 4 to 8? Let's do that. We call them <span class='bold'>8-quantiles</span> (4-quantiles are also known as quartiles).</p>
+
+		</div>
+		<hr>
+		<div>
+		<p class="remove-bottom">
+			<small><a href="http://gabrielflor.it">gabriel florit</a>, 2011 ©</small>
+		</p>
+		</div>
+	</div>
 
 </div><!-- container -->
 
