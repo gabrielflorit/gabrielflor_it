@@ -6,3 +6,4 @@ local
 .Python
 *.pyc
 *~
+.DS_store
