@@ -1,7 +1,7 @@
 import os
 import datetime
 from gabrielflor_it import app
-from flask import render_template, send_from_directory
+from flask import render_template, send_from_directory, request
 
 @app.route('/')
 def home():
@@ -28,7 +28,8 @@ def leaflet_counties():
 @app.route('/d3/counties')
 def d3_counties():
     return render_template('d3/counties.html', vars=dict(
-        version=versioning()
+        version=versioning(),
+        case=request.args.get('case', '')
         ))
 
 @app.route('/favicon.ico')

@@ -139,7 +139,8 @@ function drawLegendBorder() {
 		.attr('y', 240)
 		.attr('x', 905)
 		.attr('width', 30)
-		.attr('height', 200)
+//		.attr('height', 200)
+		.attr('height', 140)
 		.attr('fill', 'none')
 		.attr('stroke', '#ccc')
 		.attr('style', 'shape-rendering: crispEdges');
@@ -171,7 +172,8 @@ function drawLegend() {
 	svg.append('svg:text')
 		.attr('class', 'legend-tick')
 		.attr('x', 902)
-		.attr('y', 443)
+		.attr('y', 383)
+//		.attr('y', 443)
 		.attr('text-anchor', 'end')
 		.text(d3.format('.0f')(minValue) + '%');
 }
@@ -179,7 +181,8 @@ function drawLegend() {
 function drawLegendColorMap() {
 
 	legend.selectAll('rect')
-		.data(d3.range(0, 100, 1))
+//		.data(d3.range(0, 100, 1))
+		.data(d3.range(70, 0, -1))
 		.enter()
 		.insert('svg:rect')
 		.attr('y', function (d, i) {
@@ -195,7 +198,36 @@ function drawLegendColorMap() {
 
 function convertPercentToColor(data) {
 
-	return d3.hsl('hsl(' + hue + ', 100%, ' + data + '%)').toString();
+/*	.Blues .q0-7{fill:}
+.Blues .q1-7{fill:}
+.Blues .q2-7{fill:}
+.Blues .q3-7{fill:}
+.Blues .q4-7{fill:}
+.Blues .q5-7{fill:}
+.Blues .q6-7{fill:}*/
+
+	if (data < 10)
+		return 'rgb(239,243,255)';
+	else if (data < 20)
+		return 'rgb(198,219,239)';
+	else if (data < 30)
+		return 'rgb(158,202,225)';
+	else if (data < 40)
+		return 'rgb(107,174,214)';
+	else if (data < 50)
+		return 'rgb(66,146,198)';
+	else if (data < 60)
+		return 'rgb(33,113,181)';
+	else if (data < 70)
+		return 'rgb(8,69,148)';
+	else if (data < 80)
+		return 'yellow';
+	else if (data < 90)
+		return 'orange';
+	else if (data < 100)
+		return 'red';
+
+	//return d3.hsl('hsl(' + hue + ', 100%, ' + data + '%)').toString();
 }
 
 d3.select(window).on("keydown", function () {
@@ -258,7 +290,8 @@ function quantize(d) {
 	var datum = data[years[currentYearIndex]][fips];
 
 	if (datum) {
-		return convertPercentToColor(100 - scale(datum));
+//		return convertPercentToColor(100 - scale(datum));
+		return convertPercentToColor(datum);
 	} else {
 		return noData;
 	}
