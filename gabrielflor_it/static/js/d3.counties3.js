@@ -165,33 +165,61 @@ function drawLegend() {
 	svg.append('svg:text')
 		.attr('class', 'legend-title')
 		.attr('transform', 'translate(879, 220)')
-		.text('quartile');
+		.text('quantile');
 
 	svg.append('svg:text')
 		.attr('class', 'legend-tick')
 		.attr('x', 902)
-		.attr('y', 270)
+		.attr('y', 260)
+		.attr('text-anchor', 'end')
+		.text('8th');
+
+	svg.append('svg:text')
+		.attr('class', 'legend-tick')
+		.attr('x', 902)
+		.attr('y', 285)
+		.attr('text-anchor', 'end')
+		.text('7th');
+
+	svg.append('svg:text')
+		.attr('class', 'legend-tick')
+		.attr('x', 902)
+		.attr('y', 310)
+		.attr('text-anchor', 'end')
+		.text('6th');
+
+	svg.append('svg:text')
+		.attr('class', 'legend-tick')
+		.attr('x', 902)
+		.attr('y', 335)
+		.attr('text-anchor', 'end')
+		.text('5th');
+
+	svg.append('svg:text')
+		.attr('class', 'legend-tick')
+		.attr('x', 902)
+		.attr('y', 360)
 		.attr('text-anchor', 'end')
 		.text('4th');
 
 	svg.append('svg:text')
 		.attr('class', 'legend-tick')
 		.attr('x', 902)
-		.attr('y', 320)
+		.attr('y', 385)
 		.attr('text-anchor', 'end')
 		.text('3rd');
 
 	svg.append('svg:text')
 		.attr('class', 'legend-tick')
 		.attr('x', 902)
-		.attr('y', 370)
+		.attr('y', 410)
 		.attr('text-anchor', 'end')
 		.text('2nd');
 
 	svg.append('svg:text')
 		.attr('class', 'legend-tick')
 		.attr('x', 902)
-		.attr('y', 420)
+		.attr('y', 435)
 		.attr('text-anchor', 'end')
 		.text('1st');
 }
@@ -199,30 +227,42 @@ function drawLegend() {
 function drawLegendColorMap() {
 
 	legend.selectAll('rect')
-		.data(d3.range(0, 4, 1))
+		.data(d3.range(0, 8, 1))
 		.enter()
 		.insert('svg:rect')
 		.attr('y', function (d, i) {
-			return i * 50;
+			return i * 25;
 		})
 		.attr('x', 60)
 		.attr('width', 30)
-		.attr('height', 50)
+		.attr('height', 25)
 		.attr('fill', function (d, i) {
-			return d3.hsl('hsl(' + hue + ', 100%, ' + (d * 25) + '%)').toString();
+			return d3.hsl('hsl(' + hue + ', 100%, ' + (d * 12.5) + '%)').toString();
 		});
 }
 
 function convertPercentToColor(data) {
 
+	if (data <= d3.quantile(allValues, 0.125)) {
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 12.5) + '%)').toString();
+	}
 	if (data <= d3.quantile(allValues, 0.25)) {
 		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 25) + '%)').toString();
+	}
+	else if (data <= d3.quantile(allValues, 0.375)) {
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 37.5) + '%)').toString();
 	}
 	else if (data <= d3.quantile(allValues, 0.50)) {
 		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 50) + '%)').toString();
 	}
+	else if (data <= d3.quantile(allValues, 0.625)) {
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 62.5) + '%)').toString();
+	}
 	else if (data <= d3.quantile(allValues, 0.75)) {
 		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 75) + '%)').toString();
+	}
+	else if (data <= d3.quantile(allValues, 0.875)) {
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 87.5) + '%)').toString();
 	}
 	else if (data <= d3.quantile(allValues, 1)) {
 		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 100) + '%)').toString();

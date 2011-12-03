@@ -234,7 +234,7 @@ function drawLegendColorMap() {
 		.enter()
 		.insert('svg:rect')
 		.attr('y', function (d, i) {
-			return i * 2;
+			return i * 2 - 1;
 		})
 		.attr('x', 60)
 		.attr('width', 30)
@@ -255,25 +255,19 @@ function convertPercentToColor(data) {
 .Blues .q6-7{fill:}*/
 
 	if (data < 10)
-		return 'rgb(239,243,255)';
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 10*10/7) + '%)').toString();
 	else if (data < 20)
-		return 'rgb(198,219,239)';
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 20*10/7) + '%)').toString();
 	else if (data < 30)
-		return 'rgb(158,202,225)';
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 30*10/7) + '%)').toString();
 	else if (data < 40)
-		return 'rgb(107,174,214)';
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 40*10/7) + '%)').toString();
 	else if (data < 50)
-		return 'rgb(66,146,198)';
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 50*10/7) + '%)').toString();
 	else if (data < 60)
-		return 'rgb(33,113,181)';
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 60*10/7) + '%)').toString();
 	else if (data < 70)
-		return 'rgb(8,69,148)';
-	else if (data < 80)
-		return 'yellow';
-	else if (data < 90)
-		return 'orange';
-	else if (data < 100)
-		return 'red';
+		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - 70*10/7) + '%)').toString();
 
 	//return d3.hsl('hsl(' + hue + ', 100%, ' + data + '%)').toString();
 }
