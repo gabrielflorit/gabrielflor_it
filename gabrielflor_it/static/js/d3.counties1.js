@@ -167,7 +167,55 @@ function drawLegend() {
 		.attr('x', 902)
 		.attr('y', 245)
 		.attr('text-anchor', 'end')
-		.text(d3.format('.0f')(maxValue) + '%');
+		.text('70%');
+
+	svg.append('svg:text')
+		.attr('class', 'legend-tick')
+		.attr('x', 902)
+		.attr('y', 264)
+//		.attr('y', 443)
+		.attr('text-anchor', 'end')
+		.text('60%');
+
+	svg.append('svg:text')
+		.attr('class', 'legend-tick')
+		.attr('x', 902)
+		.attr('y', 284)
+//		.attr('y', 443)
+		.attr('text-anchor', 'end')
+		.text('50%');
+
+	svg.append('svg:text')
+		.attr('class', 'legend-tick')
+		.attr('x', 902)
+		.attr('y', 304)
+//		.attr('y', 443)
+		.attr('text-anchor', 'end')
+		.text('40%');
+
+	svg.append('svg:text')
+		.attr('class', 'legend-tick')
+		.attr('x', 902)
+		.attr('y', 324)
+//		.attr('y', 443)
+		.attr('text-anchor', 'end')
+		.text('30%');
+
+	svg.append('svg:text')
+		.attr('class', 'legend-tick')
+		.attr('x', 902)
+		.attr('y', 344)
+//		.attr('y', 443)
+		.attr('text-anchor', 'end')
+		.text('20%');
+
+	svg.append('svg:text')
+		.attr('class', 'legend-tick')
+		.attr('x', 902)
+		.attr('y', 364)
+//		.attr('y', 443)
+		.attr('text-anchor', 'end')
+		.text('10%');
 
 	svg.append('svg:text')
 		.attr('class', 'legend-tick')
@@ -175,7 +223,7 @@ function drawLegend() {
 		.attr('y', 383)
 //		.attr('y', 443)
 		.attr('text-anchor', 'end')
-		.text(d3.format('.0f')(minValue) + '%');
+		.text('0%');
 }
 
 function drawLegendColorMap() {
