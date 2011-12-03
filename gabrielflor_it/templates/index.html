@@ -49,6 +49,11 @@ span.bold {
 	font-weight: bold;
 }
 
+div.content img {
+	padding-bottom: 60px;
+	max-width: 100%;
+}
+
 </style>
 
 
@@ -71,13 +76,19 @@ span.bold {
 			
 			<small>December 1, 2011</small>
 
-			<p><span class='bold'>Let's make a map.</span> We'll display poverty by county for 2009 (data courtesy of the <a href='http://www.census.gov/did/www/saipe/'>U.S. Census Bureau</a>).</p>
+			<p><span class='bold'>Let's make a map.</span> We'll display poverty by county (data courtesy of the <a href='http://www.census.gov/did/www/saipe/'>U.S. Census Bureau</a>).</p>
 
 			<p>Here's a first attempt. Each county is colored based on its numerical value - in this case, the county's total percentage of people living in poverty. Since the lowest percentage is in the 0%'s, and the highest in the 60%'s, we'll go with 7 classes: 0%-10%, 10%-20%, 20%-30%, ..., 60%-70%. Lighter colors mean lower poverty, darker colors mean higher poverty.</p>
 
+			<img src='static/img/map1.png'/>
+
 			<p>Great - now let's try a different classification. We'll sort the data numerically in an ascending fashion (e.g. 3, 6, 8, 23, 56), then divide the data into 4 groups of equal size. We call these groups <span class='bold'>quartiles</span>.</p>
 
+			<img src='static/img/map2.png'/>
+
 			<p>What happens if we increase the number of equally sized groups - say from 4 to 8? Let's do that. We call them <span class='bold'>8-quantiles</span> (4-quantiles are also known as quartiles).</p>
+
+			<img src='static/img/map3.png'/>
 
 		</div>
 		<hr>
