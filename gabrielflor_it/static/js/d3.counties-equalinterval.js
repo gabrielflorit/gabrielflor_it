@@ -160,33 +160,33 @@ function drawLegend() {
 
 	// create the color gradient
 	legendGradient.selectAll('rect')
-		.data(d3.range(0, classes, 1))
+		.data(d3.range(0, breaks, 1))
 		.enter()
 		.insert('svg:rect')
 		.attr('x', 1)
 		.attr('y', function (d, i) {
-			return i * (legendGradientHeight/classes);
+			return i * (legendGradientHeight/breaks);
 		})
 		.attr('width', legendGradientWidth)
-		.attr('height', (legendGradientHeight/classes))
+		.attr('height', (legendGradientHeight/breaks))
 		.attr('fill', function (d, i) {
-			return d3.hsl('hsl(' + hue + ', 100%, ' + (i * (100/classes)) + '%)').toString();
+			return d3.hsl('hsl(' + hue + ', 100%, ' + (i * (100/breaks)) + '%)').toString();
 		});
 
 	var ticksScale = d3.scale.linear()
-		.domain([0, classes])
+		.domain([0, breaks])
 		.range([minValue, maxValue]);
 
 	// add the ticks
 	legendTicks.selectAll('text')
-		.data(d3.range(classes, -1, -1))
+		.data(d3.range(breaks, -1, -1))
 		.enter()
 		.insert('svg:text')
 		.attr('class', 'legend-tick')
 		.attr('text-anchor', 'end')
 		.attr('x', -4)
 		.attr('y', function (d, i) {
-			return i * (legendGradientHeight/classes) + 5;
+			return i * (legendGradientHeight/breaks) + 5;
 		})
 		.text(function (d, i) {
 			return d3.format('.0f')(ticksScale(d)) + '%';
@@ -195,17 +195,17 @@ function drawLegend() {
 
 function convertPercentToColor(data) {
 
-	var classesToData = d3.scale.linear()
-		.domain([0, classes])
+	var breaksToData = d3.scale.linear()
+		.domain([0, breaks])
 		.range([minValue, maxValue]);
 
 	var dataToPercent = d3.scale.linear()
 		.domain([minValue, maxValue])
 		.range([0, 100]);
 
-	for (var i = 1; i <= classes; i++) {
-		if (data <= classesToData(i))
-			return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/classes) + '%)').toString();
+	for (var i = 1; i <= breaks; i++) {
+		if (data <= breaksToData(i))
+			return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
 	}
 }
 

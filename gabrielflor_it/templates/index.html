@@ -32,10 +32,6 @@
 <!-- Favicons
 ================================================== -->
 <link rel="shortcut icon" href="static/img/favicon.ico">
-<link rel="apple-touch-icon" href="static/img/apple-touch-icon.png">
-<link rel="apple-touch-icon" sizes="72x72" href="static/img/apple-touch-icon-72x72.png">
-<link rel="apple-touch-icon" sizes="114x114" href="static/img/apple-touch-icon-114x114.png">
-
 </head>
 <body>
 
@@ -82,21 +78,28 @@
 		<div>
 			<h3>Choropleths, classes, and color maps</h3>
 			
-			<small>December 1, 2011</small>
+			<small>December 4, 2011</small>
 
-			<p><span class='bold'>Let's make a map.</span> We'll display poverty by county (data courtesy of the <a href='http://www.census.gov/did/www/saipe/'>U.S. Census Bureau</a>).</p>
+			<p><span class='bold'>Data classification</span> is a critical component of choropleths. The number of classes and our choice of classification system can turn the same data into seemingly different maps. I'll illustrate with a number of examples - of maps, of course. We'll look at total percentage of people living in poverty by county (data courtesy of the <a href='http://www.census.gov/did/www/saipe/'>U.S. Census Bureau</a>).</p>
 
-			<p>Here's a first attempt. Each county is colored based on its numerical value - in this case, the county's total percentage of people living in poverty. Since the lowest percentage is in the 0%'s, and the highest in the 60%'s, we'll go with 7 classes: 0%-10%, 10%-20%, 20%-30%, ..., 60%-70%. Lighter colors mean lower poverty, darker colors mean higher poverty.</p>
+			The first 3 maps have classes of equal intervals. 4 classes, equal intervals:
 
-			<img src='static/img/map1.png'/>
+			7 classes, equal intervals:
 
-			<p>Great - now let's try a different classification. We'll sort the data numerically in an ascending fashion (e.g. 3, 6, 8, 23, 56), then divide the data into 4 groups of equal size. We call these groups <span class='bold'>quartiles</span>.</p>
+			10 classes, equal intervals:
 
-			<img src='static/img/map2.png'/>
+			Now let's switch to quantiles. Here, each class is of equal size - each class has the same number of data points. 4 classes (also known as quartiles, or 4-quantiles):
 
-			<p>What happens if we increase the number of equally sized groups - say from 4 to 8? Let's do that. We call them <span class='bold'>8-quantiles</span> (4-quantiles are also known as quartiles).</p>
+			7-quantiles:
 
-			<img src='static/img/map3.png'/>
+			10-quantiles:
+
+			Finally we'll look at natural breaks. This classification system creates classes of similar values and maximizes the difference between classes. The end result is based on the naturally occurring breaks in the data. 4 classes, natural breaks:
+
+			7 classes, natural breaks:
+
+			10 classes, natural breaks:
+
 
 		</div>
 		<hr>
