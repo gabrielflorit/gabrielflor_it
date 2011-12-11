@@ -11,8 +11,7 @@ def home():
 def counties():
     return render_template('d3/counties.html', vars=dict(
         version=versioning(),
-        case=request.args.get('case', ''),
-        breaks=request.args.get('breaks', 4)
+        case=request.args.get('case', '')
         ))
 
 # @app.route('/polymaps/counties')

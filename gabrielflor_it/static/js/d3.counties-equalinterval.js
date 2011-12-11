@@ -8,6 +8,7 @@ var minValue, maxValue;
 var scale;
 var noData = 'rgb(255,255,255)';
 var hue = 231;
+var breaks = 4;
 
 var path = d3.geo.path();
 
@@ -72,12 +73,12 @@ d3.json('../static/geojson/counties.json', function (json) {
 		data = saipe;
 
 		// get max and min
-			var year = data[years[years.length - 1]];
+		for (var i = 0; i < years.length; i++) {
+			var year = data[years[i]];
 			for (var datum in year) {
 				allValues.push(year[datum]);
 			}
-
-		currentYearIndex = years.length - 1;
+		}
 
 		minValue = d3.min(allValues);
 		maxValue = d3.max(allValues);
@@ -89,14 +90,12 @@ d3.json('../static/geojson/counties.json', function (json) {
 		drawTitleAndMisc();
 		setTimeout(function() {
 			drawLegend();
-			// drawLegendBorder();
 			drawMap();
 
 			$('#loading').hide();
 			$('#controls-leftright').show();
+			$('#controls-updown').show();
 			$('#controls-hue').show();
-			$('#controls-upperbound').hide();
-			$('#controls-lowerbound').hide();
 		}, 500);
 	});
 });
@@ -128,13 +127,17 @@ function drawTitleAndMisc() {
 		.text('Source: Small Area Income & Poverty Estimates, U.S. Census Bureau');
 }
 
-// function eraseLegendColorMap() {
-
-// 	legend.selectAll('rect').remove();
-// }
-
 var legend = svg.append('svg:g')
-.attr('transform', 'translate(904, 240)');
+	.attr('transform', 'translate(904, 240)');
+
+var legendGradient = legend.append('svg:g');
+var legendTicks = legend.append('svg:g');
+
+function eraseLegend() {
+
+	legendGradient.selectAll('rect').remove();
+	legendTicks.selectAll('text').remove();
+}
 
 function drawLegend() {
 
@@ -146,9 +149,6 @@ function drawLegend() {
 
 	var legendGradientWidth = 30;
 	var legendGradientHeight = 200;
-
-	var legendGradient = legend.append('svg:g');
-	var legendTicks = legend.append('svg:g');
 
 	// create the color gradient
 	legendGradient.selectAll('rect')
@@ -188,8 +188,8 @@ function drawLegend() {
 	legend.append('svg:rect')
 		.attr('y', 0)
 		.attr('x', 0)
-		.attr('width', legendGradientWidth + 1)
-		.attr('height', legendGradientHeight + 1)
+		.attr('width', legendGradientWidth)
+		.attr('height', legendGradientHeight)
 		.attr('fill', 'none')
 		.attr('stroke', '#ccc')
 		.attr('style', 'shape-rendering: crispEdges');
@@ -215,40 +215,56 @@ d3.select(window).on("keydown", function () {
 
 	switch (d3.event.keyCode) {
 
+		case 38:
+			$('#controls-updown').fadeOut();
+			breaks++;
+			drawMapAndLegend();
+			break;
+
+		case 40:
+			$('#controls-updown').fadeOut();
+			if (breaks > 2) {
+				breaks--;
+				drawMapAndLegend();
+			}
+			break;
+
 		// h
-	case 72:
-		$('#controls-hue').fadeOut();
-		hue = hue + 5;
-		if (hue > 360) hue = 0;
-		// drawMapAndLegend();
-		break;
+		case 72:
+			$('#controls-hue').fadeOut();
+			hue = hue + 5;
+			if (hue > 360) {
+				hue = 0;
+			}
+			drawMapAndLegend();
+			break;
 
 		// left
-	case 37:
-		$('#controls-leftright').fadeOut();
-		if (currentYearIndex > 0) {
-			currentYearIndex--;
-			// drawMap();
-		}
-		break;
+		case 37:
+			$('#controls-leftright').fadeOut();
+			if (currentYearIndex > 0) {
+				currentYearIndex--;
+				drawMap();
+			}
+			break;
 
 		// right
-	case 39:
-		$('#controls-leftright').fadeOut();
-		if (currentYearIndex < years.length - 1) {
-			currentYearIndex++;
-			// drawMap();
-		}
-		break;
+		case 39:
+			$('#controls-leftright').fadeOut();
+			if (currentYearIndex < years.length - 1) {
+				currentYearIndex++;
+				drawMap();
+			}
+			break;
 	}
 });
 
-// function drawMapAndLegend() {
+function drawMapAndLegend() {
 
-// 	eraseLegendColorMap();
-// 	drawLegendColorMap();
-// 	drawMap();
-// }
+	eraseLegend();
+	drawLegend();
+	drawMap();
+}
 
 function drawMap() {
 
