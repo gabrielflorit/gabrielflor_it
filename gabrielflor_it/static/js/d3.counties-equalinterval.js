@@ -147,14 +147,6 @@ function drawLegend() {
 	var legendGradientWidth = 30;
 	var legendGradientHeight = 200;
 
-	// this is a dumb way of creating a border!
-	legend.append('svg:rect')
-		.attr('width', legendGradientWidth + 1)
-		.attr('height', legendGradientHeight + 1)
-		.attr('fill', 'none')
-		.attr('stroke', '#ccc')
-		.attr('style', 'shape-rendering: crispEdges');
-
 	var legendGradient = legend.append('svg:g');
 	var legendTicks = legend.append('svg:g');
 
@@ -191,6 +183,16 @@ function drawLegend() {
 		.text(function (d, i) {
 			return d3.format('.0f')(ticksScale(d)) + '%';
 		});
+
+	// this is a dumb way of creating a border!
+	legend.append('svg:rect')
+		.attr('y', 0)
+		.attr('x', 0)
+		.attr('width', legendGradientWidth + 1)
+		.attr('height', legendGradientHeight + 1)
+		.attr('fill', 'none')
+		.attr('stroke', '#ccc')
+		.attr('style', 'shape-rendering: crispEdges');
 }
 
 function convertPercentToColor(data) {
