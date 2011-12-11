@@ -135,17 +135,24 @@ var legendTicks = legend.append('svg:g');
 
 function eraseLegend() {
 
+	legend.selectAll('text').remove();
 	legendGradient.selectAll('rect').remove();
 	legendTicks.selectAll('text').remove();
 }
 
 function drawLegend() {
 
+	// legend.append('svg:text')
+	// 	.attr('class', 'legend-title')
+	// 	.attr('x', -25)
+	// 	.attr('y', -20)
+	// 	.text('percent');
+
 	legend.append('svg:text')
 		.attr('class', 'legend-title')
-		.attr('x', -25)
+		.attr('x', -28)
 		.attr('y', -20)
-		.text('percent');
+		.text('quantile');
 
 	var legendGradientWidth = 30;
 	var legendGradientHeight = 200;
@@ -170,19 +177,31 @@ function drawLegend() {
 		.range([minValue, maxValue]);
 
 	// add the ticks
+	// legendTicks.selectAll('text')
+	// 	.data(d3.range(breaks, -1, -1))
+	// 	.enter()
+	// 	.insert('svg:text')
+	// 	.attr('class', 'legend-tick')
+	// 	.attr('text-anchor', 'end')
+	// 	.attr('x', -4)
+	// 	.attr('y', function (d, i) {
+	// 		return i * (legendGradientHeight/breaks) + 5;
+	// 	})
+	// 	.text(function (d, i) {
+	// 		return d3.format('.0f')(ticksScale(d)) + '%';
+	// 	});
+
 	legendTicks.selectAll('text')
-		.data(d3.range(breaks, -1, -1))
+		.data(d3.range(breaks, 0, -1))
 		.enter()
 		.insert('svg:text')
 		.attr('class', 'legend-tick')
 		.attr('text-anchor', 'end')
 		.attr('x', -4)
 		.attr('y', function (d, i) {
-			return i * (legendGradientHeight/breaks) + 5;
+			return i * (legendGradientHeight/breaks) + 5 + (legendGradientHeight/(breaks*2));
 		})
-		.text(function (d, i) {
-			return d3.format('.0f')(ticksScale(d)) + '%';
-		});
+		.text(String);
 
 	// this is a dumb way of creating a border!
 	legend.append('svg:rect')
