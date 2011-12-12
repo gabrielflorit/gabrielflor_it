@@ -10,6 +10,10 @@ var noData = 'rgb(255,255,255)';
 var hue = 231;
 var breaks = 4;
 
+function sortNumber(a, b) {
+	return a - b;
+}
+
 var path = d3.geo.path();
 
 var svg = d3.select('#chart')
@@ -79,6 +83,9 @@ d3.json('../static/geojson/counties.json', function (json) {
 				allValues.push(year[datum]);
 			}
 		}
+
+		// create a sorted array
+		allValues = allValues.sort(sortNumber);
 
 		minValue = d3.min(allValues);
 		maxValue = d3.max(allValues);
@@ -216,40 +223,19 @@ function drawLegend() {
 
 function convertPercentToColor(data) {
 
+	var breaksToData = d3.scale.linear()
+		.domain([0, breaks])
+		.range([minValue, maxValue]);
 
+	var dataToPercent = d3.scale.linear()
+		.domain([minValue, maxValue])
+		.range([0, 100]);
 
-	if (data <= d3.quantile(allValues, 0.25)) {
-		return d3.hsl('hsl(' + hue + ', 100%, ' + (75) + '%)').toString();
+	for (var i = 1; i <= breaks; i++) {
+		if (data <= d3.quantile(allValues, i/breaks))
+		// if (data <= breaksToData(i))
+			return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
 	}
-	else if (data <= d3.quantile(allValues, 0.50)) {
-		return d3.hsl('hsl(' + hue + ', 100%, ' + (50) + '%)').toString();
-	}
-	else if (data <= d3.quantile(allValues, 0.75)) {
-		return d3.hsl('hsl(' + hue + ', 100%, ' + (25) + '%)').toString();
-	}
-	else if (data <= d3.quantile(allValues, 1)) {
-		return d3.hsl('hsl(' + hue + ', 100%, ' + (0) + '%)').toString();
-	}
-
-
-
-	// for (var i = 1; i <= breaks; i++) {
-	// 	if (data <= d3.quantile(allValues, i/breaks))
-	// 	return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
-	// }
-
-	// var breaksToData = d3.scale.linear()
-	// 	.domain([0, breaks])
-	// 	.range([minValue, maxValue]);
-
-	// var dataToPercent = d3.scale.linear()
-	// 	.domain([minValue, maxValue])
-	// 	.range([0, 100]);
-
-	// for (var i = 1; i <= breaks; i++) {
-	// 	if (data <= breaksToData(i))
-	// 		return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
-	// }
 }
 
 d3.select(window).on("keydown", function () {
