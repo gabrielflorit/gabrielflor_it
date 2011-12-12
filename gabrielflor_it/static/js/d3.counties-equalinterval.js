@@ -97,6 +97,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 			.range([0, 100]);
 
 		drawTitleAndMisc();
+
 		setTimeout(function() {
 			drawLegend();
 			drawMap();
@@ -111,10 +112,16 @@ d3.json('../static/geojson/counties.json', function (json) {
 });
 
 function displayCurrentSettings() {
-	
+
 	$('#controls-classification .current').text(classifications[classificationIndex]);
 	$('#controls-year .current').text(years[currentYearIndex]);
-	$('#controls-breaks .current').text(breaks);
+
+	if (classificationIndex == 2) {
+		$('#controls-breaks .current').text('n/a');
+	} else {
+		$('#controls-breaks .current').text(breaks);
+	}
+
 	$('#controls-hue .current').text(hue);
 }
 
@@ -147,7 +154,6 @@ function drawTitleAndMisc() {
 
 var legend = svg.append('svg:g')
 	.attr('transform', 'translate(904, 240)');
-
 var legendGradient = legend.append('svg:g');
 var legendTicks = legend.append('svg:g');
 
@@ -163,6 +169,7 @@ function drawLegend() {
 	switch (classificationIndex)
 	{
 		case 0:
+		case 2:
 			legend.append('svg:text')
 				.attr('class', 'legend-title')
 				.attr('x', -25)
@@ -177,33 +184,47 @@ function drawLegend() {
 				.attr('y', -20)
 				.text('quantile');
 		break;
-
-		case 2:
-			legend.append('svg:text')
-				.attr('class', 'legend-title')
-				.attr('x', -25)
-				.attr('y', -20)
-				.text('percent');
-		break;
 	}
 
 	var legendGradientWidth = 30;
 	var legendGradientHeight = 200;
 
 	// create the color gradient
-	legendGradient.selectAll('rect')
-		.data(d3.range(0, breaks, 1))
-		.enter()
-		.insert('svg:rect')
-		.attr('x', 1)
-		.attr('y', function (d, i) {
-			return i * (legendGradientHeight/breaks);
-		})
-		.attr('width', legendGradientWidth)
-		.attr('height', (legendGradientHeight/breaks))
-		.attr('fill', function (d, i) {
-			return d3.hsl('hsl(' + hue + ', 100%, ' + (i * (100/breaks)) + '%)').toString();
-		});
+	switch (classificationIndex)
+	{
+		case 0:
+		case 1:
+			legendGradient.selectAll('rect')
+				.data(d3.range(0, breaks, 1))
+				.enter()
+				.insert('svg:rect')
+				.attr('x', 1)
+				.attr('y', function (d, i) {
+					return i * (legendGradientHeight/breaks);
+				})
+				.attr('width', legendGradientWidth)
+				.attr('height', (legendGradientHeight/breaks))
+				.attr('fill', function (d, i) {
+					return d3.hsl('hsl(' + hue + ', 100%, ' + (i * (100/breaks)) + '%)').toString();
+				});
+			break;
+
+		case 2:
+			legendGradient.selectAll('rect')
+				.data(d3.range(0, 100, 1))
+				.enter()
+				.insert('svg:rect')
+				.attr('x', 1)
+				.attr('y', function (d, i) {
+					return i * 2;
+				})
+				.attr('width', legendGradientWidth)
+				.attr('height', 2)
+				.attr('fill', function (d, i) {
+					return d3.hsl('hsl(' + hue + ', 100%, ' + d + '%)').toString();
+				});
+			break;
+	}
 
 	var ticksScale = d3.scale.linear()
 		.domain([0, breaks])
@@ -223,7 +244,7 @@ function drawLegend() {
 				.attr('y', function (d, i) {
 					return i * (legendGradientHeight/breaks) + 5;
 				})
-				.text(function (d, i) {
+				.text(function(d, i) {
 					return d3.format('.0f')(ticksScale(d)) + '%';
 				});
 		break;
@@ -243,7 +264,20 @@ function drawLegend() {
 		break;
 
 		case 2:
-		break;
+			legendTicks.selectAll('text')
+				.data([maxValue, minValue])
+				.enter()
+				.insert('svg:text')
+				.attr('class', 'legend-tick')
+				.attr('text-anchor', 'end')
+				.attr('x', -4)
+				.attr('y', function (d, i) {
+					return i * legendGradientHeight + 5;
+				})
+				.text(function(d, i) {
+					return d3.format('.0f')(d) + '%';
+				});
+			break;
 	}
 
 	// this is a dumb way of creating a border!
@@ -282,6 +316,7 @@ function convertPercentToColor(data) {
 			break;
 
 			case 2:
+				return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - dataToPercent(data)) + '%)').toString();
 			break;
 		}
 	}
