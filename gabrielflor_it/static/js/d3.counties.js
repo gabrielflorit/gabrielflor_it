@@ -7,12 +7,22 @@ var allValues = [];
 var minValue, maxValue;
 var scale;
 var noData = 'rgb(255,255,255)';
+var hue = 230;
+var breaks = 4;
+var classifications = ['interval', 'quantile', 'continuous'];
+var classificationIndex = 0;
+
+function sortNumber(a, b) {
+	return a - b;
+}
 
 var path = d3.geo.path();
 
-var svg = d3.select('#chart').append('svg:svg');
+var svg = d3.select('#chart')
+			.append('svg:svg');
 
-var region = svg.append('svg:g').attr('class', 'region');
+var map = svg.append('svg:g')
+			.attr('class', 'map');
 
 d3.json('../static/data/states.json', function (json) {
 
@@ -31,7 +41,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 		}
 	}
 
-	region.selectAll('path')
+	map.selectAll('path')
 		.data(features)
 		.enter()
 		.append('svg:path')
@@ -76,36 +86,46 @@ d3.json('../static/geojson/counties.json', function (json) {
 			}
 		}
 
+		// create a sorted array
+		allValues = allValues.sort(sortNumber);
+
 		minValue = d3.min(allValues);
 		maxValue = d3.max(allValues);
 
-		// need to get min and max from data
 		scale = d3.scale.linear()
 			.domain([minValue, maxValue])
 			.range([0, 100]);
 
-		drawCopy();
-		setTimeout(function () {
+		drawTitleAndMisc();
+
+		setTimeout(function() {
 			drawLegend();
-			drawLegendBorder();
 			drawMap();
 
 			$('#loading').hide();
-			$('#controls-leftright').show();
+			$('#controls-classification').show();
+			$('#controls-year').show();
+			$('#controls-breaks').show();
 			$('#controls-hue').show();
-			$('#controls-upperbound').hide();
-			$('#controls-lowerbound').hide();
 		}, 500);
 	});
 });
 
+function displayCurrentSettings() {
 
-var legend = svg.append('svg:g')
-	.attr('width', 200)
-	.attr('height', 200)
-	.attr('transform', 'translate(845, 240)');
+	$('#controls-classification .current').text(classifications[classificationIndex]);
+	$('#controls-year .current').text(years[currentYearIndex]);
 
-function drawCopy() {
+	if (classificationIndex == 2) {
+		$('#controls-breaks .current').text('n/a');
+	} else {
+		$('#controls-breaks .current').text(breaks);
+	}
+
+	$('#controls-hue .current').text(hue);
+}
+
+function drawTitleAndMisc() {
 
 	var title = svg.append('svg:text')
 		.attr('class', 'title')
@@ -132,108 +152,234 @@ function drawCopy() {
 		.text('Source: Small Area Income & Poverty Estimates, U.S. Census Bureau');
 }
 
-function drawLegendBorder() {
+var legend = svg.append('svg:g')
+	.attr('transform', 'translate(904, 240)');
+var legendGradient = legend.append('svg:g');
+var legendTicks = legend.append('svg:g');
+
+function eraseLegend() {
+
+	legend.selectAll('text').remove();
+	legendGradient.selectAll('rect').remove();
+	legendTicks.selectAll('text').remove();
+}
+
+function drawLegend() {
+
+	switch (classificationIndex)
+	{
+		case 0:
+		case 2:
+			legend.append('svg:text')
+				.attr('class', 'legend-title')
+				.attr('x', -25)
+				.attr('y', -20)
+				.text('percent');
+		break;
+
+		case 1:
+			legend.append('svg:text')
+				.attr('class', 'legend-title')
+				.attr('x', -28)
+				.attr('y', -20)
+				.text('quantile');
+		break;
+	}
+
+	var legendGradientWidth = 30;
+	var legendGradientHeight = 200;
+
+	// create the color gradient
+	switch (classificationIndex)
+	{
+		case 0:
+		case 1:
+			legendGradient.selectAll('rect')
+				.data(d3.range(0, breaks, 1))
+				.enter()
+				.insert('svg:rect')
+				.attr('x', 1)
+				.attr('y', function (d, i) {
+					return i * (legendGradientHeight/breaks);
+				})
+				.attr('width', legendGradientWidth)
+				.attr('height', (legendGradientHeight/breaks))
+				.attr('fill', function (d, i) {
+					return d3.hsl('hsl(' + hue + ', 100%, ' + (i * (100/breaks)) + '%)').toString();
+				});
+			break;
+
+		case 2:
+			legendGradient.selectAll('rect')
+				.data(d3.range(0, 100, 1))
+				.enter()
+				.insert('svg:rect')
+				.attr('x', 1)
+				.attr('y', function (d, i) {
+					return i * 2;
+				})
+				.attr('width', legendGradientWidth)
+				.attr('height', 2)
+				.attr('fill', function (d, i) {
+					return d3.hsl('hsl(' + hue + ', 100%, ' + d + '%)').toString();
+				});
+			break;
+	}
+
+	var ticksScale = d3.scale.linear()
+		.domain([0, breaks])
+		.range([minValue, maxValue]);
+
+	// add the ticks
+	switch (classificationIndex)
+	{
+		case 0:
+			legendTicks.selectAll('text')
+				.data(d3.range(breaks, -1, -1))
+				.enter()
+				.insert('svg:text')
+				.attr('class', 'legend-tick')
+				.attr('text-anchor', 'end')
+				.attr('x', -4)
+				.attr('y', function (d, i) {
+					return i * (legendGradientHeight/breaks) + 5;
+				})
+				.text(function(d, i) {
+					return d3.format('.0f')(ticksScale(d)) + '%';
+				});
+		break;
+
+		case 1:
+			legendTicks.selectAll('text')
+				.data(d3.range(breaks, 0, -1))
+				.enter()
+				.insert('svg:text')
+				.attr('class', 'legend-tick')
+				.attr('text-anchor', 'end')
+				.attr('x', -4)
+				.attr('y', function (d, i) {
+					return i * (legendGradientHeight/breaks) + 5 + (legendGradientHeight/(breaks*2));
+				})
+				.text(String);
+		break;
+
+		case 2:
+			legendTicks.selectAll('text')
+				.data([maxValue, minValue])
+				.enter()
+				.insert('svg:text')
+				.attr('class', 'legend-tick')
+				.attr('text-anchor', 'end')
+				.attr('x', -4)
+				.attr('y', function (d, i) {
+					return i * legendGradientHeight + 5;
+				})
+				.text(function(d, i) {
+					return d3.format('.0f')(d) + '%';
+				});
+			break;
+	}
 
 	// this is a dumb way of creating a border!
-	svg.append('svg:rect')
-		.attr('y', 240)
-		.attr('x', 905)
-		.attr('width', 30)
-		.attr('height', 200)
+	legend.append('svg:rect')
+		.attr('y', 0)
+		.attr('x', 1)
+		.attr('width', legendGradientWidth)
+		.attr('height', legendGradientHeight)
 		.attr('fill', 'none')
 		.attr('stroke', '#ccc')
 		.attr('style', 'shape-rendering: crispEdges');
 }
 
-var hue = 231;
-
-function eraseLegendColorMap() {
-
-	legend.selectAll('rect').remove();
-}
-
-function drawLegend() {
-
-	drawLegendColorMap();
-
-	svg.append('svg:text')
-		.attr('class', 'legend-title')
-		.attr('transform', 'translate(879, 220)')
-		.text('percent');
-
-	svg.append('svg:text')
-		.attr('class', 'legend-tick')
-		.attr('x', 902)
-		.attr('y', 245)
-		.attr('text-anchor', 'end')
-		.text(d3.format('.0f')(maxValue) + '%');
-
-	svg.append('svg:text')
-		.attr('class', 'legend-tick')
-		.attr('x', 902)
-		.attr('y', 443)
-		.attr('text-anchor', 'end')
-		.text(d3.format('.0f')(minValue) + '%');
-}
-
-function drawLegendColorMap() {
-
-	legend.selectAll('rect')
-		.data(d3.range(0, 100, 1))
-		.enter()
-		.insert('svg:rect')
-		.attr('y', function (d, i) {
-			return i * 2;
-		})
-		.attr('x', 60)
-		.attr('width', 30)
-		.attr('height', 2)
-		.attr('fill', function (d, i) {
-			return convertPercentToColor(d);
-		});
-}
-
 function convertPercentToColor(data) {
 
-	return d3.hsl('hsl(' + hue + ', 100%, ' + data + '%)').toString();
+	var breaksToData = d3.scale.linear()
+		.domain([0, breaks])
+		.range([minValue, maxValue]);
+
+	var dataToPercent = d3.scale.linear()
+		.domain([minValue, maxValue])
+		.range([0, 100]);
+
+	for (var i = 1; i <= breaks; i++) {
+
+		switch (classificationIndex)
+		{
+			case 0:
+				if (data <= breaksToData(i))
+					return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+			break;
+
+			case 1:
+				if (data <= d3.quantile(allValues, i/breaks))
+					return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+			break;
+
+			case 2:
+				return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - dataToPercent(data)) + '%)').toString();
+			break;
+		}
+	}
 }
 
 d3.select(window).on("keydown", function () {
 
 	switch (d3.event.keyCode) {
 
+		// c
+		case 67:
+			classificationIndex++;
+			if (classificationIndex > classifications.length - 1) {
+				classificationIndex = 0;
+			}
+			drawMapAndLegend();
+			break;
+
+		// up
+		case 38:
+			breaks++;
+			drawMapAndLegend();
+			break;
+
+		// down
+		case 40:
+			if (breaks > 2) {
+				breaks--;
+				drawMapAndLegend();
+			}
+			break;
+
 		// h
-	case 72:
-		$('#controls-hue').fadeOut();
-		hue = hue + 5;
-		if (hue > 360) hue = 0;
-		drawMapAndLegend();
-		break;
+		case 72:
+			hue = hue + 5;
+			if (hue > 360) {
+				hue = 0;
+			}
+			drawMapAndLegend();
+			break;
 
 		// left
-	case 37:
-		$('#controls-leftright').fadeOut();
-		if (currentYearIndex > 0) {
-			currentYearIndex--;
-			drawMap();
-		}
-		break;
+		case 37:
+			if (currentYearIndex > 0) {
+				currentYearIndex--;
+				drawMap();
+			}
+			break;
 
 		// right
-	case 39:
-		$('#controls-leftright').fadeOut();
-		if (currentYearIndex < years.length - 1) {
-			currentYearIndex++;
-			drawMap();
-		}
-		break;
+		case 39:
+			if (currentYearIndex < years.length - 1) {
+				currentYearIndex++;
+				drawMap();
+			}
+			break;
 	}
 });
 
 function drawMapAndLegend() {
 
-	eraseLegendColorMap();
-	drawLegendColorMap();
+	eraseLegend();
+	drawLegend();
 	drawMap();
 }
 
@@ -242,8 +388,10 @@ function drawMap() {
 	svg.select('.year')
 		.text(years[currentYearIndex]);
 
-	region.selectAll('path')
+	map.selectAll('path')
 		.style('fill', quantize);
+
+	displayCurrentSettings();
 }
 
 function getFips(d) {
@@ -258,14 +406,14 @@ function quantize(d) {
 	var datum = data[years[currentYearIndex]][fips];
 
 	if (datum) {
-		return convertPercentToColor(100 - scale(datum));
+		return convertPercentToColor(datum);
 	} else {
 		return noData;
 	}
 }
 
 $(function () {
-	$(".region").tooltip({
+	$(".map").tooltip({
 		bodyHandler: function () {
 			return tooltip;
 		},
