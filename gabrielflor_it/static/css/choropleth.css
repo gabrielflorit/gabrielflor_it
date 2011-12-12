@@ -23,10 +23,15 @@ svg {
   width: 960px;
 }
 
-#controls-leftright,
-#controls-updown,
+#controls-classification,
+#controls-year,
+#controls-breaks,
 #controls-hue {
   display: none;
+}
+
+.current {
+  font-weight: bold;
 }
 
 .legend rect {

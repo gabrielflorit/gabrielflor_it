@@ -7,8 +7,10 @@ var allValues = [];
 var minValue, maxValue;
 var scale;
 var noData = 'rgb(255,255,255)';
-var hue = 231;
+var hue = 230;
 var breaks = 4;
+var classifications = ['interval', 'quantile', 'continuous'];
+var classificationIndex = 0;
 
 function sortNumber(a, b) {
 	return a - b;
@@ -100,12 +102,21 @@ d3.json('../static/geojson/counties.json', function (json) {
 			drawMap();
 
 			$('#loading').hide();
-			$('#controls-leftright').show();
-			$('#controls-updown').show();
+			$('#controls-classification').show();
+			$('#controls-year').show();
+			$('#controls-breaks').show();
 			$('#controls-hue').show();
 		}, 500);
 	});
 });
+
+function displayCurrentSettings() {
+	
+	$('#controls-classification .current').text(classifications[classificationIndex]);
+	$('#controls-year .current').text(years[currentYearIndex]);
+	$('#controls-breaks .current').text(breaks);
+	$('#controls-hue .current').text(hue);
+}
 
 function drawTitleAndMisc() {
 
@@ -149,17 +160,32 @@ function eraseLegend() {
 
 function drawLegend() {
 
-	// legend.append('svg:text')
-	// 	.attr('class', 'legend-title')
-	// 	.attr('x', -25)
-	// 	.attr('y', -20)
-	// 	.text('percent');
+	switch (classificationIndex)
+	{
+		case 0:
+			legend.append('svg:text')
+				.attr('class', 'legend-title')
+				.attr('x', -25)
+				.attr('y', -20)
+				.text('percent');
+		break;
 
-	legend.append('svg:text')
-		.attr('class', 'legend-title')
-		.attr('x', -28)
-		.attr('y', -20)
-		.text('quantile');
+		case 1:
+			legend.append('svg:text')
+				.attr('class', 'legend-title')
+				.attr('x', -28)
+				.attr('y', -20)
+				.text('quantile');
+		break;
+
+		case 2:
+			legend.append('svg:text')
+				.attr('class', 'legend-title')
+				.attr('x', -25)
+				.attr('y', -20)
+				.text('percent');
+		break;
+	}
 
 	var legendGradientWidth = 30;
 	var legendGradientHeight = 200;
@@ -184,31 +210,41 @@ function drawLegend() {
 		.range([minValue, maxValue]);
 
 	// add the ticks
-	// legendTicks.selectAll('text')
-	// 	.data(d3.range(breaks, -1, -1))
-	// 	.enter()
-	// 	.insert('svg:text')
-	// 	.attr('class', 'legend-tick')
-	// 	.attr('text-anchor', 'end')
-	// 	.attr('x', -4)
-	// 	.attr('y', function (d, i) {
-	// 		return i * (legendGradientHeight/breaks) + 5;
-	// 	})
-	// 	.text(function (d, i) {
-	// 		return d3.format('.0f')(ticksScale(d)) + '%';
-	// 	});
+	switch (classificationIndex)
+	{
+		case 0:
+			legendTicks.selectAll('text')
+				.data(d3.range(breaks, -1, -1))
+				.enter()
+				.insert('svg:text')
+				.attr('class', 'legend-tick')
+				.attr('text-anchor', 'end')
+				.attr('x', -4)
+				.attr('y', function (d, i) {
+					return i * (legendGradientHeight/breaks) + 5;
+				})
+				.text(function (d, i) {
+					return d3.format('.0f')(ticksScale(d)) + '%';
+				});
+		break;
 
-	legendTicks.selectAll('text')
-		.data(d3.range(breaks, 0, -1))
-		.enter()
-		.insert('svg:text')
-		.attr('class', 'legend-tick')
-		.attr('text-anchor', 'end')
-		.attr('x', -4)
-		.attr('y', function (d, i) {
-			return i * (legendGradientHeight/breaks) + 5 + (legendGradientHeight/(breaks*2));
-		})
-		.text(String);
+		case 1:
+			legendTicks.selectAll('text')
+				.data(d3.range(breaks, 0, -1))
+				.enter()
+				.insert('svg:text')
+				.attr('class', 'legend-tick')
+				.attr('text-anchor', 'end')
+				.attr('x', -4)
+				.attr('y', function (d, i) {
+					return i * (legendGradientHeight/breaks) + 5 + (legendGradientHeight/(breaks*2));
+				})
+				.text(String);
+		break;
+
+		case 2:
+		break;
+	}
 
 	// this is a dumb way of creating a border!
 	legend.append('svg:rect')
@@ -232,9 +268,22 @@ function convertPercentToColor(data) {
 		.range([0, 100]);
 
 	for (var i = 1; i <= breaks; i++) {
-		if (data <= d3.quantile(allValues, i/breaks))
-		// if (data <= breaksToData(i))
-			return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+
+		switch (classificationIndex)
+		{
+			case 0:
+				if (data <= breaksToData(i))
+					return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+			break;
+
+			case 1:
+				if (data <= d3.quantile(allValues, i/breaks))
+					return d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+			break;
+
+			case 2:
+			break;
+		}
 	}
 }
 
@@ -242,14 +291,23 @@ d3.select(window).on("keydown", function () {
 
 	switch (d3.event.keyCode) {
 
+		// c
+		case 67:
+			classificationIndex++;
+			if (classificationIndex > classifications.length - 1) {
+				classificationIndex = 0;
+			}
+			drawMapAndLegend();
+			break;
+
+		// up
 		case 38:
-			$('#controls-updown').fadeOut();
 			breaks++;
 			drawMapAndLegend();
 			break;
 
+		// down
 		case 40:
-			$('#controls-updown').fadeOut();
 			if (breaks > 2) {
 				breaks--;
 				drawMapAndLegend();
@@ -258,7 +316,6 @@ d3.select(window).on("keydown", function () {
 
 		// h
 		case 72:
-			$('#controls-hue').fadeOut();
 			hue = hue + 5;
 			if (hue > 360) {
 				hue = 0;
@@ -268,7 +325,6 @@ d3.select(window).on("keydown", function () {
 
 		// left
 		case 37:
-			$('#controls-leftright').fadeOut();
 			if (currentYearIndex > 0) {
 				currentYearIndex--;
 				drawMap();
@@ -277,7 +333,6 @@ d3.select(window).on("keydown", function () {
 
 		// right
 		case 39:
-			$('#controls-leftright').fadeOut();
 			if (currentYearIndex < years.length - 1) {
 				currentYearIndex++;
 				drawMap();
@@ -300,6 +355,8 @@ function drawMap() {
 
 	map.selectAll('path')
 		.style('fill', quantize);
+
+	displayCurrentSettings();
 }
 
 function getFips(d) {
