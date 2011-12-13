@@ -1,4 +1,4 @@
-var data, svg, states, scale, minValue, maxValue, legend, legendGradient, legendTicks, map;
+var data, svg, states, scale, minValue, maxValue, legend, legendGradient, legendTicks, map, breaksToData, dataToPercent;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
 var years = [];
@@ -16,7 +16,7 @@ function displayCurrentSettings() {
 	$('#controls-classification .current').text(classifications[classificationIndex]);
 	$('#controls-year .current').text(years[currentYearIndex]);
 
-	if (classificationIndex === 2) {
+	if (classifications[classificationIndex] == 'continuous') {
 		$('#controls-breaks .current').text('n/a');
 	} else {
 		$('#controls-breaks .current').text(breaks);
@@ -39,7 +39,7 @@ function drawTitleAndMisc() {
 	svg.append('svg:text')
 		.attr('class', 'title')
 		.attr('transform', 'translate(515, 22)')
-		.text('Poverty estimates by county, ' + d3.min(years) + '-' + d3.max(years));
+		.text('Poverty estimates by county, ' + years[0] + '-' + years[years.length - 1]);
 
 	svg.append('svg:text')
 		.attr('class', 'year')
@@ -63,10 +63,10 @@ function drawTitleAndMisc() {
 
 function drawLegend() {
 
-	switch (classificationIndex)
+	switch (classifications[classificationIndex])
 	{
-		case 0:
-		case 2:
+		case 'interval':
+		case 'continuous':
 			legend.append('svg:text')
 				.attr('class', 'legend-title')
 				.attr('x', -25)
@@ -74,36 +74,41 @@ function drawLegend() {
 				.text('percent');
 		break;
 
-		case 1:
+		case 'quantile':
 			legend.append('svg:text')
 				.attr('class', 'legend-title')
 				.attr('x', -28)
 				.attr('y', -20)
 				.text('quantile');
 		break;
+
+		default:
+		break;
 	}
 
+	var heightByBreaks = legendGradientHeight/breaks;
+
 	// create the color gradient
-	switch (classificationIndex)
+	switch (classifications[classificationIndex])
 	{
-		case 0:
-		case 1:
+		case 'interval':
+		case 'quantile':
 			legendGradient.selectAll('rect')
 				.data(d3.range(0, breaks, 1))
 				.enter()
 				.insert('svg:rect')
 				.attr('x', 1)
 				.attr('y', function (d, i) {
-					return i * (legendGradientHeight/breaks);
+					return i * heightByBreaks;
 				})
 				.attr('width', legendGradientWidth)
-				.attr('height', (legendGradientHeight/breaks))
+				.attr('height', heightByBreaks)
 				.attr('fill', function (d, i) {
 					return d3.hsl('hsl(' + hue + ', 100%, ' + (i * (100/breaks)) + '%)').toString();
 				});
 			break;
 
-		case 2:
+		case 'continuous':
 			legendGradient.selectAll('rect')
 				.data(d3.range(0, 100, 1))
 				.enter()
@@ -118,16 +123,15 @@ function drawLegend() {
 					return d3.hsl('hsl(' + hue + ', 100%, ' + d + '%)').toString();
 				});
 			break;
+
+		default:
+		break;
 	}
 
-	var ticksScale = d3.scale.linear()
-		.domain([0, breaks])
-		.range([minValue, maxValue]);
-
 	// add the ticks
-	switch (classificationIndex)
+	switch (classifications[classificationIndex])
 	{
-		case 0:
+		case 'interval':
 			legendTicks.selectAll('text')
 				.data(d3.range(breaks, -1, -1))
 				.enter()
@@ -136,14 +140,14 @@ function drawLegend() {
 				.attr('text-anchor', 'end')
 				.attr('x', -4)
 				.attr('y', function (d, i) {
-					return i * (legendGradientHeight/breaks) + 5;
+					return i * heightByBreaks + 5;
 				})
 				.text(function(d, i) {
-					return d3.format('.0f')(ticksScale(d)) + '%';
+					return d3.format('.0f')(breaksToData(d)) + '%';
 				});
 		break;
 
-		case 1:
+		case 'quantile':
 			legendTicks.selectAll('text')
 				.data(d3.range(breaks, 0, -1))
 				.enter()
@@ -152,12 +156,12 @@ function drawLegend() {
 				.attr('text-anchor', 'end')
 				.attr('x', -4)
 				.attr('y', function (d, i) {
-					return i * (legendGradientHeight/breaks) + 5 + (legendGradientHeight/(breaks*2));
+					return i * heightByBreaks + 5 + (legendGradientHeight/(breaks*2));
 				})
 				.text(String);
 		break;
 
-		case 2:
+		case 'continuous':
 			legendTicks.selectAll('text')
 				.data([maxValue, minValue])
 				.enter()
@@ -172,6 +176,9 @@ function drawLegend() {
 					return d3.format('.0f')(d) + '%';
 				});
 			break;
+
+		default:
+		break;
 	}
 
 	// this is a dumb way of creating a border!
@@ -187,34 +194,30 @@ function drawLegend() {
 
 function convertPercentToColor(data) {
 
-	var breaksToData = d3.scale.linear()
-		.domain([0, breaks])
-		.range([minValue, maxValue]);
-
-	var dataToPercent = d3.scale.linear()
-		.domain([minValue, maxValue])
-		.range([0, 100]);
-
 	for (var i = 1; i <= breaks; i++) {
 
 		var color = '';
 
-		switch (classificationIndex)
+		switch (classifications[classificationIndex])
 		{
-			case 0:
+			case 'interval':
+
 				if (data <= breaksToData(i)) {
 					color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
 				}
 			break;
 
-			case 1:
+			case 'quantile':
 				if (data <= d3.quantile(allValues, i/breaks)) {
 					color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
 				}
 			break;
 
-			case 2:
+			case 'continuous':
 				color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - dataToPercent(data)) + '%)').toString();
+			break;
+
+			default:
 			break;
 		}
 
@@ -250,15 +253,13 @@ function drawMap() {
 
 var path = d3.geo.path();
 
-svg = d3.select('#chart')
-			.append('svg:svg');
+svg = d3.select('#chart').append('svg:svg');
 
 legend = svg.append('svg:g').attr('transform', 'translate(904, 240)');
 legendGradient = legend.append('svg:g');
 legendTicks = legend.append('svg:g');
 
-map = svg.append('svg:g')
-			.attr('class', 'map');
+map = svg.append('svg:g').attr('class', 'map');
 
 d3.json('../static/data/states.json', function (json) {
 
@@ -309,7 +310,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 	d3.json('../static/data/saipe_1997_2009.json', function (saipe) {
 
-		// get the years from the csv (will do it later)
+		// TODO: get the years from the actual data
 		years = d3.range(1997, 2010);
 
 		data = saipe;
@@ -328,15 +329,14 @@ d3.json('../static/geojson/counties.json', function (json) {
 		minValue = d3.min(allValues);
 		maxValue = d3.max(allValues);
 
-		scale = d3.scale.linear()
+		dataToPercent = d3.scale.linear()
 			.domain([minValue, maxValue])
 			.range([0, 100]);
 
 		drawTitleAndMisc();
 
 		setTimeout(function() {
-			drawLegend();
-			drawMap();
+			drawMapAndLegend();
 
 			$('#loading').hide();
 			$('#controls-classification').show();
@@ -355,6 +355,10 @@ function eraseLegend() {
 }
 
 function drawMapAndLegend() {
+
+	breaksToData = d3.scale.linear()
+		.domain([0, breaks])
+		.range([minValue, maxValue]);
 
 	eraseLegend();
 	drawLegend();
