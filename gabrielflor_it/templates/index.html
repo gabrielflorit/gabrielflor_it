@@ -58,11 +58,8 @@
 		font-weight: bold;
 	}
 
-	div.content img.first {
-		padding-top: 20px;
-	}
-
-	div.content img.last {
+	div.content img {
+		padding-top: 10px;
 		padding-bottom: 40px;
 	}
 
@@ -100,17 +97,19 @@
 
 			<p><span class='bold'>Data classification</span> is a critical component of choropleths. The number of classes and our choice of classification system can turn the same data into seemingly different maps. I'll illustrate with a number of examples - of maps, of course. We'll look at total percentage of people living in poverty by county (data courtesy of the <a href='http://www.census.gov/did/www/saipe/'>U.S. Census Bureau</a>).</p>
 
-			<p>First we look at classes with equal intervals. 4, 7 and 10 classes:
-			<img src='static/img/maps/interval-4.png' class='first'/>
-			<img src='static/img/maps/interval-7.png'/>
-			<img src='static/img/maps/interval-10.png' class='last'/></p>
+			<p>Let's start with classes of equal intervals. <span class='bold'>4 equal intervals</span>:
+			<img src='static/img/maps/interval-4.png' />
 
-			<p>Now let's switch to quantiles. Here, each class is of equal size - each class has the same number of data points. Again, 4, 7 and 10 classes:
-			<img src='static/img/maps/quantile-4.png' class='first'/>
-			<img src='static/img/maps/quantile-7.png'/>
-			<img src='static/img/maps/quantile-10.png' class='last'/></p>
+			<span class='bold'>10 equal intervals:</span>
+			<img src='static/img/maps/interval-10.png' /></p>
 
-			<p>Finally we'll look at natural breaks. This classification system creates classes of similar values and maximizes the difference between classes. The end result is based on the naturally occurring breaks in the data. 4, 7 and 10 natural breaks:</p>
+			<p>Now let's switch to quantiles. Here, each class is of equal size - each class has the same number of data points. 4-quantiles (also known as <span class='bold'>quartiles</span>):
+			<img src='static/img/maps/quantile-4.png'  />
+
+			<span class='bold'>10-quantiles:</span>
+			<img src='static/img/maps/quantile-10.png' /></p>
+
+			<p>Finally we'll look at natural breaks. This classification system creates classes of similar values and maximizes the difference between classes. The end result is based on the naturally occurring breaks in the data. 4 and 10 natural breaks:</p>
 		</div>
 		<hr>
 		<div>
