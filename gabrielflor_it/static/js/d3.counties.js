@@ -363,6 +363,8 @@ function drawMapAndLegend() {
 
 d3.select(window).on("keydown", function () {
 
+	alert(d3.event.keyCode);
+
 	switch (d3.event.keyCode) {
 
 		// c
@@ -390,8 +392,17 @@ d3.select(window).on("keydown", function () {
 
 		// h
 		case 72:
-			hue = hue + 5;
+			hue = hue++;
 			if (hue > 360) {
+				hue = 0;
+			}
+			drawMapAndLegend();
+			break;
+
+		// j
+		case 74:
+			hue = hue--;
+			if (hue < 0) {
 				hue = 0;
 			}
 			drawMapAndLegend();
