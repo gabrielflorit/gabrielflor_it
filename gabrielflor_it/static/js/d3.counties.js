@@ -481,7 +481,7 @@ d3.select(window).on("keydown", function () {
 		case 74:
 			hue--;
 			if (hue < 0) {
-				hue = 0;
+				hue = 360;
 			}
 			drawMapAndLegend();
 			break;
