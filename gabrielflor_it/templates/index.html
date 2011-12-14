@@ -95,21 +95,33 @@
 			
 			<small>December 4, 2011</small>
 
-			<p><span class='bold'>Data classification</span> is a critical component of choropleths. The number of classes and our choice of classification system can turn the same data into seemingly different maps. I'll illustrate with a number of examples - of maps, of course. We'll look at total percentage of people living in poverty by county (data courtesy of the <a href='http://www.census.gov/did/www/saipe/'>U.S. Census Bureau</a>).</p>
+			<p>
+				<span class='bold'>Data classification</span> is a critical component of choropleths. The number of classes and our choice of classification system can turn the same data into seemingly different maps. I'll illustrate with a number of examples - of maps, of course. We'll look at total percentage of people living in poverty by county (data courtesy of the <a href='http://www.census.gov/did/www/saipe/'>U.S. Census Bureau</a>).
+			</p>
 
-			<p>Let's start with classes of equal intervals. <span class='bold'>4 equal intervals</span>:
-			<img src='static/img/maps/interval-4.png' />
+			<p>
+				Let's start with <span class='bold'>equal intervals</span>. In this classification system, the entire range of values is divided equally into the desired number of intervals. 4 equal intervals:
+				<img src='static/img/maps/interval-4.png' />
 
-			<span class='bold'>10 equal intervals:</span>
-			<img src='static/img/maps/interval-10.png' /></p>
+				8 equal intervals:
+				<img src='static/img/maps/interval-8.png' />
+			</p>
 
-			<p>Now let's switch to quantiles. Here, each class is of equal size - each class has the same number of data points. 4-quantiles (also known as <span class='bold'>quartiles</span>):
-			<img src='static/img/maps/quantile-4.png'  />
+			<p>
+				Now let's switch to <span class='bold'>quantiles</span>. Here, each class is of equal size - each class has the same number of values. 4 quantiles (also known as quartiles):
+				<img src='static/img/maps/quantile-4.png'  />
 
-			<span class='bold'>10-quantiles:</span>
-			<img src='static/img/maps/quantile-10.png' /></p>
+				8 quantiles:
+				<img src='static/img/maps/quantile-8.png' />
+			</p>
 
-			<p>Finally we'll look at natural breaks. This classification system creates classes of similar values and maximizes the difference between classes. The end result is based on the naturally occurring breaks in the data. 4 and 10 natural breaks:</p>
+			<p>
+				Finally we'll look at <span class='bold'>k-means clusters</span>. This classification system creates classes of values such that the sum of the squared distance from each value to the center of its respective class is minimized. 4 classes:
+				<img src='static/img/maps/kmeans-4.png'  />
+
+				8 clusters:
+				<img src='static/img/maps/kmeans-8.png' />
+			</p>
 		</div>
 		<hr>
 		<div>
