@@ -107,25 +107,37 @@
 			<h4>Equal intervals</h4>
 			<p>
 				Let's start with <span class='bold'>equal intervals</span>. In this classification system, the entire range of values is divided equally into the desired number of intervals. 4 equal intervals:
-				<img src='static/img/maps/interval-4.png' />
+				<a href='counties?class=0&year=12&breaks=4&hue=230'>
+					<img src='static/img/maps/interval-4.png' />
+				</a>
 				8 equal intervals:
-				<img src='static/img/maps/interval-8.png' />
+				<a href='counties?class=0&year=12&breaks=8&hue=230'>
+					<img src='static/img/maps/interval-8.png' />
+				</a>
 			</p>
 
 			<h4>Quantiles</h4>
 			<p>
 				Now let's switch to <span class='bold'>quantiles</span>. Here, each class is of equal size - each class has the same number of values. 4 quantiles (also known as quartiles):
-				<img src='static/img/maps/quantile-4.png'  />
+				<a href='counties?class=1&year=12&breaks=4&hue=230'>
+					<img src='static/img/maps/quantile-4.png'  />
+				</a>
 				8 quantiles:
-				<img src='static/img/maps/quantile-8.png' />
+				<a href='counties?class=1&year=12&breaks=8&hue=230'>
+					<img src='static/img/maps/quantile-8.png' />
+				</a>
 			</p>
 
 			<h4>k-means clusters</h4>
 			<p>
 				Finally we'll look at <span class='bold'>k-means clusters</span>. This classification system creates classes of values such that the sum of the squared distance from each value to the center of its respective class is minimized. 4 classes:
-				<img src='static/img/maps/kmeans-4.png'  />
+				<a href='counties?class=2&year=12&breaks=4&hue=230'>
+					<img src='static/img/maps/kmeans-4.png'  />
+				</a>
 				8 classes:
-				<img src='static/img/maps/kmeans-8.png' />
+				<a href='counties?class=2&year=12&breaks=8&hue=230'>
+					<img src='static/img/maps/kmeans-8.png' />
+				</a>
 			</p>
 
 			<p>
@@ -135,7 +147,9 @@
 			<h4>Continuous classes</h4>
 			<p>
 				 I have one more map to show you:
-				<img src='static/img/maps/continuous.png' />
+				<a href='counties?class=3&year=12&hue=230'>
+					<img src='static/img/maps/continuous.png' />
+				</a>
 				There is no grouping of values here. Instead, a <span class='bold'>continuous</span> input domain (the data points, ranging from 0% to 62%) is mapped to a <span class='bold'>continuous</span> output range (in this case, a color map of bluish hue). This is also equivalent to choosing equal intervals and increasing the number of classes to infinity.
 			</p>
 

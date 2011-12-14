@@ -1,15 +1,17 @@
-var data, svg, states, scale, minValue, maxValue, legend, legendGradient, legendTicks, map, chosenBreaks, continuousScale;
+var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, chosenBreaks, continuousScale;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
 var years = [];
-var currentYearIndex = 0;
 var tooltip = '';
 var allValues = [];
 var noData = 'rgb(255,255,255)';
-var hue = 230;
-var breaks = 4;
 var classifications = ['interval', 'quantile', 'k-means', 'continuous'];
-var classificationIndex = 0;
+
+// initialize map from query string, if possible
+var classificationIndex = $.urlParam('class', 0);
+var breaks = parseInt($.urlParam('breaks', 4));
+var currentYearIndex = $.urlParam('year', 0);
+var hue = $.urlParam('hue', 230);
 
 function createBreaks() {
 
@@ -340,10 +342,10 @@ legendTicks = legend.append('svg:g');
 
 map = svg.append('svg:g').attr('class', 'map');
 
-d3.json('../static/data/states.json', function (json) {
+/*d3.json('../static/data/states.json', function (json) {
 
 	states = json;
-});
+});*/
 
 d3.json('../static/geojson/counties.json', function (json) {
 
@@ -363,7 +365,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 		.append('svg:path')
 		.attr('d', path)
 		.attr('fill', noData)
-		.on('mouseover', function (d) {
+/*		.on('mouseover', function (d) {
 
 			d3.select(this).style('stroke', 'white').style('stroke-width', '1px');
 
@@ -385,7 +387,8 @@ d3.json('../static/geojson/counties.json', function (json) {
 		.on('mouseout', function (d) {
 
 			d3.select(this).style('stroke', 'none');
-		});
+		})
+		*/;
 
 	d3.json('../static/data/saipe_1997_2009.json', function (saipe) {
 
@@ -504,6 +507,7 @@ d3.select(window).on("keydown", function () {
 	}
 });
 
+/*
 $(function () {
 	$(".map").tooltip({
 		bodyHandler: function () {
@@ -516,4 +520,4 @@ $(function () {
 		fade: 250,
 		extraClass: "tooltip"
 	});
-});
+});*/
