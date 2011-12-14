@@ -3,9 +3,8 @@
     <head>
         <meta http-equiv='Content-Type' content='text/html;charset=utf-8'>
         <title>d3 - counties</title>
-        <link rel='stylesheet' type='text/css' href='http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css'>
         <link type='text/css' rel='stylesheet' href='../static/css/choropleth.css?v={{vars.version}}'/>
-        <link type='text/css' rel='stylesheet' href='../static/css/other/jquery.tooltip.css'/>
+        <!-- <link type='text/css' rel='stylesheet' href='../static/css/other/jquery.tooltip.css'/> -->
         <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
         <!--[if lte IE 8]>
         <link type='text/css' rel='stylesheet' href='static/css/choropleth-ie8.css'/>
@@ -28,11 +27,17 @@
         <div id='ie8'>This site has been optimized for modern browsers. Please consider switching to a modern browser such as <a href='http://www.google.com/chrome'>Chrome</a>.</div>
         <div id='content'>
             <div id='chart'></div>
-            <h2 id='loading'>loading...</h2>
-            <h2 id='controls-classification'>classification: <span class='current'></span> (press c)</h2>
-            <h2 id='controls-year'>year: <span class='current'></span> (press left/right)</h2>
-            <h2 id='controls-breaks'>breaks: <span class='current'></span> (press up/down)</h2>
-            <h2 id='controls-hue'>hue: <span class='current'></span> (press h/j)</h2>
+            <div id='explanation'>
+                <a href='/'>what's this all about?</a>
+                <div id='controls'>
+                    <h2>map controls</h2>
+                    <p id='loading'>loading...</p>
+                    <p id='controls-classification'>classification: <span class='current'></span> (press c)</p>
+                    <p id='controls-year'>year: <span class='current'></span> (press left/right)</p>
+                    <p id='controls-breaks'>breaks: <span class='current'></span> (press up/down)</p>
+                    <p id='controls-hue'>hue: <span class='current'></span> (press h/j)</p>
+                </div>
+            </div>
         </div>
     </body>
     <script type='text/javascript' src='../static/js/d3/d3.min.js'></script>
@@ -41,8 +46,8 @@
     <script type='text/javascript' src='../static/js/science.js/science.min.js'></script>
     <script type='text/javascript' src='../static/js/science.js/science.stats.min.js'></script>
     <script type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
-    <script type='text/javascript' src='../static/js/other/jquery.dimensions.js'></script>
-    <script type='text/javascript' src='../static/js/other/jquery.tooltip.min.js'></script>
+    <!--<script type='text/javascript' src='../static/js/other/jquery.dimensions.js'></script>-->
+    <!--<script type='text/javascript' src='../static/js/other/jquery.tooltip.min.js'></script>-->
     <script type='text/javascript' src='../static/js/other/util.js'></script>
     <script type='text/javascript' src='../static/js/d3.counties.js?v={{vars.version}}'></script>
 </html>
