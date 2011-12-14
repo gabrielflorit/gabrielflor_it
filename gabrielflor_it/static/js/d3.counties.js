@@ -1,4 +1,4 @@
-var data, svg, states, scale, minValue, maxValue, legend, legendGradient, legendTicks, map, breaksToData, dataToPercent;
+var data, svg, states, scale, minValue, maxValue, legend, legendGradient, legendTicks, map, chosenBreaks, continuousScale;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
 var years = [];
@@ -8,8 +8,64 @@ var allValues = [];
 var noData = 'rgb(255,255,255)';
 var hue = 230;
 var breaks = 4;
-var classifications = ['interval', 'quantile', 'continuous'];
+var classifications = ['interval', 'quantile', 'k-means', 'continuous'];
 var classificationIndex = 0;
+
+function createBreaks() {
+
+	chosenBreaks = [];
+
+	switch (classifications[classificationIndex])
+	{
+		case 'interval':
+			var equalIntervalsScale = d3.scale.linear()
+				.domain([0, breaks])
+				.range([minValue, maxValue]);
+
+			for (var i = 0; i <= breaks; i++) {
+				chosenBreaks.push(equalIntervalsScale(i));
+			}
+		break;
+
+		case 'quantile':
+			for (var i = 0; i <= breaks; i++) {
+				chosenBreaks.push(d3.quantile(allValues, i/breaks));
+			}
+		break;
+
+		case 'k-means':
+			var kData = d3.zip(allValues);
+			var kScale = science.stats.kmeans().k(breaks)(kData);
+
+			var kClusters = {};
+			for (var i = 0; i < breaks; i++) {
+				kClusters[i] = [];
+			}
+
+			for (var i = 0; i < allValues.length; i++) {
+				var assignment = kScale.assignments[i];
+				kClusters[assignment].push(allValues[i]);
+			}
+
+			var tempKMeansBreaks = [];
+
+			for (var i = 0; i < breaks; i++) {
+				tempKMeansBreaks.push(kClusters[i][0]);
+				tempKMeansBreaks.push(kClusters[i][kClusters[i].length - 1]);
+			}
+
+			tempKMeansBreaks = tempKMeansBreaks.sort(sortNumber);
+
+			chosenBreaks.push(tempKMeansBreaks[0]);
+			for (var i = 1; i < tempKMeansBreaks.length; i = i + 2) {
+				chosenBreaks.push(tempKMeansBreaks[i]);
+			}
+		break;
+
+		default:
+		break;
+	}
+}
 
 function displayCurrentSettings() {
 
@@ -67,6 +123,7 @@ function drawLegend() {
 	{
 		case 'interval':
 		case 'continuous':
+		case 'k-means':
 			legend.append('svg:text')
 				.attr('class', 'legend-title')
 				.attr('x', -25)
@@ -93,6 +150,7 @@ function drawLegend() {
 	{
 		case 'interval':
 		case 'quantile':
+		case 'k-means':
 			legendGradient.selectAll('rect')
 				.data(d3.range(0, breaks, 1))
 				.enter()
@@ -143,7 +201,7 @@ function drawLegend() {
 					return i * heightByBreaks + 5;
 				})
 				.text(function(d, i) {
-					return d3.format('.0f')(breaksToData(d)) + '%';
+					return d3.format('.0f')(chosenBreaks[d]) + '%';
 				});
 		break;
 
@@ -177,6 +235,22 @@ function drawLegend() {
 				});
 			break;
 
+		case 'k-means':
+			legendTicks.selectAll('text')
+				.data(d3.range(breaks, -1, -1))
+				.enter()
+				.insert('svg:text')
+				.attr('class', 'legend-tick')
+				.attr('text-anchor', 'end')
+				.attr('x', -4)
+				.attr('y', function (d, i) {
+					return i * heightByBreaks + 5;
+				})
+				.text(function(d, i) {
+					return d3.format('.0f')(chosenBreaks[d]) + '%';
+				});
+		break;
+
 		default:
 		break;
 	}
@@ -201,20 +275,25 @@ function convertPercentToColor(data) {
 		switch (classifications[classificationIndex])
 		{
 			case 'interval':
-
-				if (data <= breaksToData(i)) {
+				if (data <= chosenBreaks[i]) {
 					color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
 				}
 			break;
 
 			case 'quantile':
-				if (data <= d3.quantile(allValues, i/breaks)) {
+				if (data <= chosenBreaks[i]) {
 					color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
 				}
 			break;
 
 			case 'continuous':
-				color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - dataToPercent(data)) + '%)').toString();
+				color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - continuousScale(data)) + '%)').toString();
+			break;
+
+			case 'k-means':
+				if (data <= chosenBreaks[i]) {
+					color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+				}
 			break;
 
 			default:
@@ -323,13 +402,12 @@ d3.json('../static/geojson/counties.json', function (json) {
 			}
 		}
 
-		// create a sorted array
 		allValues = allValues.sort(sortNumber);
 
 		minValue = d3.min(allValues);
 		maxValue = d3.max(allValues);
 
-		dataToPercent = d3.scale.linear()
+		continuousScale = d3.scale.linear()
 			.domain([minValue, maxValue])
 			.range([0, 100]);
 
@@ -356,9 +434,7 @@ function eraseLegend() {
 
 function drawMapAndLegend() {
 
-	breaksToData = d3.scale.linear()
-		.domain([0, breaks])
-		.range([minValue, maxValue]);
+	createBreaks();
 
 	eraseLegend();
 	drawLegend();
