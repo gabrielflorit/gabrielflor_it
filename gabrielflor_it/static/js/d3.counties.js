@@ -458,38 +458,6 @@ function drawMapAndLegend() {
 	drawMap();
 }
 
-$('#classification-left').click(function() {
-	classificationLeft();
-});
-
-$('#classification-right').click(function() {
-	classificationRight();
-});
-
-$('#year-left').click(function() {
-	yearLeft();
-});
-
-$('#year-right').click(function() {
-	yearRight();
-});
-
-$('#breaks-left').click(function() {
-	breaksLeft();
-});
-
-$('#breaks-right').click(function() {
-	breaksRight();
-});
-
-$('#hue-left').click(function() {
-	hueLeft();
-});
-
-$('#hue-right').click(function() {
-	hueRight();
-});
-
 function classificationLeft() {
 	classificationIndex--;
 	if (classificationIndex < 0) {
@@ -596,6 +564,37 @@ d3.select(window).on("keydown", function () {
 	}
 });
 
+$('#classification-left').click(function() {
+	classificationLeft();
+});
+
+$('#classification-right').click(function() {
+	classificationRight();
+});
+
+$('#year-left').click(function() {
+	yearLeft();
+});
+
+$('#year-right').click(function() {
+	yearRight();
+});
+
+$('#breaks-left').click(function() {
+	breaksLeft();
+});
+
+$('#breaks-right').click(function() {
+	breaksRight();
+});
+
+$('#hue-left').click(function() {
+	hueLeft();
+});
+
+$('#hue-right').click(function() {
+	hueRight();
+});
 /*
 $(function () {
 	$(".map").tooltip({
