@@ -1,3 +1,5 @@
+(function() {
+
 var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, chosenBreaks, continuousScale;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
@@ -434,7 +436,6 @@ d3.json('../static/geojson/counties.json', function (json) {
 		setTimeout(function() {
 			drawMapAndLegend();
 
-			$('#loading').hide();
 			$('#controls').show();
 			$('#about').show();
 
@@ -451,11 +452,15 @@ function eraseLegend() {
 
 function drawMapAndLegend() {
 
-	createBreaks();
-
-	eraseLegend();
-	drawLegend();
-	drawMap();
+	$('#loading').css({visibility:'visible'});
+	
+	setTimeout(function() {
+		createBreaks();
+		eraseLegend();
+		drawLegend();
+		drawMap();
+		$('#loading').css({visibility:'hidden'});
+	}, 1);	
 }
 
 function classificationLeft() {
@@ -595,6 +600,8 @@ $('#hue-left').click(function() {
 $('#hue-right').click(function() {
 	hueRight();
 });
+
+})()
 /*
 $(function () {
 	$(".map").tooltip({
