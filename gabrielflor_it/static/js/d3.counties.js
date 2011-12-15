@@ -173,13 +173,13 @@ function drawLegend() {
 				.attr('width', legendGradientWidth)
 				.attr('height', heightByBreaks)
 				.attr('fill', function (d, i) {
-					return d3.hsl('hsl(' + hue + ', 100%, ' + (i * (100/breaks)) + '%)').toString();
+					return d3.hsl(hue, 1, i/breaks);
 				});
 			break;
 
 		case 'continuous':
 			legendGradient.selectAll('rect')
-				.data(d3.range(0, 100, 1))
+				.data(d3.range(0, 1, 0.01))
 				.enter()
 				.insert('svg:rect')
 				.attr('x', 1)
@@ -189,7 +189,7 @@ function drawLegend() {
 				.attr('width', legendGradientWidth)
 				.attr('height', 2)
 				.attr('fill', function (d, i) {
-					return d3.hsl('hsl(' + hue + ', 100%, ' + d + '%)').toString();
+					return d3.hsl(hue, 1, d);
 				});
 			break;
 
@@ -279,7 +279,7 @@ function drawLegend() {
 
 function convertPercentToColor(data) {
 
-	var color = '';
+	var color = null;
 
 	for (var i = 1; i <= breaks; i++) {
 
@@ -287,29 +287,29 @@ function convertPercentToColor(data) {
 		{
 			case 'interval':
 				if (data <= chosenBreaks[i]) {
-					color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+					color = d3.hsl(hue, 1, (1 - i/breaks));
 				}
 			break;
 
 			case 'quantile':
 				if (i < breaks) {
 					if (data < chosenBreaks[i]) {
-						color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+						color = d3.hsl(hue, 1, (1 - i/breaks));
 					}
 				}
 				else {
 					// shortcircuit - if we're here the data point will always be in the last break
-					color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+					color = d3.hsl(hue, 1, (1 - i/breaks));
 				}
 			break;
 
 			case 'continuous':
-				color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - continuousScale(data)) + '%)').toString();
+				color = d3.hsl(hue, 1, 1 - continuousScale(data));
 			break;
 
 			case 'k-means':
 				if (data <= chosenBreaks[i]) {
-					color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+					color = d3.hsl(hue, 1, (1 - i/breaks));
 				}
 			break;
 
@@ -317,7 +317,7 @@ function convertPercentToColor(data) {
 			break;
 		}
 
-		if (color.length > 0) {
+		if (color) {
 			return color;
 		}
 	}
@@ -427,7 +427,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 		continuousScale = d3.scale.linear()
 			.domain([minValue, maxValue])
-			.range([0, 100]);
+			.range([0, 1]);
 
 		drawTitleAndMisc();
 
