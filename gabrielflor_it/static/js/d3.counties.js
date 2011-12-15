@@ -30,9 +30,18 @@ function createBreaks() {
 		break;
 
 		case 'quantile':
-			for (var i = 0; i <= breaks; i++) {
-				chosenBreaks.push(d3.quantile(allValues, i/breaks));
+			var quantiles = d3.scale.quantile()
+				.domain(allValues)
+				.range(d3.range(breaks))
+				.quantiles();
+			
+			chosenBreaks.push(d3.min(allValues));
+
+			for (var i = 0; i < quantiles.length; i++) {
+				chosenBreaks.push(quantiles[i]);
 			}
+
+			chosenBreaks.push(d3.max(allValues));
 		break;
 
 		case 'k-means':
@@ -270,9 +279,9 @@ function drawLegend() {
 
 function convertPercentToColor(data) {
 
-	for (var i = 1; i <= breaks; i++) {
+	var color = '';
 
-		var color = '';
+	for (var i = 1; i <= breaks; i++) {
 
 		switch (classifications[classificationIndex])
 		{
@@ -283,7 +292,13 @@ function convertPercentToColor(data) {
 			break;
 
 			case 'quantile':
-				if (data <= chosenBreaks[i]) {
+				if (i < breaks) {
+					if (data < chosenBreaks[i]) {
+						color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
+					}
+				}
+				else {
+					// shortcircuit - if we're here the data point will always be in the last break
 					color = d3.hsl('hsl(' + hue + ', 100%, ' + (100 - i * 100/breaks) + '%)').toString();
 				}
 			break;
