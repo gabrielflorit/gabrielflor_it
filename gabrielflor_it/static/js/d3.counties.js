@@ -35,13 +35,13 @@ function createBreaks() {
 				.range(d3.range(breaks))
 				.quantiles();
 			
-			chosenBreaks.push(d3.min(allValues));
+			chosenBreaks.push(minValue);
 
 			for (var i = 0; i < quantiles.length; i++) {
 				chosenBreaks.push(quantiles[i]);
 			}
 
-			chosenBreaks.push(d3.max(allValues));
+			chosenBreaks.push(maxValue);
 		break;
 
 		case 'k-means':
