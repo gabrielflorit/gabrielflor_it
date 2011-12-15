@@ -13,6 +13,12 @@ def counties():
         version=versioning()
         ))
 
+@app.route('/blair')
+def blair():
+    return render_template('d3/blair.html', vars=dict(
+        version=versioning()
+        ))
+
 # @app.route('/polymaps/counties')
 # def polymaps_counties():
 #     return render_template('polymaps/counties.html', vars=dict(
