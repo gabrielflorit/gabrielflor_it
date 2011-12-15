@@ -597,6 +597,16 @@ $('#hue-right').click(function() {
 	hueRight();
 });
 
+$('.buttons .button img').mousedown(function() {
+	$(this).fadeTo(0, 0.75);
+}).mouseleave(function() {
+	$(this).fadeTo(0, 1);
+}).mouseout(function() {
+	$(this).fadeTo(0, 1);
+}).mouseup(function() {
+	$(this).fadeTo(0, 1);
+});
+
 })()
 /*
 $(function () {

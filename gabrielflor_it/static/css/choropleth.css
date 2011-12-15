@@ -80,10 +80,18 @@ h2 {
     float: left;
 }
 
+.buttons .button img {
+  border: solid #222 1px;
+}
+
+.buttons .button img:hover {
+  border: solid #CCC 1px;
+}
+
 .buttons .text {
     width: 60%;
     float: left;
-    padding-top: 3px;
+    padding-top: 5px;
 }
 
 .buttons .end {
