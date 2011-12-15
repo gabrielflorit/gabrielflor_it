@@ -438,6 +438,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 			$('#controls').show();
 			$('#about').show();
+			$('#loading').hide();
 
 		}, 500);
 	});
@@ -452,15 +453,10 @@ function eraseLegend() {
 
 function drawMapAndLegend() {
 
-	$('#loading').css({visibility:'visible'});
-	
-	setTimeout(function() {
-		createBreaks();
-		eraseLegend();
-		drawLegend();
-		drawMap();
-		$('#loading').css({visibility:'hidden'});
-	}, 1);	
+	createBreaks();
+	eraseLegend();
+	drawLegend();
+	drawMap();
 }
 
 function classificationLeft() {
