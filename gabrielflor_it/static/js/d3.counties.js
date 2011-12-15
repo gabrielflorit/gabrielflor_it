@@ -435,10 +435,9 @@ d3.json('../static/geojson/counties.json', function (json) {
 			drawMapAndLegend();
 
 			$('#loading').hide();
-			$('#controls-classification').show();
-			$('#controls-year').show();
-			$('#controls-breaks').show();
-			$('#controls-hue').show();
+			$('#controls').show();
+			$('#about').show();
+
 		}, 500);
 	});
 });
@@ -459,65 +458,140 @@ function drawMapAndLegend() {
 	drawMap();
 }
 
+$('#classification-left').click(function() {
+	classificationLeft();
+});
+
+$('#classification-right').click(function() {
+	classificationRight();
+});
+
+$('#year-left').click(function() {
+	yearLeft();
+});
+
+$('#year-right').click(function() {
+	yearRight();
+});
+
+$('#breaks-left').click(function() {
+	breaksLeft();
+});
+
+$('#breaks-right').click(function() {
+	breaksRight();
+});
+
+$('#hue-left').click(function() {
+	hueLeft();
+});
+
+$('#hue-right').click(function() {
+	hueRight();
+});
+
+function classificationLeft() {
+	classificationIndex--;
+	if (classificationIndex < 0) {
+		classificationIndex = classifications.length - 1;
+	}
+	drawMapAndLegend();
+}
+
+function classificationRight() {
+	classificationIndex++;
+	if (classificationIndex > classifications.length - 1) {
+		classificationIndex = 0;
+	}
+	drawMapAndLegend();
+}
+
+function yearLeft() {
+	currentYearIndex--;
+	if (currentYearIndex < 0) {
+		currentYearIndex = years.length - 1;
+	}
+	drawMap();
+}
+
+function yearRight() {
+	currentYearIndex++;
+	if (currentYearIndex > years.length - 1) {
+		currentYearIndex = 0;
+	}
+	drawMap();
+}
+
+function breaksLeft() {
+	if (breaks > 2) {
+		breaks--;
+		drawMapAndLegend();
+	}
+}
+
+function breaksRight() {
+	breaks++;
+	drawMapAndLegend();
+}
+
+function hueLeft() {
+	hue--;
+	if (hue < 0) {
+		hue = 360;
+	}
+	drawMapAndLegend();
+}
+
+function hueRight() {
+	hue++;
+	if (hue > 360) {
+		hue = 0;
+	}
+	drawMapAndLegend();
+}
+
 d3.select(window).on("keydown", function () {
 
 	switch (d3.event.keyCode) {
 
 		// c
 		case 67:
-			classificationIndex++;
-			if (classificationIndex > classifications.length - 1) {
-				classificationIndex = 0;
-			}
-			drawMapAndLegend();
+			classificationLeft();
+			break;
+
+		// v
+		case 86:
+			classificationRight();
 			break;
 
 		// up
 		case 38:
-			breaks++;
-			drawMapAndLegend();
+			breaksRight();
 			break;
 
 		// down
 		case 40:
-			if (breaks > 2) {
-				breaks--;
-				drawMapAndLegend();
-			}
+			breaksLeft();
 			break;
 
 		// h
 		case 72:
-			hue++;
-			if (hue > 360) {
-				hue = 0;
-			}
-			drawMapAndLegend();
+			hueLeft();
 			break;
 
 		// j
 		case 74:
-			hue--;
-			if (hue < 0) {
-				hue = 360;
-			}
-			drawMapAndLegend();
+			hueRight();
 			break;
 
 		// left
 		case 37:
-			if (currentYearIndex > 0) {
-				currentYearIndex--;
-				drawMap();
-			}
+			yearLeft();
 			break;
 
 		// right
 		case 39:
-			if (currentYearIndex < years.length - 1) {
-				currentYearIndex++;
-				drawMap();
-			}
+			yearRight();
 			break;
 	}
 });

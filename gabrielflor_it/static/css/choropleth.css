@@ -32,12 +32,29 @@ h2 {
   width: 960px;
 }
 
+#explanation #about {
+    position: absolute;
+    top: 8px;
+    right: 0px;
+    display: none;
+}
+
+#explanation #loading {
+    position: absolute;
+    top: 8px;
+    left: 0px;
+}
+
 #explanation {
   width: 960px;
+  position: relative;
 }
 
 #controls {
-  float: left;
+  position: relative;
+  margin: 0 auto;
+  text-align: center;
+  display: none;
 }
 
 #controls p {
@@ -45,15 +62,31 @@ h2 {
   margin: 0px;
 }
 
-#controls-classification,
-#controls-year,
-#controls-breaks,
-#controls-hue {
-  display: none;
+#controls h1 {
+    margin-top: 10px;
+    margin-bottom: 8px;
 }
 
-#explanation a {
-  float: right;
+.buttons {
+    position: relative;
+    clear: both;
+    width: 40%;
+    margin: 0 auto;
+}
+
+.buttons .button {
+    width: 20%;
+    float: left;
+}
+
+.buttons .text {
+    width: 60%;
+    float: left;
+    padding-top: 3px;
+}
+
+.buttons .end {
+    clear: both;
 }
 
 .current {
