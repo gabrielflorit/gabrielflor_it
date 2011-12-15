@@ -37,6 +37,7 @@ h2 {
     top: 8px;
     right: 0px;
     display: none;
+    z-index: 1;
 }
 
 #explanation #loading {
