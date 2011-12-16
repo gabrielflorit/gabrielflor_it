@@ -7,8 +7,12 @@ var totalNumberOfBlairs = 8;
 $(document).ready(function() {
 
 	var files = [
-					'blair', 
-					'blaircontrast50'];
+					'blair00', 
+					'blair10', 
+					'blair20', 
+					'blair30', 
+					'blair40', 
+					'blair50'];
 	
 	masterBlairs = [];
 	numberOfBlairs = files.length;
