@@ -10,7 +10,7 @@ var noData = 'rgb(255,255,255)';
 var classifications = ['interval', 'quantile', 'k-means', 'continuous'];
 
 // initialize map from query string, if possible
-var classificationIndex = $.urlParam('class', 0);
+var classificationIndex = $.urlParam('class', 3);
 var breaks = parseInt($.urlParam('breaks', 4));
 var currentYearIndex = $.urlParam('year', 0);
 var hue = $.urlParam('hue', 230);
