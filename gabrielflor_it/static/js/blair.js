@@ -27,26 +27,8 @@ $(document).ready(function() {
 				g = pixels[j + 1];
 				b = pixels[j + 2];
 
-				col1 = chroma.rgb(255, 0, 0);
-				col2 = chroma.rgb(0, 255, 0);
-				col3 = chroma.interpolate(col1, col2, i/steps);
-
-				// rgb: (255, ?, ?)
-				if (i == 0) {
-					pixels[j + 0] = 255 - (255*i/steps);
-				}
-
-				if (i == 1) {
-					pixels[j + 0] = 200;
-					pixels[j + 2] = 55;
-				}
-
-				// rgb: (?, ?, 255)
-				if (i == 7) {
-					pixels[j + 2] = 255;
-				}
-					pixels[j + 0] = 255 - (255*i/steps);
-					pixels[j + 2] = 255 - (255*i/steps);
+				pixels[j + 0] = 255 - (255*i/steps);
+				pixels[j + 2] = (255*i/steps);
 			}
 
 			ctx.putImageData(data, this.width * i, 0);
