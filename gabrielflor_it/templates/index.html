@@ -58,6 +58,10 @@
 		font-weight: bold;
 	}
 
+	span.italic {
+		font-style: italic;
+	}
+
 	div.content h4 {
 		padding-top: 10px;
 		padding-bottom: 10px;
@@ -91,6 +95,10 @@
 			<ul>
 			<li><a href="http://www.twitter.com/gabrielflorit">twitter</a></li>
 			</ul>
+			<h4>Projects</h4>
+			<ul>
+			<li><a href='/counties'>Poverty estimates by county, 1997-2009</a></li>
+			</ul>
 		</nav>
 	</div>
 
@@ -101,16 +109,20 @@
 			<small>December 14, 2011</small>
 
 			<p>
-				<span class='bold'>Data classification</span> is a critical component of choropleths. The number of classes and our choice of classification system can turn the same data into seemingly different maps. I'll illustrate with a number of examples - of maps, of course. We'll look at total percentage of people living in poverty by county (data courtesy of the <a href='http://www.census.gov/did/www/saipe/'>U.S. Census Bureau</a>). If you're in a hurry, <a href='counties'>here's the interactive map</a>.
+				<a href='counties'><span class='bold italic'>Click here to access the interactive map.</span></a>
+			</p>
+
+			<p>
+				<span class='bold'>Data classification</span> is a critical component of choropleths. The number of classes and our choice of classification system can turn the same data into seemingly different maps. I'll illustrate with a number of examples - of maps, of course. We'll look at total percentage of people living in poverty by county (data courtesy of the <a href='http://www.census.gov/did/www/saipe/'>U.S. Census Bureau</a>).
 			</p>
 
 			<h4>Equal intervals</h4>
 			<p>
-				Let's start with <span class='bold'>equal intervals</span>. In this classification system, the entire range of values is divided equally into the desired number of intervals. 4 equal intervals:
+				Let's start with <span class='bold'>equal intervals</span>. In this classification system, the entire range of values is divided equally into the desired number of intervals. <a href='counties?class=0&year=12&breaks=4&hue=230'>4 equal intervals:</a>
 				<a href='counties?class=0&year=12&breaks=4&hue=230'>
 					<img src='static/img/maps/interval-4.png' />
 				</a>
-				8 equal intervals:
+				<a href='counties?class=0&year=12&breaks=8&hue=230'>8 equal intervals:</a>
 				<a href='counties?class=0&year=12&breaks=8&hue=230'>
 					<img src='static/img/maps/interval-8.png' />
 				</a>
@@ -118,11 +130,11 @@
 
 			<h4>Quantiles</h4>
 			<p>
-				Now let's switch to <span class='bold'>quantiles</span>. Here, each class is of equal size - each class has the same number of values. 4 quantiles (also known as quartiles):
+				Now let's switch to <span class='bold'>quantiles</span>. Here, each class is of equal size - each class has the same number of values. <a href='counties?class=1&year=12&breaks=4&hue=230'>4 quantiles (also known as quartiles):</a>
 				<a href='counties?class=1&year=12&breaks=4&hue=230'>
 					<img src='static/img/maps/quantile-4.png'  />
 				</a>
-				8 quantiles:
+				<a href='counties?class=1&year=12&breaks=8&hue=230'>8 quantiles:</a>
 				<a href='counties?class=1&year=12&breaks=8&hue=230'>
 					<img src='static/img/maps/quantile-8.png' />
 				</a>
@@ -130,12 +142,12 @@
 
 			<h4>k-means clusters</h4>
 			<p>
-				Finally we'll look at <span class='bold'>k-means clusters</span>. This classification system creates classes of values such that the sum of the squared distance from each value to the center of its respective class is minimized. 4 classes:
+				Finally we'll look at <span class='bold'>k-means clusters</span>. This classification system creates classes of values such that the sum of the squared distance from each value to the center of its respective class is minimized. <a href='counties?class=2&year=12&breaks=4&hue=230'>4 classes:</a>
 				<a href='counties?class=2&year=12&breaks=4&hue=230'>
 					<img src='static/img/maps/kmeans-4.png'  />
 				</a>
-				8 classes:
-				<a href='counties?class=2&year=12&breaks=8&hue=230'>
+				<a href='counties?class=2&year=12&breaks=4&hue=230'>8 classes:</a>
+				<a href='counties?class=2&year=12&breaks=4&hue=230'>
 					<img src='static/img/maps/kmeans-8.png' />
 				</a>
 			</p>
@@ -146,7 +158,7 @@
 			
 			<h4>Continuous classes</h4>
 			<p>
-				 I have one more map to show you:
+				<a href='counties?class=3&year=12&hue=230'>I have one more map to show you:</a>
 				<a href='counties?class=3&year=12&hue=230'>
 					<img src='static/img/maps/continuous.png' />
 				</a>
