@@ -1,10 +1,12 @@
 (function() {
 
-var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, chosenBreaks, continuousScale;
+var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, chosenBreaks, continuousScale, currentCounty, states;
+var spark, sparkx, sparky, sparkline;
+var sparkLineWidth = 150;
+var sparkLineHeight = 100;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
 var years = [];
-var tooltip = '';
 var allValues = [];
 var noData = 'rgb(255,255,255)';
 var classifications = ['interval', 'quantile', 'k-means', 'continuous'];
@@ -86,8 +88,9 @@ function displayCurrentSettings() {
 	$('#controls-year .current').text(years[currentYearIndex]);
 
 	if (classifications[classificationIndex] == 'continuous') {
-		$('#controls-breaks .current').text('n/a');
+		$('#controls-breaks').parent().parent().hide();
 	} else {
+		$('#controls-breaks').parent().parent().show();
 		$('#controls-breaks .current').text(breaks);
 	}
 
@@ -99,7 +102,6 @@ function sortNumber(a, b) {
 }
 
 function getFips(d) {
-
 	return d.properties.GEO_ID.substring(9, 14);
 }
 
@@ -279,7 +281,7 @@ function drawLegend() {
 		.attr('style', 'shape-rendering: crispEdges');
 }
 
-function convertPercentToColor(data) {
+function convertPercentToColor(percent) {
 
 	var color = null;
 
@@ -288,14 +290,14 @@ function convertPercentToColor(data) {
 		switch (classifications[classificationIndex])
 		{
 			case 'interval':
-				if (data <= chosenBreaks[i]) {
+				if (percent <= chosenBreaks[i]) {
 					color = d3.hsl(hue, 1, (1 - i/breaks));
 				}
 			break;
 
 			case 'quantile':
 				if (i < breaks) {
-					if (data < chosenBreaks[i]) {
+					if (percent < chosenBreaks[i]) {
 						color = d3.hsl(hue, 1, (1 - i/breaks));
 					}
 				}
@@ -306,11 +308,11 @@ function convertPercentToColor(data) {
 			break;
 
 			case 'continuous':
-				color = d3.hsl(hue, 1, 1 - continuousScale(data));
+				color = d3.hsl(hue, 1, 1 - continuousScale(percent));
 			break;
 
 			case 'k-means':
-				if (data <= chosenBreaks[i]) {
+				if (percent <= chosenBreaks[i]) {
 					color = d3.hsl(hue, 1, (1 - i/breaks));
 				}
 			break;
@@ -331,11 +333,7 @@ function quantize(d) {
 
 	var datum = data[years[currentYearIndex]][fips];
 
-	if (datum) {
-		return convertPercentToColor(datum);
-	} else {
-		return noData;
-	}
+	return datum ? convertPercentToColor(datum) : noData;
 }
 
 function drawMap() {
@@ -358,11 +356,35 @@ legendGradient = legend.append('svg:g');
 legendTicks = legend.append('svg:g');
 
 map = svg.append('svg:g').attr('class', 'map');
+spark = svg.append('svg:g').attr('class', 'spark')
+	.attr('transform', 'translate(50, 200)');
 
-/*d3.json('../static/data/states.json', function (json) {
+d3.json('../static/data/states.json', function (json) {
 
 	states = json;
-});*/
+});
+
+function drawSpark(fips) {
+
+	var sparkdata = [];
+	for (var i = 0; i < years.length; i++) {
+		var datum = data[years[i]][fips];
+		sparkdata.push(datum);
+	}
+
+	spark.selectAll("path")
+		.data([sparkdata])
+		.attr("d", sparkline);
+
+	spark.selectAll('text')
+		.data([sparkdata[0], sparkdata[sparkdata.length - 1]])
+		.attr('y', function(d, i) {
+			return sparky(d) + 5;
+		})			
+		.text(function(d, i) {
+			return d3.format('.1f')(d);
+		});
+}
 
 d3.json('../static/geojson/counties.json', function (json) {
 
@@ -382,35 +404,26 @@ d3.json('../static/geojson/counties.json', function (json) {
 		.append('svg:path')
 		.attr('d', path)
 		.attr('fill', noData)
-/*		.on('mouseover', function (d) {
+		.on('mouseover', function (d) {
 
-			d3.select(this).style('stroke', 'white').style('stroke-width', '1px');
+			d3.select(this)
+				.style('stroke', 'white')
+				.style('stroke-width', '1px');
 
-			var name = d.properties.NAME;
 			var fips = getFips(d);
-
-			var datum = data[years[currentYearIndex]][fips];
-
-			if (datum) {
-				tooltip = name + ' County, ' + states[d.properties.STATE] +
-					'<br/><span><b>' + years[currentYearIndex] +
-					'</b> rate: <b>' + d3.format('.1f')(datum) +
-					'%</b></span>';
-			} else {
-				tooltip = name + ' County, ' + states[d.properties.STATE] +
-					': <b>N/A</b>';
-			}
+			drawSpark(fips);
 		})
 		.on('mouseout', function (d) {
 
-			d3.select(this).style('stroke', 'none');
-		})
-		*/;
+			d3.select(this)
+				.style('stroke', 'none');
+		});
 
-	d3.json('../static/data/saipe_1997_2009.json', function (saipe) {
+	d3.json('../static/data/saipe_1997_2009.json?t=1', function (saipe) {
 
-		// TODO: get the years from the actual data
-		years = d3.range(1997, 2010);
+		for (var year in saipe) {
+			years.push(parseInt(year));
+		}
 
 		data = saipe;
 
@@ -427,9 +440,40 @@ d3.json('../static/geojson/counties.json', function (json) {
 		minValue = d3.min(allValues);
 		maxValue = d3.max(allValues);
 
-		continuousScale = d3.scale.linear()
-			.domain([minValue, maxValue])
-			.range([0, 1]);
+		continuousScale = d3.scale.linear().domain([minValue, maxValue]).range([0, 1]);
+		sparkx = d3.scale.linear().domain([0, years.length]).range([0, sparkLineWidth]);
+		sparky = d3.scale.linear().domain([minValue, maxValue]).range([0, -sparkLineHeight]);
+
+		sparkline = d3.svg.line()
+			.x(function(d,i) { 
+				return sparkx(i); 
+			})
+			.y(function(d) { 
+				return sparky(d); 
+			})
+			.interpolate('linear');
+
+		var sparkdata = [];
+		for (var i = 0; i < years.length; i++) {
+			var datum = data[years[i]]['06037'];
+			sparkdata.push(datum);
+		}
+
+		spark.append("svg:path").attr("d", sparkline(sparkdata));
+		spark.selectAll('text')
+			.data([sparkdata[0], sparkdata[sparkdata.length - 1]])
+			.enter()
+			.insert('svg:text')
+			.attr('text-anchor', 'end')
+			.attr('x', function(d, i) {
+				return i * sparkLineWidth;
+			})
+			.attr('y', function(d, i) {
+				return sparky(d) + 5;
+			})			
+			.text(function(d, i) {
+				return d3.format('.1f')(d);
+			});
 
 		drawTitleAndMisc();
 
@@ -445,14 +489,12 @@ d3.json('../static/geojson/counties.json', function (json) {
 });
 
 function eraseLegend() {
-
 	legend.selectAll('text').remove();
 	legendGradient.selectAll('rect').remove();
 	legendTicks.selectAll('text').remove();
 }
 
 function drawMapAndLegend() {
-
 	createBreaks();
 	eraseLegend();
 	drawLegend();
@@ -520,7 +562,6 @@ function hueRight() {
 }
 
 d3.select(window).on("keydown", function () {
-
 	switch (d3.event.keyCode) {
 
 		// c
@@ -597,27 +638,4 @@ $('#hue-right').click(function() {
 	hueRight();
 });
 
-$('.buttons .button img').click(function() {
-	var outerThis = $(this);
-	$(this).animate({borderColor: '#CCC'}, 0, function() {
-		setTimeout(function() {
-			outerThis.animate({borderColor: '#222'}, 0);	
-		}, 150);
-	});
-});
-
 })()
-/*
-$(function () {
-	$(".map").tooltip({
-		bodyHandler: function () {
-			return tooltip;
-		},
-		track: true,
-		delay: 0,
-		showURL: false,
-		showBody: " - ",
-		fade: 250,
-		extraClass: "tooltip"
-	});
-});*/
