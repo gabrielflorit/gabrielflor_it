@@ -6,6 +6,7 @@ var sparkLineWidth = 150;
 var sparkLineHeight = 100;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
+var extraTranslateRight = 100;
 var years = [];
 var allValues = [];
 var noData = 'rgb(255,255,255)';
@@ -109,7 +110,7 @@ function drawTitleAndMisc() {
 
 	svg.append('svg:text')
 		.attr('class', 'title')
-		.attr('transform', 'translate(515, 22)')
+		.attr('transform', 'translate(' + (515 + extraTranslateRight) + ', 22)')
 		.text('Poverty estimates by county, ' + years[0] + '-' + years[years.length - 1]);
 
 	svg.append('svg:text')
@@ -119,15 +120,13 @@ function drawTitleAndMisc() {
 
 	svg.append('svg:text')
 		.attr('class', 'notes')
-		.attr('x', 950)
-		.attr('y', 475)
+		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 475)')
 		.attr('text-anchor', 'end')
 		.text('By: GABRIEL FLORIT');
 
 	svg.append('svg:text')
 		.attr('class', 'notes')
-		.attr('x', 950)
-		.attr('y', 490)
+		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 490)')
 		.attr('text-anchor', 'end')
 		.text('Source: Small Area Income & Poverty Estimates, U.S. Census Bureau');
 }
@@ -351,11 +350,12 @@ var path = d3.geo.path();
 
 svg = d3.select('#chart').append('svg:svg');
 
-legend = svg.append('svg:g').attr('transform', 'translate(904, 240)');
+legend = svg.append('svg:g').attr('transform', 'translate(' + (904 + extraTranslateRight) + ', 240)');
 legendGradient = legend.append('svg:g');
 legendTicks = legend.append('svg:g');
 
-map = svg.append('svg:g').attr('class', 'map');
+map = svg.append('svg:g').attr('class', 'map')
+	.attr('transform', 'translate(' + extraTranslateRight + ', 0)');
 spark = svg.append('svg:g').attr('class', 'spark')
 	.attr('transform', 'translate(50, 200)');
 
