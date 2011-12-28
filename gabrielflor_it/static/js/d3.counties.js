@@ -2,7 +2,7 @@
 
 var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, chosenBreaks, continuousScale, currentCounty, states;
 var spark, sparkx, sparky, sparkline;
-var sparkLineWidth = 150;
+var sparkLineWidth = 200;
 var sparkLineHeight = 100;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
@@ -363,11 +363,11 @@ legendGradient = legend.append('svg:g');
 legendTicks = legend.append('svg:g');
 
 map = svg.append('svg:g').attr('class', 'map')
-	.attr('transform', 'translate(' + extraTranslateRight + ', 0)');
+	.attr('transform', 'translate(' + (extraTranslateRight + 50) + ', 0)');
 spark = svg.append('svg:g').attr('class', 'spark')
-	.attr('transform', 'translate(46, 200)');
+	.attr('transform', 'translate(53, 200)');
 var countyName = svg.append('svg:g').attr('class', 'countyName')
-	.attr('transform', 'translate(20, 220)');
+	.attr('transform', 'translate(15, 230)');
 
 d3.json('../static/data/states.json', function (json) {
 
@@ -486,9 +486,11 @@ d3.json('../static/geojson/counties.json', function (json) {
 			.data([sparkdata[0], sparkdata[sparkdata.length - 1]])
 			.enter()
 			.insert('svg:text')
-			.attr('text-anchor', 'end')
+			.attr('text-anchor', function(d, i) {
+				return i == 0 ? 'end' : 'start';	
+			})
 			.attr('x', function(d, i) {
-				return i * sparkLineWidth;
+				return i * (sparkLineWidth - 32) - 4;
 			})
 			.attr('y', function(d, i) {
 				return sparky(d) + 5;
