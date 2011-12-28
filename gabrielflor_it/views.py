@@ -13,6 +13,12 @@ def counties():
         version=versioning()
         ))
 
+@app.route('/poverty-by-county')
+def poverty_by_county():
+    return render_template('d3/poverty-by-county.html', vars=dict(
+        version=versioning()
+        ))
+
 @app.route('/blair')
 def blair():
     return render_template('d3/blair.html', vars=dict(
