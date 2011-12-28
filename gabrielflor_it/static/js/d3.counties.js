@@ -118,7 +118,7 @@ function drawTitleAndMisc() {
 
 	svg.append('svg:text')
 		.attr('class', 'title')
-		.attr('transform', 'translate(' + (515 + extraTranslateRight) + ', 22)')
+		.attr('transform', 'translate(' + (515 + extraTranslateRight) + ', 25)')
 		.text('Poverty estimates by county, ' + years[0] + '-' + years[years.length - 1]);
 
 	svg.append('svg:text')
