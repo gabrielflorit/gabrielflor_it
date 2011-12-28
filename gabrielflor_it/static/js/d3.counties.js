@@ -2,8 +2,8 @@
 
 var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, chosenBreaks, continuousScale, currentCounty, states;
 var spark, sparkx, sparky, sparkline;
-var sparkLineWidth = 200;
-var sparkLineHeight = 100;
+var sparkLineWidth = 220;
+var sparkLineHeight = 120;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
 var extraTranslateRight = 100;
@@ -123,7 +123,7 @@ function drawTitleAndMisc() {
 
 	svg.append('svg:text')
 		.attr('class', 'year')
-		.attr('transform', 'translate(15, 60)')
+		.attr('transform', 'translate(15, 50)')
 		.text('');
 
 	svg.append('svg:text')
@@ -365,7 +365,7 @@ legendTicks = legend.append('svg:g');
 map = svg.append('svg:g').attr('class', 'map')
 	.attr('transform', 'translate(' + (extraTranslateRight + 50) + ', 0)');
 spark = svg.append('svg:g').attr('class', 'spark')
-	.attr('transform', 'translate(53, 200)');
+	.attr('transform', 'translate(55, 200)');
 var countyName = svg.append('svg:g').attr('class', 'countyName')
 	.attr('transform', 'translate(15, 230)');
 
@@ -374,10 +374,10 @@ d3.json('../static/data/states.json', function (json) {
 	states = json;
 });
 
-function drawSpark(d) {
+function drawSpark() {
 
-	var fips = getFips(d);
-	var name = getCountyName(d);
+	var fips = getFips(currentCounty);
+	var name = getCountyName(currentCounty);
 
 	var sparkdata = [];
 	for (var i = 0; i < years.length; i++) {
@@ -438,7 +438,9 @@ d3.json('../static/geojson/counties.json', function (json) {
 				.style('stroke', 'white')
 				.style('stroke-width', '1px');
 
-			drawSpark(d);
+			currentCounty = d;
+
+			drawSpark();
 		})
 		.on('mouseout', function (d) {
 
@@ -480,9 +482,9 @@ d3.json('../static/geojson/counties.json', function (json) {
 			})
 			.interpolate('linear');
 
-		var __data__ = map[0][0].childNodes[0].__data__;
-		var fips = getFips(__data__);
-		var name = getCountyName(__data__);
+		currentCounty = map[0][0].childNodes[0].__data__;
+		var fips = getFips(currentCounty);
+		var name = getCountyName(currentCounty);
 
 		var sparkdata = [];
 		for (var i = 0; i < years.length; i++) {
@@ -499,7 +501,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 				return i == 0 ? 'end' : 'start';	
 			})
 			.attr('x', function(d, i) {
-				return i * (sparkLineWidth - 32) - 4;
+				return i * (sparkLineWidth - 25) - 8;
 			})
 			.attr('y', function(d, i) {
 				return sparky(d) + 5;
@@ -582,6 +584,7 @@ function yearLeft() {
 		currentYearIndex = years.length - 1;
 	}
 	drawMap();
+	drawSpark();
 }
 
 function yearRight() {
@@ -590,6 +593,7 @@ function yearRight() {
 		currentYearIndex = 0;
 	}
 	drawMap();
+	drawSpark();
 }
 
 function breaksLeft() {
