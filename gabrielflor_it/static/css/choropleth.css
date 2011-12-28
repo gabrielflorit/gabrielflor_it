@@ -35,17 +35,17 @@ h2 {
 }
 
 #explanation #about {
-    position: absolute;
-    top: 8px;
-    right: 0px;
-    display: none;
-    z-index: 1;
+  position: absolute;
+  top: 8px;
+  right: 0px;
+  display: none;
+  z-index: 1;
 }
 
 #explanation #loading {
-    position: absolute;
-    top: 8px;
-    left: 0px;
+  position: absolute;
+  top: 8px;
+  left: 0px;
 }
 
 #explanation {
@@ -67,20 +67,20 @@ h2 {
 }
 
 #controls h1 {
-    margin-top: 10px;
-    margin-bottom: 8px;
+  margin-top: 10px;
+  margin-bottom: 8px;
 }
 
 .buttons {
-    position: relative;
-    clear: both;
-    width: 40%;
-    margin: 0 auto;
+  position: relative;
+  clear: both;
+  width: 40%;
+  margin: 0 auto;
 }
 
 .buttons .button {
-    width: 20%;
-    float: left;
+  width: 20%;
+  float: left;
 }
 
 .buttons .button img {
@@ -92,13 +92,13 @@ h2 {
 }
 
 .buttons .text {
-    width: 60%;
-    float: left;
-    padding-top: 5px;
+  width: 60%;
+  float: left;
+  padding-top: 5px;
 }
 
 .buttons .end {
-    clear: both;
+  clear: both;
 }
 
 .current {

@@ -106,6 +106,14 @@ function getFips(d) {
 	return d.properties.GEO_ID.substring(9, 14);
 }
 
+function getCountyName(d) {
+
+	var county = d.properties.NAME + ' County';
+	var state = states[d.properties.STATE];
+
+	return [county,state];
+}
+
 function drawTitleAndMisc() {
 
 	svg.append('svg:text')
@@ -357,14 +365,19 @@ legendTicks = legend.append('svg:g');
 map = svg.append('svg:g').attr('class', 'map')
 	.attr('transform', 'translate(' + extraTranslateRight + ', 0)');
 spark = svg.append('svg:g').attr('class', 'spark')
-	.attr('transform', 'translate(50, 200)');
+	.attr('transform', 'translate(46, 200)');
+var countyName = svg.append('svg:g').attr('class', 'countyName')
+	.attr('transform', 'translate(20, 220)');
 
 d3.json('../static/data/states.json', function (json) {
 
 	states = json;
 });
 
-function drawSpark(fips) {
+function drawSpark(d) {
+
+	var fips = getFips(d);
+	var name = getCountyName(d);
 
 	var sparkdata = [];
 	for (var i = 0; i < years.length; i++) {
@@ -383,6 +396,12 @@ function drawSpark(fips) {
 		})			
 		.text(function(d, i) {
 			return d3.format('.1f')(d);
+		});
+
+	countyName.selectAll('text')
+		.data(name)
+		.text(function(d, i) {
+			return d;
 		});
 }
 
@@ -410,8 +429,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 				.style('stroke', 'white')
 				.style('stroke-width', '1px');
 
-			var fips = getFips(d);
-			drawSpark(fips);
+			drawSpark(d);
 		})
 		.on('mouseout', function (d) {
 
@@ -453,9 +471,13 @@ d3.json('../static/geojson/counties.json', function (json) {
 			})
 			.interpolate('linear');
 
+		var __data__ = map[0][0].childNodes[0].__data__;
+		var fips = getFips(__data__);
+		var name = getCountyName(__data__);
+
 		var sparkdata = [];
 		for (var i = 0; i < years.length; i++) {
-			var datum = data[years[i]]['06037'];
+			var datum = data[years[i]][fips];
 			sparkdata.push(datum);
 		}
 
@@ -473,6 +495,20 @@ d3.json('../static/geojson/counties.json', function (json) {
 			})			
 			.text(function(d, i) {
 				return d3.format('.1f')(d);
+			});
+
+		countyName.selectAll('text')
+			.data(name)
+			.enter()
+			.insert('svg:text')
+			.attr('class', function(d, i) {
+				return i == 0 ? 'county' : 'state';
+			})
+			.attr('y', function(d, i) {
+				return i * 25;
+			})			
+			.text(function(d, i) {
+				return d;
 			});
 
 		drawTitleAndMisc();
