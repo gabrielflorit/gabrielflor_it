@@ -1,12 +1,8 @@
 (function() {
 
-var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, chosenBreaks, continuousScale, currentCounty, states;
-var spark, sparkx, sparky, sparkline;
-var sparkLineWidth = 220;
-var sparkLineHeight = 120;
+var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, chosenBreaks, continuousScale;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
-var extraTranslateRight = 100;
 var years = [];
 var allValues = [];
 var noData = 'rgb(255,255,255)';
@@ -106,19 +102,11 @@ function getFips(d) {
 	return d.properties.GEO_ID.substring(9, 14);
 }
 
-function getCountyName(d) {
-
-	var county = d.properties.NAME + ' County';
-	var state = states[d.properties.STATE];
-
-	return [county,state];
-}
-
 function drawTitleAndMisc() {
 
 	svg.append('svg:text')
 		.attr('class', 'title')
-		.attr('transform', 'translate(' + (515 + extraTranslateRight) + ', 25)')
+		.attr('transform', 'translate(515, 25)')
 		.text('Poverty estimates by county, ' + years[0] + '-' + years[years.length - 1]);
 
 	svg.append('svg:text')
@@ -128,13 +116,13 @@ function drawTitleAndMisc() {
 
 	svg.append('svg:text')
 		.attr('class', 'notes')
-		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 475)')
+		.attr('transform', 'translate(950, 475)')
 		.attr('text-anchor', 'end')
 		.text('By: GABRIEL FLORIT');
 
 	svg.append('svg:text')
 		.attr('class', 'notes')
-		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 490)')
+		.attr('transform', 'translate(950, 490)')
 		.attr('text-anchor', 'end')
 		.text('Source: Small Area Income & Poverty Estimates, U.S. Census Bureau');
 }
@@ -358,61 +346,12 @@ var path = d3.geo.path();
 
 svg = d3.select('#chart').append('svg:svg');
 
-legend = svg.append('svg:g').attr('transform', 'translate(' + (904 + extraTranslateRight) + ', 240)');
+legend = svg.append('svg:g').attr('transform', 'translate(904, 240)');
 legendGradient = legend.append('svg:g');
 legendTicks = legend.append('svg:g');
 
 map = svg.append('svg:g').attr('class', 'map')
-	.attr('transform', 'translate(' + (extraTranslateRight + 50) + ', 0)');
-spark = svg.append('svg:g').attr('class', 'spark')
-	.attr('transform', 'translate(55, 200)');
-var countyName = svg.append('svg:g').attr('class', 'countyName')
-	.attr('transform', 'translate(15, 230)');
-
-d3.json('../static/data/states.json', function (json) {
-
-	states = json;
-});
-
-function drawSpark() {
-
-	var fips = getFips(currentCounty);
-	var name = getCountyName(currentCounty);
-
-	var sparkdata = [];
-	for (var i = 0; i < years.length; i++) {
-		var datum = data[years[i]][fips];
-		sparkdata.push(datum);
-	}
-
-	spark.selectAll("path")
-		.data([sparkdata])
-		.attr("d", sparkline);
-
-	spark.selectAll('circle')
-		.data([sparkdata[currentYearIndex]])
-		.attr('cx', function(d, i) {
-			return sparkx(currentYearIndex);
-		})
-		.attr('cy', function(d, i) {
-			return sparky(d);
-		});
-
-	spark.selectAll('text')
-		.data([sparkdata[0], sparkdata[sparkdata.length - 1]])
-		.attr('y', function(d, i) {
-			return sparky(d) + 5;
-		})			
-		.text(function(d, i) {
-			return d3.format('.1f')(d);
-		});
-
-	countyName.selectAll('text')
-		.data(name)
-		.text(function(d, i) {
-			return d;
-		});
-}
+	.attr('transform', 'translate(50, 0)');
 
 d3.json('../static/geojson/counties.json', function (json) {
 
@@ -431,22 +370,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 		.enter()
 		.append('svg:path')
 		.attr('d', path)
-		.attr('fill', noData)
-		.on('mouseover', function (d) {
-
-			d3.select(this)
-				.style('stroke', 'white')
-				.style('stroke-width', '1px');
-
-			currentCounty = d;
-
-			drawSpark();
-		})
-		.on('mouseout', function (d) {
-
-			d3.select(this)
-				.style('stroke', 'none');
-		});
+		.attr('fill', noData);
 
 	d3.json('../static/data/saipe.json', function (saipe) {
 
@@ -470,71 +394,6 @@ d3.json('../static/geojson/counties.json', function (json) {
 		maxValue = d3.max(allValues);
 
 		continuousScale = d3.scale.linear().domain([minValue, maxValue]).range([0, 1]);
-		sparkx = d3.scale.linear().domain([0, years.length]).range([0, sparkLineWidth]);
-		sparky = d3.scale.linear().domain([minValue, maxValue]).range([0, -sparkLineHeight]);
-
-		sparkline = d3.svg.line()
-			.x(function(d,i) { 
-				return sparkx(i); 
-			})
-			.y(function(d) { 
-				return sparky(d); 
-			})
-			.interpolate('linear');
-
-		currentCounty = map[0][0].childNodes[0].__data__;
-		var fips = getFips(currentCounty);
-		var name = getCountyName(currentCounty);
-
-		var sparkdata = [];
-		for (var i = 0; i < years.length; i++) {
-			var datum = data[years[i]][fips];
-			sparkdata.push(datum);
-		}
-
-		spark.append("svg:path").attr("d", sparkline(sparkdata));
-		spark.selectAll('text')
-			.data([sparkdata[0], sparkdata[sparkdata.length - 1]])
-			.enter()
-			.insert('svg:text')
-			.attr('text-anchor', function(d, i) {
-				return i == 0 ? 'end' : 'start';	
-			})
-			.attr('x', function(d, i) {
-				return i * (sparkLineWidth - 22) - 8;
-			})
-			.attr('y', function(d, i) {
-				return sparky(d) + 5;
-			})			
-			.text(function(d, i) {
-				return d3.format('.1f')(d);
-			});
-		
-		spark.selectAll('circle')
-			.data([sparkdata[currentYearIndex]])
-			.enter()
-			.insert('svg:circle')
-			.attr('cx', function(d, i) {
-				return sparkx(currentYearIndex);
-			})
-			.attr('cy', function(d, i) {
-				return sparky(d);
-			})
-			.attr('r', 5);
-
-		countyName.selectAll('text')
-			.data(name)
-			.enter()
-			.insert('svg:text')
-			.attr('class', function(d, i) {
-				return i == 0 ? 'county' : 'state';
-			})
-			.attr('y', function(d, i) {
-				return i * 25;
-			})			
-			.text(function(d, i) {
-				return d;
-			});
 
 		drawTitleAndMisc();
 
@@ -584,7 +443,6 @@ function yearLeft() {
 		currentYearIndex = years.length - 1;
 	}
 	drawMap();
-	drawSpark();
 }
 
 function yearRight() {
@@ -593,7 +451,6 @@ function yearRight() {
 		currentYearIndex = 0;
 	}
 	drawMap();
-	drawSpark();
 }
 
 function breaksLeft() {

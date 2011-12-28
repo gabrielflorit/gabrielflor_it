@@ -13,7 +13,7 @@ def counties():
         version=versioning()
         ))
 
-@app.route('/poverty-by-county')
+@app.route('/poverty-by-county-shh')
 def poverty_by_county():
     return render_template('d3/poverty-by-county.html', vars=dict(
         version=versioning()

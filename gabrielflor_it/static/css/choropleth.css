@@ -14,7 +14,6 @@ html {
 
 svg {
   width: 960px;
-  width: 1060px;
   height: 500px;
 }
 
@@ -31,7 +30,6 @@ h2 {
   border: solid #333 1px;
   height: 500px;
   width: 960px;
-  width: 1060px;
 }
 
 #explanation #about {
@@ -50,7 +48,6 @@ h2 {
 
 #explanation {
   width: 960px;
-  width: 1060px;
   position: relative;
 }
 
