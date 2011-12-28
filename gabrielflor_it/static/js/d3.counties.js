@@ -389,6 +389,15 @@ function drawSpark(d) {
 		.data([sparkdata])
 		.attr("d", sparkline);
 
+	spark.selectAll('circle')
+		.data([sparkdata[currentYearIndex]])
+		.attr('cx', function(d, i) {
+			return sparkx(currentYearIndex);
+		})
+		.attr('cy', function(d, i) {
+			return sparky(d);
+		});
+
 	spark.selectAll('text')
 		.data([sparkdata[0], sparkdata[sparkdata.length - 1]])
 		.attr('y', function(d, i) {
@@ -498,6 +507,18 @@ d3.json('../static/geojson/counties.json', function (json) {
 			.text(function(d, i) {
 				return d3.format('.1f')(d);
 			});
+		
+		spark.selectAll('circle')
+			.data([sparkdata[currentYearIndex]])
+			.enter()
+			.insert('svg:circle')
+			.attr('cx', function(d, i) {
+				return sparkx(currentYearIndex);
+			})
+			.attr('cy', function(d, i) {
+				return sparky(d);
+			})
+			.attr('r', 5);
 
 		countyName.selectAll('text')
 			.data(name)
