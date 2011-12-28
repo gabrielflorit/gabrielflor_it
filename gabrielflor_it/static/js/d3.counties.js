@@ -448,7 +448,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 				.style('stroke', 'none');
 		});
 
-	d3.json('../static/data/saipe_1997_2009.json?t=1', function (saipe) {
+	d3.json('../static/data/saipe.json', function (saipe) {
 
 		for (var year in saipe) {
 			years.push(parseInt(year));
@@ -501,7 +501,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 				return i == 0 ? 'end' : 'start';	
 			})
 			.attr('x', function(d, i) {
-				return i * (sparkLineWidth - 25) - 8;
+				return i * (sparkLineWidth - 22) - 8;
 			})
 			.attr('y', function(d, i) {
 				return sparky(d) + 5;
