@@ -30,6 +30,14 @@ h2 {
   border: solid #333 1px;
   height: 500px;
   width: 960px;
+  margin: 0 auto;
+  margin-top: 40px;
+}
+
+#explanation {
+  width: 960px;
+  position: relative;
+  margin: 0 auto;
 }
 
 #explanation #about {
@@ -44,11 +52,6 @@ h2 {
   position: absolute;
   top: 8px;
   left: 0px;
-}
-
-#explanation {
-  width: 960px;
-  position: relative;
 }
 
 #controls {
@@ -133,15 +136,6 @@ h2 {
 
 .year {
   font-size: 3em;
-}
-
-.tooltip {
-  color: #222;
-  background-color: white;
-}
-
-.tooltip span {
-  font-size: 0.9em;
 }
 
 .notes {

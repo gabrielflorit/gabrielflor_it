@@ -6,9 +6,8 @@ var sparkLineWidth = 220;
 var sparkLineHeight = 120;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
-var extraTranslateRight = 100;
+var extraTranslateRight = 200;
 var years = [];
-var allValues = [];
 var noData = 'rgb(255,255,255)';
 
 var currentYearIndex = 0;
@@ -19,8 +18,12 @@ function displayCurrentSettings() {
 	$('#controls-year .current').text(years[currentYearIndex]);
 }
 
-function sortNumber(a, b) {
+function sortNumberAscending(a, b) {
 	return a - b;
+}
+
+function sortKeyValueDescending(a, b) {
+	return b.value - a.value;
 }
 
 function getFips(d) {
@@ -33,6 +36,13 @@ function getCountyName(d) {
 	var state = states[d.properties.STATE];
 
 	return [county,state];
+}
+
+function getCountyByFips(fips) {
+	
+	return map.selectAll('path')[0].filter(function(value, index, array) {
+		return getFips(value.__data__) == fips;
+	})[0];
 }
 
 function drawTitleAndMisc() {
@@ -147,6 +157,8 @@ spark = svg.append('svg:g').attr('class', 'spark')
 	.attr('transform', 'translate(55, 200)');
 var countyName = svg.append('svg:g').attr('class', 'countyName')
 	.attr('transform', 'translate(15, 230)');
+var topFive = svg.append('svg:g').attr('class', 'topFive')
+	.attr('transform', 'translate(15, 400)');
 
 d3.json('../static/data/states.json', function (json) {
 
@@ -193,6 +205,22 @@ function drawSpark() {
 		});
 }
 
+function drawTopFive() {
+
+	var topFiveData = d3.entries(data[years[currentYearIndex]])
+	.sort(sortKeyValueDescending)
+	.slice(0, 5);
+
+	topFive.selectAll('text')
+	.data(topFiveData)
+	.text(function(d, i) {
+
+		var county = getCountyByFips(d.key);
+		return d.value + ', ' + getCountyName(county.__data__);
+	});
+
+}
+
 d3.json('../static/geojson/counties.json', function (json) {
 
 	var features = [];
@@ -235,18 +263,23 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 		data = saipe;
 
+		// get this year's top 5
+		var topFiveData = d3.entries(data[years[currentYearIndex]])
+			.sort(sortKeyValueDescending)
+			.slice(0, 5);
+
 		// get max and min
+		var allYears = [];
 		for (var i = 0; i < years.length; i++) {
-			var year = data[years[i]];
-			for (var datum in year) {
-				allValues.push(year[datum]);
-			}
+			var yearValues = data[years[i]];
+			allYears.push(d3.values(yearValues));
 		}
 
-		allValues = allValues.sort(sortNumber);
+		var sortedValues = d3.merge(allYears)
+			.sort(sortNumberAscending);
 
-		minValue = d3.min(allValues);
-		maxValue = d3.max(allValues);
+		minValue = d3.min(sortedValues);
+		maxValue = d3.max(sortedValues);
 
 		continuousScale = d3.scale.linear().domain([minValue, maxValue]).range([0, 1]);
 		sparkx = d3.scale.linear().domain([0, years.length]).range([0, sparkLineWidth]);
@@ -261,7 +294,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 			})
 			.interpolate('linear');
 
-		currentCounty = map[0][0].childNodes[0].__data__;
+		currentCounty = map.selectAll('path')[0][0].__data__;
 		var fips = getFips(currentCounty);
 		var name = getCountyName(currentCounty);
 
@@ -270,6 +303,31 @@ d3.json('../static/geojson/counties.json', function (json) {
 			var datum = data[years[i]][fips];
 			sparkdata.push(datum);
 		}
+
+		topFive.selectAll('text')
+			.data(topFiveData)
+			.enter()
+			.insert('svg:text')
+			.attr('y', function(d, i) {
+				return i * 20;
+			})			
+			.text(function(d, i) {
+
+				var county = getCountyByFips(d.key);
+				return d.value + ', ' + getCountyName(county.__data__);
+			})
+			.on('mouseover', function (d) {
+
+				var county = getCountyByFips(d.key);
+				d3.select(county)
+					.style('fill', 'red')
+			})
+			.on('mouseout', function (d) {
+
+				var county = getCountyByFips(d.key);
+				d3.select(county)
+					.style('fill', convertPercentToColor(d.value));
+			});
 
 		spark.append("svg:path").attr("d", sparkline(sparkdata));
 		spark.selectAll('text')
@@ -347,6 +405,7 @@ function yearLeft() {
 	}
 	drawMap();
 	drawSpark();
+	drawTopFive();
 }
 
 function yearRight() {
@@ -356,6 +415,7 @@ function yearRight() {
 	}
 	drawMap();
 	drawSpark();
+	drawTopFive();
 }
 
 d3.select(window).on("keydown", function () {
