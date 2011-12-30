@@ -9,6 +9,8 @@ var legendGradientHeight = 200;
 var extraTranslateRight = 200;
 var years = [];
 var noData = 'rgb(255,255,255)';
+var highlightColor = d3.rgb(198, 42, 42);
+highlightColor = d3.rgb('red').darker();
 
 var currentYearIndex = 0;
 var hue = 230;
@@ -244,8 +246,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 		.on('mouseover', function (d) {
 
 			d3.select(this)
-				.style('stroke', 'white')
-				.style('stroke-width', '1px');
+				.style('fill', highlightColor);
 
 			currentCounty = d;
 
@@ -254,7 +255,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 		.on('mouseout', function (d) {
 
 			d3.select(this)
-				.style('stroke', 'none');
+				.style('fill', convertPercentToColor(data[years[currentYearIndex]][getFips(d)]));
 		});
 
 	d3.json('../static/data/saipe.json', function (saipe) {
@@ -296,7 +297,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 			})
 			.interpolate('linear');
 
-		currentCounty = map.selectAll('path')[0][0].__data__;
+		currentCounty = getCountyByFips(topFiveData[0].key).__data__;
 		var fips = getFips(currentCounty);
 		var name = getCountyName(currentCounty);
 
@@ -312,7 +313,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 			.insert('svg:text')
 			.attr('y', function(d, i) {
 				return i * 20;
-			})			
+			})
 			.text(function(d, i) {
 
 				var county = getCountyByFips(d.key);
@@ -322,7 +323,9 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 				var county = getCountyByFips(d.key);
 				d3.select(county)
-					.style('fill', 'red')
+					.style('fill', highlightColor);
+				currentCounty = county.__data__;
+				drawSpark();
 			})
 			.on('mouseout', function (d) {
 
