@@ -158,6 +158,8 @@ spark = svg.append('svg:g').attr('class', 'spark')
 var countyName = svg.append('svg:g').attr('class', 'countyName')
 	.attr('transform', 'translate(15, 230)');
 var topFive = svg.append('svg:g').attr('class', 'topFive')
+	.attr('transform', 'translate(15, 300)');
+var topFiveInfo = svg.append('svg:g').attr('class', 'topFiveInfo')
 	.attr('transform', 'translate(15, 400)');
 
 d3.json('../static/data/states.json', function (json) {
