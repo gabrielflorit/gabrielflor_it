@@ -55,7 +55,7 @@ function drawTitleAndMisc() {
 		.attr('class', 'notes')
 		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 475)')
 		.attr('text-anchor', 'end')
-		.text('By: GABRIEL FLORIT');
+		.text('By: GABRIEL FLORIT | December 2011');
 
 	svg.append('svg:text')
 		.attr('class', 'notes')
