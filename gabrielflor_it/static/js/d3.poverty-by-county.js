@@ -486,6 +486,8 @@ d3.json('../static/geojson/counties.json', function (json) {
 			})
 			.on('click', function(d, i) {
 
+				currentCounty = null;
+
 				var county = getCountyByFips(d.key);
 
 				// if this county is also selected, do nothing
