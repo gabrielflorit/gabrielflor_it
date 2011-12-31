@@ -33,7 +33,7 @@ function getFips(d) {
 
 function getCountyName(d) {
 	var county = d.properties.NAME + ' County';
-	var state = states[d.properties.STATE];
+	var state = states[d.properties.STATE][0];
 
 	return [county, state];
 }
