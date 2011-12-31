@@ -274,6 +274,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 				.style('fill', convertPercentToColor(data[years[currentYearIndex]][getFips(selectedCounty.__data__)]));
 
 			selectedCounty = null;
+			drawSpark();
 		}
 	});
 
@@ -419,16 +420,53 @@ d3.json('../static/geojson/counties.json', function (json) {
 			.on('mouseover', function (d) {
 
 				var county = getCountyByFips(d.key);
-				d3.select(county)
-					.style('fill', highlightColor);
-				currentCounty = county.__data__;
-				drawSpark();
+
+				// if this county is also selected, do nothing
+				if (county == selectedCounty) {
+					
+				}
+				else {
+					d3.select(county)
+						.style('fill', highlightColor);
+					currentCounty = county.__data__;
+					drawSpark();
+				}
 			})
 			.on('mouseout', function (d) {
 
 				var county = getCountyByFips(d.key);
-				d3.select(county)
-					.style('fill', convertPercentToColor(d.value));
+
+				// if this county is also selected, do nothing
+				if (county == selectedCounty) {
+					
+				}
+				else {
+					d3.select(county)
+						.style('fill', convertPercentToColor(d.value));
+					currentCounty = null;
+					drawSpark();
+				}
+			})
+			.on('click', function(d, i) {
+
+				var county = getCountyByFips(d.key);
+
+				// if this county is also selected, do nothing
+				if (county == selectedCounty) {
+					
+				}
+				else {
+
+					if (selectedCounty) {
+						d3.select(selectedCounty)
+							.style('fill', convertPercentToColor(data[years[currentYearIndex]][getFips(selectedCounty.__data__)]));
+					}
+
+					selectedCounty = county;
+					drawSpark();
+				}
+
+				d3.event.stopPropagation();
 			});
 
 		spark.append("svg:path").attr("d", sparkline(sparkdata));
