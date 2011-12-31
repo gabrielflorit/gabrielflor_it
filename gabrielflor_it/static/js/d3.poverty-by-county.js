@@ -1,7 +1,7 @@
 (function() {
 
 var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, 
-	map, continuousScale, currentCounty, selectedCounty, states, topFiveData;
+	map, continuousScale, currentCounty, selectedCounty, states, topFiveData, saipehighlights;
 var spark, sparkx, sparky, sparkline;
 var sparkLineWidth = 220;
 var sparkLineHeight = 150;
@@ -161,11 +161,16 @@ var topFiveInfoSubtitle = svg.append('svg:text')
 var topFive = svg.append('svg:g').attr('class', 'topFive')
 	.attr('transform', 'translate(15, 560)');
 var topFiveInfo = svg.append('svg:g').attr('class', 'topFiveInfo')
-	.attr('transform', 'translate(270, 513)');
+	.attr('transform', 'translate(270, 512)');
 
 d3.json('../static/data/states.json', function (json) {
 
 	states = json;
+});
+
+d3.json('../static/data/saipehighlights.json', function (json) {
+
+	saipehighlights = json;
 });
 
 function drawTopFiveInfoSubtitle() {
@@ -334,7 +339,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 			});
 
 			if (topFiveCounties.length > 0) {
-				drawTopFiveInfoText(topFiveCounties[0].key);
+				drawTopFiveInfoText(saipehighlights[topFiveCounties[0].key]);
 			}
 			else {
 				drawTopFiveInfoText('');
@@ -444,7 +449,20 @@ d3.json('../static/geojson/counties.json', function (json) {
 		topFive.selectAll('text')
 			.data(topFiveData)
 			.enter()
+			.append('svg:image')
+			.attr('xlink:href', '../static/img/play_9x12.png')
+			.attr('width', 9)
+			.attr('height', 12)
+			.attr('x', 0)
+			.attr('y', function(d, i) {
+				return i * 25 - 11;
+			});
+
+		topFive.selectAll('text')
+			.data(topFiveData)
+			.enter()
 			.insert('svg:text')
+			.attr('x', 15)
 			.attr('y', function(d, i) {
 				return i * 25;
 			})
@@ -504,7 +522,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 					selectedCounty = county;
 					drawSpark();
 
-					drawTopFiveInfoText('Ziebach County is the poorest area in the Unites States, where more than 60 per cent of residents live at or below the poverty line. The county relies on construction work, but this disappears during winter’s deep freeze, sending the unemployment rate soaring to 90 per cent. Several other factors continuously stifle Ziebach County’s economy, including an isolated location, a crumbling infrastructure, the poorly trained population and a tribe that struggles to work with businesses or attract investors.');
+					drawTopFiveInfoText(saipehighlights[d.key]);
 				}
 
 				d3.event.stopPropagation();
