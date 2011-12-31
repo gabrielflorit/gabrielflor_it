@@ -1,6 +1,6 @@
 (function() {
 
-var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, continuousScale, currentCounty, states;
+var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, continuousScale, currentCounty, selectedCounty, states;
 var spark, sparkx, sparky, sparkline;
 var sparkLineWidth = 220;
 var sparkLineHeight = 120;
@@ -16,7 +16,6 @@ var currentYearIndex = 0;
 var hue = 230;
 
 function displayCurrentSettings() {
-
 	$('#controls-year .current').text(years[currentYearIndex]);
 }
 
@@ -33,15 +32,13 @@ function getFips(d) {
 }
 
 function getCountyName(d) {
-
 	var county = d.properties.NAME + ' County';
 	var state = states[d.properties.STATE];
 
-	return [county,state];
+	return [county, state];
 }
 
-function getCountyByFips(fips) {
-	
+function getCountyByFips(fips) {	
 	return map.selectAll('path')[0].filter(function(value, index, array) {
 		return getFips(value.__data__) == fips;
 	})[0];
@@ -156,9 +153,11 @@ legendTicks = legend.append('svg:g');
 map = svg.append('svg:g').attr('class', 'map')
 	.attr('transform', 'translate(' + (extraTranslateRight + 50) + ', 0)');
 spark = svg.append('svg:g').attr('class', 'spark')
-	.attr('transform', 'translate(55, 200)');
+	.attr('transform', 'translate(55, 200)')
+	.style('visibility', 'hidden');
 var countyName = svg.append('svg:g').attr('class', 'countyName')
-	.attr('transform', 'translate(15, 230)');
+	.attr('transform', 'translate(15, 230)')
+	.style('visibility', 'hidden');
 var topFive = svg.append('svg:g').attr('class', 'topFive')
 	.attr('transform', 'translate(15, 300)');
 var topFiveInfo = svg.append('svg:g').attr('class', 'topFiveInfo')
@@ -171,58 +170,86 @@ d3.json('../static/data/states.json', function (json) {
 
 function drawSpark() {
 
-	var fips = getFips(currentCounty);
-	var name = getCountyName(currentCounty);
+	if (selectedCounty || currentCounty) {
+		
+		spark.style('visibility', 'visible');
+		countyName.style('visibility', 'visible');
 
-	var sparkdata = [];
-	for (var i = 0; i < years.length; i++) {
-		var datum = data[years[i]][fips];
-		sparkdata.push(datum);
+		var fips, name;
+
+		if (selectedCounty) {
+			fips = getFips(selectedCounty.__data__);
+			name = getCountyName(selectedCounty.__data__);
+		}
+		else {
+			fips = getFips(currentCounty);
+			name = getCountyName(currentCounty);
+		}
+
+		var sparkdata = [];
+		for (var i = 0; i < years.length; i++) {
+			var datum = data[years[i]][fips];
+			sparkdata.push(datum);
+		}
+
+		spark.selectAll("path")
+			.data([sparkdata])
+			.attr("d", sparkline);
+
+		spark.selectAll('circle')
+			.data([sparkdata[currentYearIndex]])
+			.attr('cx', function(d, i) {
+				return sparkx(currentYearIndex);
+			})
+			.attr('cy', function(d, i) {
+				return sparky(d);
+			});
+
+		spark.selectAll('text')
+			.data([sparkdata[0], sparkdata[sparkdata.length - 1], sparkdata[currentYearIndex]])
+			.attr('x', function(d, i) {
+				return i < 2
+					? i * (sparkLineWidth - 22) - 8
+					: sparkx(currentYearIndex);
+			})
+			.attr('y', function(d, i) {
+				return i < 2
+					? sparky(d) + 5
+					: sparky(d) - 10;
+			})
+			.text(function(d, i) {
+				return i < 2 
+					? d3.format('.1f')(d)
+					: currentYearIndex > 0 && currentYearIndex < years.length - 1
+						? d3.format('.1f')(d)
+						: '';
+			});
+
+		countyName.selectAll('text')
+			.data(name)
+			.text(function(d, i) {
+				return d;
+			});
 	}
-
-	spark.selectAll("path")
-		.data([sparkdata])
-		.attr("d", sparkline);
-
-	spark.selectAll('circle')
-		.data([sparkdata[currentYearIndex]])
-		.attr('cx', function(d, i) {
-			return sparkx(currentYearIndex);
-		})
-		.attr('cy', function(d, i) {
-			return sparky(d);
-		});
-
-	spark.selectAll('text')
-		.data([sparkdata[0], sparkdata[sparkdata.length - 1]])
-		.attr('y', function(d, i) {
-			return sparky(d) + 5;
-		})			
-		.text(function(d, i) {
-			return d3.format('.1f')(d);
-		});
-
-	countyName.selectAll('text')
-		.data(name)
-		.text(function(d, i) {
-			return d;
-		});
+	else {
+		spark.style('visibility', 'hidden');
+		countyName.style('visibility', 'hidden');
+	}
 }
 
 function drawTopFive() {
 
 	var topFiveData = d3.entries(data[years[currentYearIndex]])
-	.sort(sortKeyValueDescending)
-	.slice(0, 5);
+		.sort(sortKeyValueDescending)
+		.slice(0, 5);
 
 	topFive.selectAll('text')
-	.data(topFiveData)
-	.text(function(d, i) {
+		.data(topFiveData)
+		.text(function(d, i) {
 
-		var county = getCountyByFips(d.key);
-		return d.value + ', ' + getCountyName(county.__data__);
-	});
-
+			var county = getCountyByFips(d.key);
+			return d.value + ', ' + getCountyName(county.__data__);
+		});
 }
 
 d3.json('../static/geojson/counties.json', function (json) {
@@ -237,6 +264,19 @@ d3.json('../static/geojson/counties.json', function (json) {
 		}
 	}
 
+	svg.on('click', function(d, i) {
+
+		// is a county selected?
+		if (selectedCounty) {
+
+			// deselect it
+			d3.select(selectedCounty)
+				.style('fill', convertPercentToColor(data[years[currentYearIndex]][getFips(selectedCounty.__data__)]));
+
+			selectedCounty = null;
+		}
+	});
+
 	map.selectAll('path')
 		.data(features)
 		.enter()
@@ -245,17 +285,75 @@ d3.json('../static/geojson/counties.json', function (json) {
 		.attr('fill', noData)
 		.on('mouseover', function (d) {
 
-			d3.select(this)
-				.style('fill', highlightColor);
+			if (selectedCounty) {
+				
+			}
+			else {
+				d3.select(this)
+					.style('fill', highlightColor);
 
-			currentCounty = d;
-
-			drawSpark();
+				currentCounty = d;
+				drawSpark();
+			}
 		})
 		.on('mouseout', function (d) {
 
-			d3.select(this)
-				.style('fill', convertPercentToColor(data[years[currentYearIndex]][getFips(d)]));
+			if (selectedCounty) {
+				
+			}
+			else {
+				d3.select(this)
+					.style('fill', convertPercentToColor(data[years[currentYearIndex]][getFips(d)]));
+			}
+
+			currentCounty = null;
+			drawSpark();
+		})
+		.on('click', function(d, i) {
+
+			// is a county selected?
+			if (selectedCounty) {
+
+				// there can be two cases:
+				// 1 - we've clicked on the currently selected county
+				// 2 - we've clicked on a new county
+
+				// 1 - if we've clicked on the currently selected county,				
+				// deselect it
+				if (selectedCounty == this) {
+					
+					// deselect it
+					d3.select(selectedCounty)
+						.style('fill', convertPercentToColor(data[years[currentYearIndex]][getFips(selectedCounty.__data__)]));
+
+					selectedCounty = null;
+				}
+
+				// 2 - if we've clicked on a new county,
+				// deselect the selected county and then select this one
+				else {
+					
+					// deselect it
+					d3.select(selectedCounty)
+						.style('fill', convertPercentToColor(data[years[currentYearIndex]][getFips(selectedCounty.__data__)]));
+
+					selectedCounty = this;
+
+					d3.select(selectedCounty)
+						.style('fill', highlightColor);
+					
+					drawSpark();
+				}
+			}
+			// no county is selected - select this one
+			else {
+				selectedCounty = this;
+
+				d3.select(selectedCounty)
+					.style('fill', highlightColor);
+			}
+
+			d3.event.stopPropagation();
 		});
 
 	d3.json('../static/data/saipe.json', function (saipe) {
@@ -294,8 +392,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 			})
 			.y(function(d) { 
 				return sparky(d); 
-			})
-			.interpolate('linear');
+			});
 
 		currentCounty = getCountyByFips(topFiveData[0].key).__data__;
 		var fips = getFips(currentCounty);
@@ -336,20 +433,40 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 		spark.append("svg:path").attr("d", sparkline(sparkdata));
 		spark.selectAll('text')
-			.data([sparkdata[0], sparkdata[sparkdata.length - 1]])
+			.data([sparkdata[0], sparkdata[sparkdata.length - 1], sparkdata[currentYearIndex]])
 			.enter()
 			.insert('svg:text')
 			.attr('text-anchor', function(d, i) {
-				return i == 0 ? 'end' : 'start';	
+				switch(i) {
+					case 0:
+						return 'end';
+					break;
+
+					case 1:
+						return 'start';
+					break;
+
+					case 2:
+						return 'middle';
+					break;
+				}
 			})
 			.attr('x', function(d, i) {
-				return i * (sparkLineWidth - 22) - 8;
+				return i < 2
+					? i * (sparkLineWidth - 22) - 8
+					: sparkx(currentYearIndex);
 			})
 			.attr('y', function(d, i) {
-				return sparky(d) + 5;
-			})			
+				return i < 2
+					? sparky(d) + 5
+					: sparky(d) - 10;
+			})
 			.text(function(d, i) {
-				return d3.format('.1f')(d);
+				return i < 2 
+					? d3.format('.1f')(d)
+					: currentYearIndex > 0 && currentYearIndex < years.length - 1
+						? d3.format('.1f')(d)
+						: '';
 			});
 		
 		spark.selectAll('circle')
@@ -411,6 +528,11 @@ function yearLeft() {
 	drawMap();
 	drawSpark();
 	drawTopFive();
+
+	if (selectedCounty) {
+		d3.select(selectedCounty)
+		.style('fill', highlightColor);
+	}
 }
 
 function yearRight() {
@@ -421,6 +543,11 @@ function yearRight() {
 	drawMap();
 	drawSpark();
 	drawTopFive();
+
+	if (selectedCounty) {
+		d3.select(selectedCounty)
+		.style('fill', highlightColor);
+	}
 }
 
 d3.select(window).on("keydown", function () {
