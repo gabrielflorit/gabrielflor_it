@@ -1,13 +1,13 @@
 (function() {
 
 var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, 
-	map, continuousScale, currentCounty, selectedCounty, states, topFiveData, topFiveInfoSubtitle;
+	map, continuousScale, currentCounty, selectedCounty, states, topFiveData;
 var spark, sparkx, sparky, sparkline;
 var sparkLineWidth = 220;
-var sparkLineHeight = 120;
+var sparkLineHeight = 150;
 var legendGradientWidth = 30;
 var legendGradientHeight = 200;
-var extraTranslateRight = 200;
+var extraTranslateRight = 100;
 var years = [];
 var noData = 'rgb(255,255,255)';
 var highlightColor = d3.rgb(198, 42, 42);
@@ -54,20 +54,15 @@ function drawTitleAndMisc() {
 
 	svg.append('svg:text')
 		.attr('class', 'notes')
-		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 475)')
+		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 695)')
 		.attr('text-anchor', 'end')
 		.text('By: GABRIEL FLORIT | December 2011');
 
 	svg.append('svg:text')
 		.attr('class', 'notes')
-		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 490)')
+		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 710)')
 		.attr('text-anchor', 'end')
 		.text('Source: Small Area Income & Poverty Estimates, U.S. Census Bureau');
-
-	topFiveInfoSubtitle = svg.append('svg:text')
-		.attr('class', 'topFiveInfoSubtitle')
-		.attr('transform', 'translate(15, 320)')
-		.text('');
 }
 
 function drawLegend() {
@@ -154,15 +149,19 @@ legendTicks = legend.append('svg:g');
 map = svg.append('svg:g').attr('class', 'map')
 	.attr('transform', 'translate(' + (extraTranslateRight + 50) + ', 0)');
 spark = svg.append('svg:g').attr('class', 'spark')
-	.attr('transform', 'translate(55, 200)')
+	.attr('transform', 'translate(55, 230)')
 	.style('visibility', 'hidden');
 var countyName = svg.append('svg:g').attr('class', 'countyName')
-	.attr('transform', 'translate(15, 230)')
+	.attr('transform', 'translate(15, 260)')
 	.style('visibility', 'hidden');
+var topFiveInfoSubtitle = svg.append('svg:text')
+	.attr('class', 'topFiveInfoSubtitle')
+	.attr('transform', 'translate(15, 530)')
+	.text('');
 var topFive = svg.append('svg:g').attr('class', 'topFive')
-	.attr('transform', 'translate(15, 350)');
+	.attr('transform', 'translate(15, 560)');
 var topFiveInfo = svg.append('svg:g').attr('class', 'topFiveInfo')
-	.attr('transform', 'translate(30, 480)');
+	.attr('transform', 'translate(270, 513)');
 
 d3.json('../static/data/states.json', function (json) {
 
@@ -178,7 +177,7 @@ function drawTopFiveInfoSubtitle() {
 function drawTopFiveInfoText(text) {
 	
 	topFiveInfo.select("body")
-		.html(text);
+		.html('<p>' + text + '</p>');
 }
 
 function drawSpark() {
@@ -437,7 +436,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 		}
 
 		topFiveInfo.append("foreignObject")
-			.attr("width", 700)
+			.attr("width", 770)
 			.attr("height", 500)
 			.append("xhtml:body")
 			.html("");
