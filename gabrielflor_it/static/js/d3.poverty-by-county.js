@@ -1,6 +1,6 @@
 (function() {
 
-var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, continuousScale, currentCounty, selectedCounty, states;
+var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, continuousScale, currentCounty, selectedCounty, states, topFiveData;
 var spark, sparkx, sparky, sparkline;
 var sparkLineWidth = 220;
 var sparkLineHeight = 120;
@@ -168,6 +168,12 @@ d3.json('../static/data/states.json', function (json) {
 	states = json;
 });
 
+function drawTopFiveInfoText(text) {
+	
+	topFiveInfo.select("body")
+		.html(text);
+}
+
 function drawSpark() {
 
 	if (selectedCounty || currentCounty) {
@@ -239,7 +245,7 @@ function drawSpark() {
 
 function drawTopFive() {
 
-	var topFiveData = d3.entries(data[years[currentYearIndex]])
+	topFiveData = d3.entries(data[years[currentYearIndex]])
 		.sort(sortKeyValueDescending)
 		.slice(0, 5);
 
@@ -275,6 +281,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 			selectedCounty = null;
 			drawSpark();
+			drawTopFiveInfoText('');
 		}
 	});
 
@@ -312,6 +319,20 @@ d3.json('../static/geojson/counties.json', function (json) {
 		})
 		.on('click', function(d, i) {
 
+			var fips = getFips(d);
+
+			// is this one of the top five counties? if so, show the text
+			var topFiveCounties = topFiveData.filter(function(value, index, array) {
+				return value.key == fips;
+			});
+
+			if (topFiveCounties.length > 0) {
+				drawTopFiveInfoText(topFiveCounties[0].key);
+			}
+			else {
+				drawTopFiveInfoText('');
+			}
+
 			// is a county selected?
 			if (selectedCounty) {
 
@@ -328,6 +349,8 @@ d3.json('../static/geojson/counties.json', function (json) {
 						.style('fill', convertPercentToColor(data[years[currentYearIndex]][getFips(selectedCounty.__data__)]));
 
 					selectedCounty = null;
+	
+					drawTopFiveInfoText('');
 				}
 
 				// 2 - if we've clicked on a new county,
@@ -366,7 +389,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 		data = saipe;
 
 		// get this year's top 5
-		var topFiveData = d3.entries(data[years[currentYearIndex]])
+		topFiveData = d3.entries(data[years[currentYearIndex]])
 			.sort(sortKeyValueDescending)
 			.slice(0, 5);
 
@@ -404,6 +427,12 @@ d3.json('../static/geojson/counties.json', function (json) {
 			var datum = data[years[i]][fips];
 			sparkdata.push(datum);
 		}
+
+		topFiveInfo.append("foreignObject")
+			.attr("width", 280)
+			.attr("height", 500)
+			.append("xhtml:body")
+			.html("");
 
 		topFive.selectAll('text')
 			.data(topFiveData)
@@ -464,6 +493,8 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 					selectedCounty = county;
 					drawSpark();
+
+					drawTopFiveInfoText(d.key);
 				}
 
 				d3.event.stopPropagation();
