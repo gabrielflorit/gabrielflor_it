@@ -413,9 +413,9 @@ d3.json('../static/geojson/counties.json', function (json) {
 				return sparky(d); 
 			});
 
-		currentCounty = getCountyByFips(topFiveData[0].key).__data__;
-		var fips = getFips(currentCounty);
-		var name = getCountyName(currentCounty);
+		var tempCounty = getCountyByFips(topFiveData[0].key).__data__;
+		var fips = getFips(tempCounty);
+		var name = getCountyName(tempCounty);
 
 		var sparkdata = [];
 		for (var i = 0; i < years.length; i++) {
