@@ -5,7 +5,7 @@
 body {
   margin: 10px;
   font-family: 'Open Sans', sans-serif;
-  color: #ccc;
+  color: #ddd;
 }
 
 html {
@@ -18,7 +18,7 @@ svg {
 }
 
 a {
-  color: #ccc;
+  color: #ddd;
 }
 
 h2 {
@@ -88,7 +88,7 @@ h2 {
 }
 
 .buttons .button img:hover {
-  border: solid #CCC 1px;
+  border: solid #ddd 1px;
 }
 
 .buttons .text {
@@ -115,7 +115,7 @@ h2 {
 .legend text,
 .title,
 .year {
-  fill: #ccc;
+  fill: #ddd;
 }
 
 .legend-tick {
