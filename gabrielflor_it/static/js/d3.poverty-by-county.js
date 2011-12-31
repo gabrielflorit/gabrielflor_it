@@ -62,7 +62,7 @@ function drawTitleAndMisc() {
 		.attr('class', 'notes')
 		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 710)')
 		.attr('text-anchor', 'end')
-		.text('Source: Small Area Income & Poverty Estimates, U.S. Census Bureau');
+		.text('Data: Small Area Income & Poverty Estimates, U.S. Census Bureau');
 }
 
 function drawLegend() {
