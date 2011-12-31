@@ -80,20 +80,50 @@
 
             svg {
               width: 1160px;
+              height: 600px;
+            }
+
+            #header {
+                margin: 0 auto;
+                width: 1160px;
             }
 
             #chart {
               width: 1160px;
+              height: 600px;
+              margin-top: 30px;
             }
 
             #explanation {
               width: 1160px;
+            }
+
+            #header .title {
+                font-family: georgia, "times new roman", times, serif;
+                font-size: 3em;
+                font-weight: normal;
+                padding: 0px;
+                margin-top: 30px;
+                margin-bottom: 20px;
+            }
+
+            #header .subtitle {
+                font-family: georgia, "times new roman", times, serif;
+                font-size: 1.1em;
+                line-height: 1.65em;
+                font-weight: normal;
+                padding: 0px;
+                margin: 0px;
             }
         </style>        
     </head>
     <body>
         <div id='ie8'>This site has been optimized for modern browsers. Please consider switching to a modern browser such as <a href='http://www.google.com/chrome'>Chrome</a>.</div>
         <div id='content'>
+            <div id='header'>
+                <p class='title'>A half-decade of increasing poverty</p>
+                <p class='subtitle'>In the last 5 years the average poverty rate in the United States has risen by 2%. According to the U.S. Census Bureau, 46.2 million people now live in poverty - 5 million under the age of 5. This map displays poverty rates by county for 2005-2010. Click on a county and use the arrow buttons (or left/right keys on your keyboard) to examine the county's poverty rate change.</p>
+            </div>
             <div id='chart'></div>
             <div id='explanation'>
                 <img id='loading' src='../static/img/clock.png' />
