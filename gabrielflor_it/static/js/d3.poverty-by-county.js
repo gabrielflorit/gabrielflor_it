@@ -1,6 +1,7 @@
 (function() {
 
-var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, map, continuousScale, currentCounty, selectedCounty, states, topFiveData;
+var data, svg, minValue, maxValue, legend, legendGradient, legendTicks, 
+	map, continuousScale, currentCounty, selectedCounty, states, topFiveData, topFiveInfoSubtitle;
 var spark, sparkx, sparky, sparkline;
 var sparkLineWidth = 220;
 var sparkLineHeight = 120;
@@ -62,6 +63,11 @@ function drawTitleAndMisc() {
 		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 490)')
 		.attr('text-anchor', 'end')
 		.text('Source: Small Area Income & Poverty Estimates, U.S. Census Bureau');
+
+	topFiveInfoSubtitle = svg.append('svg:text')
+		.attr('class', 'topFiveInfoSubtitle')
+		.attr('transform', 'translate(15, 320)')
+		.text('');
 }
 
 function drawLegend() {
@@ -154,14 +160,20 @@ var countyName = svg.append('svg:g').attr('class', 'countyName')
 	.attr('transform', 'translate(15, 230)')
 	.style('visibility', 'hidden');
 var topFive = svg.append('svg:g').attr('class', 'topFive')
-	.attr('transform', 'translate(15, 300)');
+	.attr('transform', 'translate(15, 350)');
 var topFiveInfo = svg.append('svg:g').attr('class', 'topFiveInfo')
-	.attr('transform', 'translate(15, 400)');
+	.attr('transform', 'translate(30, 480)');
 
 d3.json('../static/data/states.json', function (json) {
 
 	states = json;
 });
+
+function drawTopFiveInfoSubtitle() {
+	
+	topFiveInfoSubtitle
+		.text('Highest poverty rates in ' + years[currentYearIndex] + ':');
+}
 
 function drawTopFiveInfoText(text) {
 	
@@ -249,7 +261,8 @@ function drawTopFive() {
 		.text(function(d, i) {
 
 			var county = getCountyByFips(d.key);
-			return d.value + ', ' + getCountyName(county.__data__);
+			return county.__data__.properties.NAME + ', ' + states[county.__data__.properties.STATE][1]
+				+ ': ' + d3.format('.1f')(d.value) + '%';
 		});
 }
 
@@ -424,7 +437,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 		}
 
 		topFiveInfo.append("foreignObject")
-			.attr("width", 280)
+			.attr("width", 700)
 			.attr("height", 500)
 			.append("xhtml:body")
 			.html("");
@@ -434,12 +447,13 @@ d3.json('../static/geojson/counties.json', function (json) {
 			.enter()
 			.insert('svg:text')
 			.attr('y', function(d, i) {
-				return i * 20;
+				return i * 25;
 			})
 			.text(function(d, i) {
 
 				var county = getCountyByFips(d.key);
-				return d.value + ', ' + getCountyName(county.__data__);
+				return county.__data__.properties.NAME + ', ' + states[county.__data__.properties.STATE][1]
+					+ ': ' + d3.format('.1f')(d.value) + '%';
 			})
 			.on('mouseover', function (d) {
 
@@ -489,7 +503,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 					selectedCounty = county;
 					drawSpark();
 
-					drawTopFiveInfoText(d.key);
+					drawTopFiveInfoText('Ziebach County is the poorest area in the Unites States, where more than 60 per cent of residents live at or below the poverty line. The county relies on construction work, but this disappears during winter’s deep freeze, sending the unemployment rate soaring to 90 per cent. Several other factors continuously stifle Ziebach County’s economy, including an isolated location, a crumbling infrastructure, the poorly trained population and a tribe that struggles to work with businesses or attract investors.');
 				}
 
 				d3.event.stopPropagation();
@@ -563,6 +577,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 		setTimeout(function() {
 			drawMapAndLegend();
+			drawTopFiveInfoSubtitle();
 
 			$('#controls').show();
 			$('#about').show();
@@ -592,6 +607,7 @@ function yearLeft() {
 	drawMap();
 	drawSpark();
 	drawTopFive();
+	drawTopFiveInfoSubtitle();
 
 	if (selectedCounty) {
 		d3.select(selectedCounty)
@@ -607,6 +623,7 @@ function yearRight() {
 	drawMap();
 	drawSpark();
 	drawTopFive();
+	drawTopFiveInfoSubtitle();
 
 	if (selectedCounty) {
 		d3.select(selectedCounty)
