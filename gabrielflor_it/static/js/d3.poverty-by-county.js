@@ -629,7 +629,6 @@ function yearLeft() {
 	}
 	drawMap();
 	drawSpark();
-	drawTopFive();
 
 	if (selectedCounty) {
 		d3.select(selectedCounty)
@@ -644,7 +643,6 @@ function yearRight() {
 	}
 	drawMap();
 	drawSpark();
-	drawTopFive();
 
 	if (selectedCounty) {
 		d3.select(selectedCounty)
