@@ -449,7 +449,11 @@ d3.json('../static/geojson/counties.json', function (json) {
 			.attr("width", 770)
 			.attr("height", 500)
 			.append("xhtml:body")
-			.html("");
+			.html("")
+			.on('click', function(d) {
+
+				d3.event.stopPropagation();
+			});
 
 		topFive.selectAll('text')
 			.data(topFiveData)
