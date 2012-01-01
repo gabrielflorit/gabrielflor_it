@@ -254,11 +254,16 @@ function drawSpark() {
 	}
 }
 
-function drawTopFive() {
+function setTopFive() {
 
 	topFiveData = d3.entries(data[years[currentYearIndex]])
 		.sort(sortKeyValueDescending)
-		.slice(0, 5);
+		.slice(0, 2);
+}
+
+function drawTopFive() {
+
+	setTopFive();
 
 	topFive.selectAll('text')
 		.data(topFiveData)
@@ -401,9 +406,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 		data = saipe;
 
 		// get this year's top 5
-		topFiveData = d3.entries(data[years[currentYearIndex]])
-			.sort(sortKeyValueDescending)
-			.slice(0, 5);
+		setTopFive();
 
 		// get max and min
 		var allYears = [];
