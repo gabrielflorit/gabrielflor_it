@@ -24,10 +24,6 @@ function sortNumberAscending(a, b) {
 	return a - b;
 }
 
-function sortKeyValueDescending(a, b) {
-	return b.value - a.value;
-}
-
 function getFips(d) {
 	return d.properties.GEO_ID.substring(9, 14);
 }
@@ -157,7 +153,7 @@ var countyName = svg.append('svg:g').attr('class', 'countyName')
 var topFiveInfoSubtitle = svg.append('svg:text')
 	.attr('class', 'topFiveInfoSubtitle')
 	.attr('transform', 'translate(15, 530)')
-	.text('');
+	.text('Highest poverty rates:');
 var topFive = svg.append('svg:g').attr('class', 'topFive')
 	.attr('transform', 'translate(15, 560)');
 var topFiveInfo = svg.append('svg:g').attr('class', 'topFiveInfo')
@@ -172,12 +168,6 @@ d3.json('../static/data/saipehighlights.json', function (json) {
 
 	saipehighlights = json;
 });
-
-function drawTopFiveInfoSubtitle() {
-	
-	topFiveInfoSubtitle
-		.text('Highest poverty rates in ' + years[currentYearIndex] + ':');
-}
 
 function drawTopFiveInfoText(text) {
 	
@@ -256,23 +246,35 @@ function drawSpark() {
 
 function setTopFive() {
 
-	topFiveData = d3.entries(data[years[currentYearIndex]])
-		.sort(sortKeyValueDescending)
-		.slice(0, 2);
-}
+	var allData = [];
+	for (var i = 0; i < years.length; i++) {
+		allData.push(d3.entries(data[years[i]]))
+	}
 
-function drawTopFive() {
+	topFiveData = d3.nest()
+		.key(function(d) {
+			return d.key;
+		})
+		.entries(d3.merge(allData))
+		.map(function(value) {
 
-	setTopFive();
+			// this is a bit crazy! what value is what??!! nonsense! clean it up!!!
+			var allValues = value.values.map(function(value) {
+				return value.value;
+			});
 
-	topFive.selectAll('text')
-		.data(topFiveData)
-		.text(function(d, i) {
+			var max = d3.max(allValues);
 
-			var county = getCountyByFips(d.key);
-			return county.__data__.properties.NAME + ', ' + states[county.__data__.properties.STATE][1]
-				+ ': ' + d3.format('.1f')(d.value) + '%';
-		});
+			var result = {};
+			result['key'] = value.key;
+			result['value'] = max;
+
+			return result;
+		})
+		.sort(function(a, b) {
+			return b.value - a.value;
+		})
+		.slice(0, 6);
 }
 
 d3.json('../static/geojson/counties.json', function (json) {
@@ -405,7 +407,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 		data = saipe;
 
-		// get this year's top 5
+		// get the top 5
 		setTopFive();
 
 		// get max and min
@@ -599,7 +601,6 @@ d3.json('../static/geojson/counties.json', function (json) {
 
 		setTimeout(function() {
 			drawMapAndLegend();
-			drawTopFiveInfoSubtitle();
 
 			$('#controls').show();
 			$('#about').show();
@@ -629,7 +630,6 @@ function yearLeft() {
 	drawMap();
 	drawSpark();
 	drawTopFive();
-	drawTopFiveInfoSubtitle();
 
 	if (selectedCounty) {
 		d3.select(selectedCounty)
@@ -645,7 +645,6 @@ function yearRight() {
 	drawMap();
 	drawSpark();
 	drawTopFive();
-	drawTopFiveInfoSubtitle();
 
 	if (selectedCounty) {
 		d3.select(selectedCounty)
