@@ -50,13 +50,13 @@ function drawTitleAndMisc() {
 
 	svg.append('svg:text')
 		.attr('class', 'notes')
-		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 695)')
+		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 715)')
 		.attr('text-anchor', 'end')
 		.text('By: GABRIEL FLORIT | December 2011');
 
 	svg.append('svg:text')
 		.attr('class', 'notes')
-		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 710)')
+		.attr('transform', 'translate(' + (950 + extraTranslateRight) + ', 730)')
 		.attr('text-anchor', 'end')
 		.text('Data: Small Area Income & Poverty Estimates, U.S. Census Bureau');
 }
@@ -406,6 +406,8 @@ d3.json('../static/geojson/counties.json', function (json) {
 		for (var year in saipe) {
 			years.push(parseInt(year));
 		}
+
+		years = years.sort(sortNumberAscending);
 
 		data = saipe;
 
