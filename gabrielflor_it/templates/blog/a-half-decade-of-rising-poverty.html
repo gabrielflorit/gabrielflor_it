@@ -1,33 +1,19 @@
 {% extends "layout.html" %}
 {% block body %}
-		<div>
-			<h3><a href='blog-a-half-decade-of-rising-poverty'>A half-decade of rising poverty</a></h3>
-			
-			<small>December 31, 2011</small>
+{% include 'blog/a-half-decade-of-rising-poverty-content.html' %}
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	    var disqus_shortname = 'gabrielflorit';
+	    var disqus_identifier = 'A half-decade of rising poverty';
+	    var disqus_url = 'http://gabrielflor.it/blog-a-half-decade-of-rising-poverty';
+	    var disqus_title = 'A half-decade of rising poverty';
 
-			<p>
-				<a href='a-half-decade-of-rising-poverty'><span class='bold italic'>Click here to access the interactive map.</span></a>
-			</p>
-
-			<p>
-				I put together a more polished version of my previous work on mapping poverty by county, adding a bit more interactivity including a sparkline showing historical poverty rate change. The <a href='/blog-choropleth-classification-systems'>continuous scale</a> does a great job of highlighting spatial patterns.
-				<a href='a-half-decade-of-rising-poverty'>
-					<img src='static/img/a-half-decade-of-rising-poverty.png' class='last' />
-				</a>
-			</p>
-			<div id="disqus_thread"></div>
-			<script type="text/javascript">
-			    var disqus_shortname = 'gabrielflorit';
-			    var disqus_identifier = 'A half-decade of rising poverty';
-			    var disqus_url = 'http://gabrielflor.it/blog-a-half-decade-of-rising-poverty';
-			    var disqus_title = 'A half-decade of rising poverty';
-
-			    (function() {
-			        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
-			        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
-			        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-			    })();
-			</script>
-			<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-			<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>		</div>
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	<a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>		
 {% endblock %}
