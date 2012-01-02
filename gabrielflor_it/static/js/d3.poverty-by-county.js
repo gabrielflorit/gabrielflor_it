@@ -111,7 +111,9 @@ function drawLegend() {
 
 function convertPercentToColor(percent) {
 
-	return d3.hsl(hue, 1, 1 - continuousScale(percent));
+	return percent
+		? d3.hsl(hue, 1, 1 - continuousScale(percent))
+		: noData;
 }
 
 function quantize(d) {
@@ -209,7 +211,7 @@ function drawSpark() {
 				return sparkx(currentYearIndex);
 			})
 			.attr('cy', function(d, i) {
-				return sparky(d);
+				return sparky(d ? d : minValue);
 			});
 
 		spark.selectAll('text')
@@ -221,14 +223,14 @@ function drawSpark() {
 			})
 			.attr('y', function(d, i) {
 				return i < 2
-					? sparky(d) + 5
-					: sparky(d) - 10;
+					? sparky(d ? d : minValue) + 5
+					: sparky(d ? d : minValue) - 10;
 			})
 			.text(function(d, i) {
 				return i < 2 
-					? d3.format('.1f')(d)
+					? d ? d3.format('.1f')(d) : 'n/a'
 					: currentYearIndex > 0 && currentYearIndex < years.length - 1
-						? d3.format('.1f')(d)
+						? d ? d3.format('.1f')(d) : 'n/a'
 						: '';
 			});
 
@@ -432,7 +434,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 				return sparkx(i); 
 			})
 			.y(function(d) { 
-				return sparky(d); 
+				return sparky(d ? d : minValue);
 			});
 
 		var tempCounty = getCountyByFips(topFiveData[0].key).__data__;
