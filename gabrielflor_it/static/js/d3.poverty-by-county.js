@@ -80,8 +80,8 @@ function drawLegend() {
 		})
 		.attr('width', legendGradientWidth)
 		.attr('height', 2)
-		.attr('fill', function (d, i) {
-			return d3.hsl(hue, 1, d).toString();
+		.style('fill', function (d, i) {
+			return d3.hsl(hue, 1, d);
 		});
 
 	legendTicks.selectAll('text')
@@ -104,7 +104,7 @@ function drawLegend() {
 		.attr('x', 1)
 		.attr('width', legendGradientWidth)
 		.attr('height', legendGradientHeight)
-		.attr('fill', 'none')
+		.style('fill', 'none')
 		.attr('stroke', '#ccc')
 		.attr('style', 'shape-rendering: crispEdges');
 }
@@ -311,7 +311,7 @@ d3.json('../static/geojson/counties.json', function (json) {
 		.enter()
 		.append('svg:path')
 		.attr('d', path)
-		.attr('fill', noData)
+		.style('fill', noData)
 		.on('mouseover', function (d) {
 
 			if (selectedCounty) {
