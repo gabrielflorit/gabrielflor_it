@@ -172,7 +172,7 @@ function drawLegend() {
 				.attr('width', legendGradientWidth)
 				.attr('height', heightByBreaks)
 				.attr('fill', function (d, i) {
-					return d3.hsl(hue, 1, i/breaks);
+					return d3.hsl(hue, 1, i/breaks).toString();
 				});
 			break;
 
@@ -188,7 +188,7 @@ function drawLegend() {
 				.attr('width', legendGradientWidth)
 				.attr('height', 2)
 				.attr('fill', function (d, i) {
-					return d3.hsl(hue, 1, d);
+					return d3.hsl(hue, 1, d).toString();
 				});
 			break;
 
