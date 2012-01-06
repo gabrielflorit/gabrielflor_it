@@ -81,7 +81,7 @@ function drawLegend() {
 		.attr('width', legendGradientWidth)
 		.attr('height', 2)
 		.attr('fill', function (d, i) {
-			return d3.hsl(hue, 1, d);
+			return d3.hsl(hue, 1, d).toString();
 		});
 
 	legendTicks.selectAll('text')
