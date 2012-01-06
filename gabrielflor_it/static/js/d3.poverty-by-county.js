@@ -105,8 +105,8 @@ function drawLegend() {
 		.attr('width', legendGradientWidth)
 		.attr('height', legendGradientHeight)
 		.style('fill', 'none')
-		.attr('stroke', '#ccc')
-		.attr('style', 'shape-rendering: crispEdges');
+		.style('stroke', '#ccc')
+		.style('shape-rendering', 'crispEdges');
 }
 
 function convertPercentToColor(percent) {

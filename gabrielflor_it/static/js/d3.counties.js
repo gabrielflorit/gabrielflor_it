@@ -187,7 +187,7 @@ function drawLegend() {
 				})
 				.attr('width', legendGradientWidth)
 				.attr('height', 2)
-				.attr('fill', function (d, i) {
+				.style('fill', function (d, i) {
 					return d3.hsl(hue, 1, d);
 				});
 			break;
@@ -272,8 +272,8 @@ function drawLegend() {
 		.attr('width', legendGradientWidth)
 		.attr('height', legendGradientHeight)
 		.style('fill', 'none')
-		.attr('stroke', '#ccc')
-		.attr('style', 'shape-rendering: crispEdges');
+		.style('stroke', '#ccc')
+		.style('shape-rendering', 'crispEdges');
 }
 
 function convertPercentToColor(percent) {
