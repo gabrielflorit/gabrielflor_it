@@ -2,7 +2,7 @@
 	position: absolute;
 	top: 0;
 	right: 0;
-	left: 20em;
+	left: 0;
 	height: 100%;
 	background: #fff;
 }
@@ -14,18 +14,22 @@
 #drawer {
 	position: absolute;
 	z-index: 9999999;
-	background: #fff;
+	background: #000;
+	color: #fff;
+	/*background: #fff;*/
 	top: 0;
 	left: 0;
 	bottom: 0;
 	width: 20em;
-	-moz-box-shadow: 0 1px 8px rgba(0, 0, 0, .3) !important;
-	-webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, .3) !important;
-	box-shadow: 0 1px 8px rgba(0, 0, 0, .3) !important;
+	-moz-box-shadow: 0 1px 8px rgba(0, 0, 0, 1) !important;
+	-webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, 1) !important;
+	box-shadow: 0 1px 8px rgba(0, 0, 0, 1) !important;
 	border-right: 1px solid #8C8C8C !important;
 	border-right: 1px solid rgba(0, 0, 0, .45) !important;
 	font-family: Amethysta, serif;
-
+	opacity:0.85;
+	-moz-opacity:0.85;
+	filter:alpha(opacity=85);
 /*
 	z-index: 999999 !important;
 	position: absolute !important;
