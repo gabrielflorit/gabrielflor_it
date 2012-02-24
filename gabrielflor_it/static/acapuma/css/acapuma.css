@@ -1,3 +1,7 @@
+body {
+	background: #fff;
+}
+
 #map {
 	position: absolute;
 	top: 0;
@@ -6,6 +10,25 @@
 	height: 100%;
 	background: #fff;
 }
+
+
+/* custom fonts BEGIN */
+/* ------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------- */
+@font-face {
+    font-family: 'FranchiseRegular';
+    src: url('franchisekit/franchise-bold-webfont.eot');
+    src: url('franchisekit/franchise-bold-webfont.eot?#iefix') format('embedded-opentype'),
+         url('franchisekit/franchise-bold-webfont.woff') format('woff'),
+         url('franchisekit/franchise-bold-webfont.ttf') format('truetype'),
+         url('franchisekit/franchise-bold-webfont.svg#FranchiseRegular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+
+}
+/* ------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------- */
+/* custom fonts END */
 
 
 /* drawer BEGIN */
@@ -52,5 +75,39 @@
 	z-index: 100;
 }
 /* drawer END */
+/* ------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------- */
+
+
+/* tooltip BEGIN */
+/* ------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------- */
+#tooltip {
+	position: absolute;
+	right: 1em;
+	top: 1em;
+	background: #fff;
+	color: #222;
+	padding: 1em;
+	-moz-box-shadow: 0 1px 8px rgba(0, 0, 0, .3);
+	-webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, .3);
+	box-shadow: 0 1px 8px rgba(0, 0, 0, .3);
+	border: 1px solid #8C8C8C;
+	border: 1px solid rgba(0, 0, 0, .45);
+	border-bottom: 1px solid #666;
+	width: 15em;
+	font-family:"Open Sans",Arial,sans-serif;
+}
+
+#tooltip .numberAndGraph .number {
+	font-family:"FranchiseRegular",Arial,sans-serif;
+	font-size: 4em;
+}
+
+#tooltip .explanation {
+	font-size: 0.8em;
+	font-style: italic;
+}
+/* tooltip END */
 /* ------------------------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------------- */
