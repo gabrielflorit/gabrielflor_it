@@ -1,0 +1,62 @@
+#map {
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 20em;
+	height: 100%;
+	background: #fff;
+}
+
+
+/* drawer BEGIN */
+/* ------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------- */
+#drawer {
+	position: absolute;
+	z-index: 9999999;
+	background: #fff;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 20em;
+	-moz-box-shadow: 0 1px 8px rgba(0, 0, 0, .3) !important;
+	-webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, .3) !important;
+	box-shadow: 0 1px 8px rgba(0, 0, 0, .3) !important;
+	border-right: 1px solid #8C8C8C !important;
+	border-right: 1px solid rgba(0, 0, 0, .45) !important;
+	font-family: Amethysta, serif;
+
+/*
+	z-index: 999999 !important;
+	position: absolute !important;
+	left: auto !important;
+	right: 10px !important;
+	bottom: 10px !important;
+	background: #fff !important;
+	color: #222 !important;
+	padding: 10px !important;
+	-moz-box-shadow: 0 1px 8px rgba(0, 0, 0, .3) !important;
+	-webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, .3) !important;
+	box-shadow: 0 1px 8px rgba(0, 0, 0, .3) !important;
+	border: 1px solid #8C8C8C !important;
+	border: 1px solid rgba(0, 0, 0, .45) !important;
+	border-bottom: 1px solid #666 !important;
+	*/
+}
+
+#drawer #panelOne {
+	padding: 2em;
+}
+
+#drawer h1 {
+	font-size: 2em;
+	margin-bottom: 1em;
+}
+
+#drawer h2 {
+	font-size: 1em;
+	line-height: 1.5em;
+}
+/* drawer END */
+/* ------------------------------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------------------------- */

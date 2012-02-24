@@ -37,6 +37,12 @@ def blair():
         version=versioning()
         ))
 
+@app.route('/aca-puma')
+def aca_puma():
+    return render_template('aca-puma.html', vars=dict(
+        version=versioning()
+        ))
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static/img'),
