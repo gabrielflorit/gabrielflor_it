@@ -83,30 +83,50 @@ body {
 /* ------------------------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------------- */
 #tooltip {
+	display: none;
 	position: absolute;
 	right: 1em;
 	top: 1em;
-	background: #fff;
+	background: #183966;
 	color: #222;
 	padding: 1em;
-	-moz-box-shadow: 0 1px 8px rgba(0, 0, 0, .3);
-	-webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, .3);
-	box-shadow: 0 1px 8px rgba(0, 0, 0, .3);
+	-moz-box-shadow: 0 1px 8px rgba(24, 57, 102, 1);
+	-webkit-box-shadow: 0 1px 8px rgba(24, 57, 102, 1);
+	box-shadow: 0 1px 8px rgba(24, 57, 102, 1);
 	border: 1px solid #8C8C8C;
 	border: 1px solid rgba(0, 0, 0, .45);
-	border-bottom: 1px solid #666;
-	width: 15em;
+	border-bottom: 1px solid #000;
+	width: 20em;
 	font-family:"Open Sans",Arial,sans-serif;
 }
 
-#tooltip .numberAndGraph .number {
+#tooltip .numberAndChart {
+	position: relative;
+	float: left;
+}
+
+#tooltip .numberAndChart .number {
 	font-family:"FranchiseRegular",Arial,sans-serif;
-	font-size: 4em;
+	font-size: 6em;
+	width: 1.5em;
+	position: relative;
+	float: left;
+	text-align: right;
+	color: #F98319;
+	color: #fff;
+}
+
+#chart {
+	position: relative;
+	width: 11em;
+	float: right;
 }
 
 #tooltip .explanation {
+	clear: both;
 	font-size: 0.8em;
 	font-style: italic;
+	color: #fff;
 }
 /* tooltip END */
 /* ------------------------------------------------------------------------------------------- */
