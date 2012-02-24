@@ -13,8 +13,8 @@
 /* ------------------------------------------------------------------------------------------- */
 #drawer {
 	position: absolute;
-	z-index: 9999999;
-	background: #000;
+	z-index: 10;
+	background: #001B4A;
 	color: #fff;
 	top: 0;
 	left: 0;
@@ -43,6 +43,13 @@
 #drawer h2 {
 	font-size: 1em;
 	line-height: 1.5em;
+}
+
+#kfflogo {
+	position: absolute;
+	bottom: 1em;
+	left: 2em;
+	z-index: 100;
 }
 /* drawer END */
 /* ------------------------------------------------------------------------------------------- */
