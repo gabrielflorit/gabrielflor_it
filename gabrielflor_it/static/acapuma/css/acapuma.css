@@ -83,7 +83,7 @@ body {
 /* ------------------------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------------- */
 #tooltip {
-	display: none;
+	visibility: hidden;
 	position: absolute;
 	right: 1em;
 	top: 1em;
@@ -96,30 +96,60 @@ body {
 	border: 1px solid #8C8C8C;
 	border: 1px solid rgba(0, 0, 0, .45);
 	border-bottom: 1px solid #000;
-	width: 20em;
+	width: 40em;
 	font-family:"Open Sans",Arial,sans-serif;
+
+	color: white;
 }
 
-#tooltip .numberAndChart {
+#tooltip .numberAndPeople {
 	position: relative;
-	float: left;
-}
-
-#tooltip .numberAndChart .number {
+	width: 100%;
 	font-family:"FranchiseRegular",Arial,sans-serif;
-	font-size: 6em;
-	width: 1.5em;
-	position: relative;
 	float: left;
-	text-align: right;
-	color: #F98319;
-	color: #fff;
 }
 
-#chart {
+#tooltip .numberAndPeople .number {
 	position: relative;
-	width: 11em;
+	width: 20%;
+	float: left;
+	color: #fff;
+	font-size: 600%;
+	text-align: right;
+}
+
+#tooltip .numberAndPeople .people {
+	position: relative;
+	margin-top: 2%;
+	width: 75%;
 	float: right;
+	overflow: hidden;
+	font-size: 400%;
+}
+
+#tooltip .numberAndPeople .people .iconAndPanel {
+	position: relative;
+	width: 9%;
+	margin-left: 1%;
+	float: left;
+}
+
+#tooltip .numberAndPeople .people .iconAndPanel div {
+	position: relative;
+}
+
+#tooltip .numberAndPeople .people .iconAndPanel div.icon {
+	background-image: url('../img/invisiman.png');
+	background-position: 100% 100%;
+	background-repeat: no-repeat;
+	background-size: 100% 100%;
+	z-index: 10;
+}
+
+#tooltip .numberAndPeople .people .iconAndPanel div.panel {
+	position: absolute;
+	background-color: white;
+	width: 100%;
 }
 
 #tooltip .explanation {
@@ -127,6 +157,7 @@ body {
 	font-size: 0.8em;
 	font-style: italic;
 	color: #fff;
+	text-align: right;
 }
 /* tooltip END */
 /* ------------------------------------------------------------------------------------------- */
