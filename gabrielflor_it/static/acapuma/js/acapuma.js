@@ -23,7 +23,14 @@ jQuery(document).ready(function ($) {
 				new mm.TouchHandler()
 			]
 		);
-		m.setCenterZoom(new mm.Location(defaultLat, defaultLon), defaultZoom);
+
+		var ua = navigator.userAgent.toLowerCase(),
+			isMobile = ua.indexOf('mobile') != -1;
+		if (!isMobile) {
+			wax.mm.zoomer(m).appendTo(m.parent);
+		}
+
+  		m.setCenterZoom(new mm.Location(defaultLat, defaultLon), defaultZoom);
 		wax.mm.hash(m, tilejson, {
 			defaultCenter: new mm.Location(defaultLat, defaultLon),
 			defaultZoom: defaultZoom,

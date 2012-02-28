@@ -168,7 +168,7 @@ body {
 }
 
 #tooltip .numberAndPeople .people .iconAndPanel div.icon {
-	background-image: url('../img/invisiman3.png');
+	background-image: url('../img/invisiman.png');
 	background-position: 100% 100%;
 	background-repeat: no-repeat;
 	background-size: 100% 100%;
@@ -190,3 +190,54 @@ body {
 /* tooltip END */
 /* ------------------------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------------- */
+#map .zoomer {
+	position: absolute;
+	background-color: #222;
+	background-color: #183966;
+	border: 1px solid #222;
+	border: 1px solid #1e4881;
+	border-radius: 3px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	box-shadow: rgba(24,57,102,1) 0px 1px 3px;
+	-moz-box-shadow: rgba(24,57,102,1) 0px 1px 3px;  
+	-webkit-box-shadow: rgba(24,57,102,1) 0px 1px 3px;
+	opacity: 0.75;
+	-moz-opacity: 0.75;
+	filter: alpha(opacity=75);
+	text-indent: -9999px;
+	overflow: hidden;
+	z-index: 10;
+	cursor: pointer;
+	top: 2em;
+	left: 26em;
+	width: 1.75em;
+	height: 1.75em;
+}
+
+#map .zoomer:active {
+	border-color:#bbb !important;
+	background-color:#ddd !important;
+	box-shadow:inset rgba(0,0,0,0.1) 0px 1px 3px !important;
+	-moz-box-shadow:inset rgba(0,0,0,0.1) 0px 1px 3px !important;
+	-webkit-box-shadow:inset rgba(0,0,0,0.1) 0px 1px 3px !important;
+}
+
+#map .zoomin {
+	background-image: url(../img/plus_8x8.png);
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	border-radius: 3px 3px 0px 0px;
+	-moz-border-radius: 3px 3px 0px 0px;
+	-webkit-border-radius: 3px 3px 0px 0px;
+}
+
+#map .zoomout {
+	background-image: url(../img/minus_8x2.png);
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	border-radius: 0px 0px 3px 3px;
+	-moz-border-radius: 0px 0px 3px 3px;
+	-webkit-border-radius: 0px 0px 3px 3px;
+	top: 4em;
+}
