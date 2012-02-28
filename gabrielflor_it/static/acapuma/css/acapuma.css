@@ -192,16 +192,14 @@ body {
 /* ------------------------------------------------------------------------------------------- */
 #map .zoomer {
 	position: absolute;
-	background-color: #222;
-	background-color: #183966;
-	border: 1px solid #222;
-	border: 1px solid #1e4881;
+	background-color: #fff;
+	border: 1px solid #aaa;
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
-	box-shadow: rgba(24,57,102,1) 0px 1px 3px;
-	-moz-box-shadow: rgba(24,57,102,1) 0px 1px 3px;  
-	-webkit-box-shadow: rgba(24,57,102,1) 0px 1px 3px;
+	box-shadow: rgba(170,170,170,1) 0px 1px 3px;
+	-moz-box-shadow: rgba(170,170,170,1) 0px 1px 3px;  
+	-webkit-box-shadow: rgba(170,170,170,1) 0px 1px 3px;
 	opacity: 0.75;
 	-moz-opacity: 0.75;
 	filter: alpha(opacity=75);
