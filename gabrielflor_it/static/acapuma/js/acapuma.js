@@ -4,7 +4,7 @@ jQuery(document).ready(function ($) {
 
 	var url = 'http://api.tiles.mapbox.com/v3/mapbox.world-blank-light,velir.acapuma,mapbox.world-bank-borders-en.jsonp';
 	var defaultLat = 39;
-	var defaultLon = -98;
+	var defaultLon = -110;
 	var defaultZoom = 4;
 	// var minZoom = 4;
 	// var maxZoom = 11;
