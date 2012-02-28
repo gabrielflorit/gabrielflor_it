@@ -96,9 +96,8 @@ body {
 	border: 1px solid #8C8C8C;
 	border: 1px solid rgba(0, 0, 0, .45);
 	border-bottom: 1px solid #000;
-	width: 40em;
+	width: 27em;
 	font-family:"Open Sans",Arial,sans-serif;
-
 	color: white;
 }
 
@@ -111,17 +110,16 @@ body {
 
 #tooltip .numberAndPeople .number {
 	position: relative;
-	width: 20%;
+	width: 30%;
 	float: left;
-	color: #fff;
 	font-size: 600%;
 	text-align: right;
 }
 
 #tooltip .numberAndPeople .people {
 	position: relative;
-	margin-top: 2%;
-	width: 75%;
+	margin-top: 3%;
+	width: 65%;
 	float: right;
 	overflow: hidden;
 	font-size: 400%;
@@ -129,8 +127,8 @@ body {
 
 #tooltip .numberAndPeople .people .iconAndPanel {
 	position: relative;
-	width: 9%;
-	margin-left: 1%;
+	width: 8%;
+	margin-left: 2%;
 	float: left;
 }
 
@@ -156,7 +154,6 @@ body {
 	clear: both;
 	font-size: 0.8em;
 	font-style: italic;
-	color: #fff;
 	text-align: right;
 }
 /* tooltip END */
