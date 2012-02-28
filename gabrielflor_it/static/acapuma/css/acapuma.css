@@ -89,6 +89,16 @@ body {
 	background-repeat: no-repeat;
 }
 
+#panelOne .error {
+	display: none;
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-size: 0.8em;
+	margin-top: 1em;
+	font-weight: bold;
+	color: #F98319;
+}
+
 #kfflogo {
 	position: absolute;
 	bottom: 1em;

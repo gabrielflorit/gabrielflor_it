@@ -81,5 +81,45 @@ jQuery(document).ready(function ($) {
 		}
 	});
 
+	$('form.searchLocation').submit(function (e){
+		e.preventDefault();
+		geocode(input.val());
+	});
+
+	function geocode(query) {
+
+		var url = 'http://open.mapquestapi.com/nominatim/v1/search';
+		var data = {
+			format: 'json',
+			countrycodes: 'us',
+			limit: 1,
+			q: query
+		}
+
+		$.getJSON(url, data, function(json) {
+
+			var value = json[0];
+
+			if (value === undefined) {
+				$('#panelOne .error').show();
+			} else {
+				$('#panelOne .error').hide();
+				if (value.type == 'state' || value.type == 'county' || value.type == 'maritime'  || value.type == 'country') {
+					easey.slow(m, {
+						location: new mm.Location(value.lat, value.lon),
+						zoom: 7,
+						time: 2000
+					});
+				} else {
+					easey.slow(m, {
+						location: new mm.Location(value.lat, value.lon),
+						zoom: 11,
+						time: 2000
+					});
+				}
+			}
+		});
+	}
+
 
 });
