@@ -66,4 +66,20 @@ jQuery(document).ready(function ($) {
 
 	});
 
+	// setup the search input
+	var input = $('#panelOne input'),
+		inputTitle = 'enter your address';
+		input.val(inputTitle);
+
+	input.blur(function() {
+		if (input.val() === '') {
+			input.val(inputTitle);
+		}
+	}).focus(function() {
+		if (input.val() === inputTitle) {
+			input.val('');
+		}
+	});
+
+
 });
