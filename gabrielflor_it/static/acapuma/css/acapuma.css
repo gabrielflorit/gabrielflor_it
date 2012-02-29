@@ -187,6 +187,15 @@ body {
 	font-style: italic;
 	text-align: right;
 }
+
+#tooltip .places {
+	margin-top: 1em;
+	font-size: 0.8em;
+	font-style: italic;
+	text-align: right;
+	height: 4em;
+	overflow: hidden;
+}
 /* tooltip END */
 /* ------------------------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------------- */
