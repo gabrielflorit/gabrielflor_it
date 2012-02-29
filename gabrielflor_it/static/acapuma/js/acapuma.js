@@ -11,11 +11,8 @@ jQuery(document).ready(function ($) {
 	var iMax = 20;
 	var jMax = 5;
 	var interaction;
-	var theTileJson;
 
 	wax.tilejson(url, function (tilejson) {
-
-		theTileJson = tilejson;
 
 		mm = com.modestmaps;
 		m = new mm.Map('map', new wax.mm.connector(tilejson),
@@ -42,9 +39,9 @@ jQuery(document).ready(function ($) {
 			{
 				callbacks: {
 					over: displayTooltip,
-					out: hideTooltip,
+					out: hideTooltip/*,
 					click: function(feature) {
-					}
+					}*/
 				}
 			}
 		);
@@ -98,18 +95,10 @@ jQuery(document).ready(function ($) {
 
 	$('form.searchLocation').submit(function (e){
 		e.preventDefault();
-		geocode(input.val(), function() {
-			DoIt();
-		});
+		geocode(input.val(), displayTooltipForCenterOfMap);
 	});
 
-	$('#kfflogo').on('click', function(e) {
-			DoIt();
-	});
-
-	
-
-	function DoIt() {
+	function displayTooltipForCenterOfMap() {
 			var domMap = $('#map');
 
 			var x = domMap.offset().left + Math.floor(domMap.width()/2);
@@ -117,18 +106,12 @@ jQuery(document).ready(function ($) {
 
 			var pos = {x: x, y: y};
 
-			var interaction2 = wax.mm.interaction(m, theTileJson);
-
-
-
-
-
-			interaction2.getCenterFeature(pos, function(feature) {
+			interaction.getCenterFeature(pos, function(feature) {
 				displayTooltip(feature);
 			});
 	}
 
-	function geocode(query, theCallback) {
+	function geocode(query, tooltipCallback) {
 
 		var url = 'http://open.mapquestapi.com/nominatim/v1/search';
 		var data = {
@@ -147,13 +130,12 @@ jQuery(document).ready(function ($) {
 				$('#panelOne .error').show();
 			} else {
 				$('#panelOne .error').hide();
+				alert(value.type);
 				easey.slow(m, {
 					location: new mm.Location(value.lat, value.lon),
-					zoom: (value.type == 'state' || value.type == 'county' || value.type == 'maritime'  || value.type == 'country') ? 9 : 9,
+					zoom: (value.type == 'state') ? 7 : 9,
 					time: 2000,
-					callback: function() {
-						setTimeout(theCallback, 0);
-					}
+					callback: tooltipCallback
 				});
 			}
 		});
