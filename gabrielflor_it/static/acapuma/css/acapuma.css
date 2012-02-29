@@ -6,7 +6,7 @@ body {
 	position: absolute;
 	top: 0;
 	right: 0;
-	left: 0;
+	left: 24em;
 	height: 100%;
 	background: #fff;
 }
@@ -208,7 +208,7 @@ body {
 	z-index: 10;
 	cursor: pointer;
 	top: 2em;
-	left: 26em;
+	left: 2em;
 	width: 1.75em;
 	height: 1.75em;
 }

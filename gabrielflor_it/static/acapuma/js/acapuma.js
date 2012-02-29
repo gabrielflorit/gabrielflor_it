@@ -1,10 +1,8 @@
 jQuery(document).ready(function ($) {
 
-	var acapuma = {};
-
 	var url = 'http://api.tiles.mapbox.com/v3/mapbox.world-blank-light,velir.acapuma,mapbox.world-bank-borders-en.jsonp';
 	var defaultLat = 39;
-	var defaultLon = -110;
+	var defaultLon = -97;
 	var defaultZoom = 4;
 	// var minZoom = 4;
 	// var maxZoom = 11;
@@ -12,8 +10,12 @@ jQuery(document).ready(function ($) {
 	var chart;
 	var iMax = 20;
 	var jMax = 5;
+	var interaction;
+	var theTileJson;
 
 	wax.tilejson(url, function (tilejson) {
+
+		theTileJson = tilejson;
 
 		mm = com.modestmaps;
 		m = new mm.Map('map', new wax.mm.connector(tilejson),
@@ -39,32 +41,8 @@ jQuery(document).ready(function ($) {
 		interaction = wax.mm.interaction(m, tilejson, 
 			{
 				callbacks: {
-					over: function(feature) {
-
-						acapuma.state = feature.split(',')[0];
-						acapuma.puma = feature.split(',')[1];
-						acapuma.data = Number(feature.split(',')[2]);
-
-						var totalAmount = acapuma.data;
-
-						var panels = $('#tooltip .numberAndPeople .people .iconAndPanel .panel');
-						panels.each(function(index, element) {
-
-							var thisAmount = totalAmount <= 10
-								? totalAmount
-								: 10;
-
-							totalAmount -= thisAmount;
-
-							$(this).animate({top:(100 - (thisAmount * 10)) + '%'}, 0);
-						});
-
-						$('#tooltip .numberAndPeople .number').text(acapuma.data + '%');
-						$('#tooltip').css('visibility', 'visible');
-					},
-					out: function() {
-						$('#tooltip').css('visibility', 'hidden');
-					},
+					over: displayTooltip,
+					out: hideTooltip,
 					click: function(feature) {
 					}
 				}
@@ -72,6 +50,36 @@ jQuery(document).ready(function ($) {
 		);
 
 	});
+
+	function hideTooltip() {
+		$('#tooltip').css('visibility', 'hidden');
+	}
+
+	function displayTooltip(feature) {
+
+		var acapuma = {};
+		acapuma.state = feature.split(',')[0];
+		acapuma.puma = feature.split(',')[1];
+		acapuma.data = Number(feature.split(',')[2]);
+
+		var totalAmount = acapuma.data;
+
+		var panels = $('#tooltip .numberAndPeople .people .iconAndPanel .panel');
+		panels.each(function(index, element) {
+
+			var thisAmount = totalAmount <= 10
+				? totalAmount
+				: 10;
+
+			totalAmount -= thisAmount;
+
+			$(this).animate({top:(100 - (thisAmount * 10)) + '%'}, 0);
+		});
+
+		$('#tooltip .place').text(feature);
+		$('#tooltip .numberAndPeople .number').text(acapuma.data + '%');
+		$('#tooltip').css('visibility', 'visible');
+	}
 
 	// setup the search input
 	var input = $('#panelOne input'),
@@ -90,10 +98,37 @@ jQuery(document).ready(function ($) {
 
 	$('form.searchLocation').submit(function (e){
 		e.preventDefault();
-		geocode(input.val());
+		geocode(input.val(), function() {
+			DoIt();
+		});
 	});
 
-	function geocode(query) {
+	$('#kfflogo').on('click', function(e) {
+			DoIt();
+	});
+
+	
+
+	function DoIt() {
+			var domMap = $('#map');
+
+			var x = domMap.offset().left + Math.floor(domMap.width()/2);
+			var y = domMap.offset().top + Math.floor(domMap.height()/2);
+
+			var pos = {x: x, y: y};
+
+			var interaction2 = wax.mm.interaction(m, theTileJson);
+
+
+
+
+
+			interaction2.getCenterFeature(pos, function(feature) {
+				displayTooltip(feature);
+			});
+	}
+
+	function geocode(query, theCallback) {
 
 		var url = 'http://open.mapquestapi.com/nominatim/v1/search';
 		var data = {
@@ -106,24 +141,20 @@ jQuery(document).ready(function ($) {
 		$.getJSON(url, data, function(json) {
 
 			var value = json[0];
+			hideTooltip();
 
 			if (value === undefined) {
 				$('#panelOne .error').show();
 			} else {
 				$('#panelOne .error').hide();
-				if (value.type == 'state' || value.type == 'county' || value.type == 'maritime'  || value.type == 'country') {
-					easey.slow(m, {
-						location: new mm.Location(value.lat, value.lon),
-						zoom: 7,
-						time: 2000
-					});
-				} else {
-					easey.slow(m, {
-						location: new mm.Location(value.lat, value.lon),
-						zoom: 11,
-						time: 2000
-					});
-				}
+				easey.slow(m, {
+					location: new mm.Location(value.lat, value.lon),
+					zoom: (value.type == 'state' || value.type == 'county' || value.type == 'maritime'  || value.type == 'country') ? 9 : 9,
+					time: 2000,
+					callback: function() {
+						setTimeout(theCallback, 0);
+					}
+				});
 			}
 		});
 	}

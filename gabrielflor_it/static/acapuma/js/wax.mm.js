@@ -2900,6 +2900,23 @@ wax.mm.interaction = function(map, tilejson, options) {
         });
     }
 
+    // Return feature in the center of the map.
+    interaction.getCenterFeature = function(pos, theCallback) {
+
+        var tile = getTile(pos),
+            feature;
+
+        if (tile) waxGM.getGrid(tile.src, function(err, g) {
+            if (err || !g) return;
+            feature = g.tileFeature(pos.x, pos.y, tile, {
+                format: 'teaser'
+            });
+            if (feature) {
+              theCallback(feature);
+            }
+        });
+    };
+
     // Attach listeners to the map
     interaction.add = function() {
         for (var i = 0; i < clearingEvents.length; i++) {
