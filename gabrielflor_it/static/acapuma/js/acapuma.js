@@ -84,7 +84,9 @@ jQuery(document).ready(function ($) {
 			});
 
 			var thePuma = pumas.filter(function(element, index, array) {
-				return element.key == [acapuma.state,acapuma.puma].join('|||');
+				var keyState = element.key.split('|||')[0];
+				var keyPuma = element.key.split('|||')[1];
+				return (keyState == Number(acapuma.state) && keyPuma == Number(acapuma.puma))
 			});
 
 			if (thePuma && thePuma[0]) {
