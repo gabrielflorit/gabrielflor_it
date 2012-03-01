@@ -264,12 +264,12 @@ body {
 /* ------------------------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------------- */
 #legend {
-	border: solid red 1px;
+	color: #222;
 	bottom: 1em;
 	right: 1em;
 	position: absolute;
 	background-color: white;
-	padding: 1em;
+	padding: 0.75em 1em;
 	-moz-box-shadow: 0 1px 8px rgba(0, 0, 0, .3);
 	-webkit-box-shadow: 0 1px 8px rgba(0, 0, 0, .3);
 	box-shadow: 0 1px 8px rgba(0, 0, 0, .3);
@@ -277,10 +277,16 @@ body {
 	border: 1px solid rgba(0, 0, 0, .45);
 	border-bottom: 1px solid #666;
 	font-family: 'Open Sans', Arial, sans-serif;
-	width: 30em;
+	width: 20em;
 }
 
-#legend ul.colors {
+#legend .title {
+	font-weight: bold;
+	font-size: 0.7em;
+	margin-bottom: 0.75em;
+}
+
+#legend ul {
 	float: left;
 	position: relative;
 	width: 100%;
@@ -290,11 +296,39 @@ body {
 #legend ul.colors li {
 	position: relative;
 	float: left;
-	width: 2.5%;
+	width: 10%;
+	height: 1em;
+}
+
+#legend ul.labels {
+	font-size: 0.6em;
+	margin-bottom: 0.75em;
+}
+
+#legend ul.labels li {
+	position: relative;
+	float: left;
+	width: 10%;
+	left: 5%;
+	text-align: center;
+}
+
+#legend ul.labels li.first {
+	position: absolute;
+	left: -5%;
 }
 
 #legend .source {
+	color: #999;
+	width: 100%;
+	text-align: right;
 	clear: both;
+	font-weight: bold;
+	font-size: 0.6em;
+}
+
+#legend .source a {
+	color: #222;
 }
 /* ------------------------------------------------------------------------------------------- */
 /* ------------------------------------------------------------------------------------------- */
