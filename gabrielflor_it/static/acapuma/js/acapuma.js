@@ -1,5 +1,17 @@
 jQuery(document).ready(function ($) {
 
+	$.ajax({
+            url: 'http://open.mapquestapi.com/nominatim/v1/search?format=json&json_callback=callback&countrycodes=us&limit=1&q=iowa',
+            type: 'jsonp',
+            jsonpCallback: 'tryThis',
+            error: function(a, b, c) {
+            	alert('n');
+            },
+            success: function(value) {
+				alert('y');
+            }
+        });
+
 	var pumas = [];
 	var stateNames;
 
@@ -77,6 +89,7 @@ jQuery(document).ready(function ($) {
 						m.coordinate.zoom <= 5 && currentZoomLevel > 5) {
 						refreshMap(constructMapUrl(m.coordinate.zoom));
 						currentZoomLevel = m.coordinate.zoom;
+						displayTooltipForCenterOfMap();
 					}
 				});
 			});
@@ -144,6 +157,9 @@ jQuery(document).ready(function ($) {
 				})[0].name);
 				$('#tooltip .numberAndPeople .number').text(acapuma.data + '%');
 				$('#tooltip').css('visibility', 'visible');
+
+				// hide loading message
+				$('#panelOne .loading').hide();
 			}
 
 			// setup the search input
@@ -156,14 +172,15 @@ jQuery(document).ready(function ($) {
 					input.val(inputTitle);
 				}
 			}).focus(function() {
-				if (input.val() === inputTitle) {
+				if (input.val() === inputTitle) {c
 					input.val('');
 				}
 			});
 
-			$('form.searchLocation').submit(function (e){
+			$('form.searchLocation').submit(function (e) {
 				e.preventDefault();
-				geocode(input.val(), displayTooltipForCenterOfMap);
+
+				geocode(input.val(), currentZoomLevel > 5 ? displayTooltipForCenterOfMap : null);
 			});
 
 			function displayTooltipForCenterOfMap() {
@@ -174,9 +191,11 @@ jQuery(document).ready(function ($) {
 
 					var pos = {x: x, y: y};
 
-					interaction.getCenterFeature(pos, function(feature) {
-						displayTooltip(feature);
-					});
+					setTimeout(function() {
+						interaction.getCenterFeature(pos, function(feature) {
+							displayTooltip(feature);
+						});
+					}, 500);
 			}
 
 			function geocode(query, tooltipCallback) {
@@ -196,8 +215,10 @@ jQuery(document).ready(function ($) {
 
 					if (value === undefined) {
 						$('#panelOne .error').show();
+						$('#panelOne .loading').hide();
 					} else {
 						$('#panelOne .error').hide();
+						$('#panelOne .loading').show();
 						easey.slow(m, {
 							location: new mm.Location(value.lat, value.lon),
 							zoom: (value.type == 'state') ? 7 : 9,

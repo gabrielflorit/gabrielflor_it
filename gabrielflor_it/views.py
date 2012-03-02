@@ -1,6 +1,7 @@
 import os
 import datetime
 from gabrielflor_it import app
+from util.crossdomain import crossdomain
 from flask import render_template, send_from_directory
 
 @app.route('/')
@@ -38,6 +39,7 @@ def blair():
         ))
 
 @app.route('/aca-puma')
+@crossdomain(origin='*')
 def aca_puma():
     return render_template('aca-puma.html', vars=dict(
         version=versioning()

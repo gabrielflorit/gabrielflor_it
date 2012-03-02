@@ -99,6 +99,17 @@ body {
 	color: #F98319;
 }
 
+#panelOne .loading {
+	display: none;
+	font-family: 'Open Sans';
+	font-style: italic;
+	font-size: 0.8em;
+	margin-top: 1em;
+	font-weight: bold;
+	color: #FFF;
+	text-align: right;
+}
+
 #kfflogo {
 	position: absolute;
 	bottom: 1em;
