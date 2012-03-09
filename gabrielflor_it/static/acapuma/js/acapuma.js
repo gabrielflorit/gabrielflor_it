@@ -81,6 +81,10 @@ jQuery(document).ready(function ($) {
 
 			wax.tilejson(url, function (tilejson) {
 
+				// override the template - both teaser and full need to have a fips 
+				// full needs it for mobile because the popup happens on click, not hover
+				tilejson.template = "{{#__l1__}}{{#__location__}}{{/__location__}}{{#__teaser__}}{{{STATEFIP}}},{{{PUMA}}},{{{ACA_DATA}}}{{/__teaser__}}{{#__full__}}{{{STATEFIP}}},{{{PUMA}}},{{{ACA_DATA}}}{{/__full__}}{{/__l1__}}";
+
 				setZoomLimits(tilejson);
 
 				mm = com.modestmaps;
@@ -104,11 +108,13 @@ jQuery(document).ready(function ($) {
 					defaultZoom: defaultZoom,
 					manager: wax.mm.locationHash
 				});
+
 				interaction = wax.mm.interaction(m, tilejson, 
 					{
 						callbacks: {
 							over: displayTooltip,
-							out: hideTooltip/*,
+							out: hideTooltip,
+							click: displayTooltip/*,							
 							click: function(feature) {
 							}*/
 						}
