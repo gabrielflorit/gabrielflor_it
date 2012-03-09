@@ -63,7 +63,7 @@ jQuery(document).ready(function ($) {
 			var defaultLon = -97;
 			var defaultZoom = 4;
 			var minZoom = 4;
-			var maxZoom = 10;
+			var maxZoom = 11;
 
 			var interaction;
 
@@ -116,9 +116,17 @@ jQuery(document).ready(function ($) {
 				);
 
 				m.addCallback('zoomed', function() {
-				// if we're going from 5 to 6, or from 6 to 5, change base layers
+					// if we're going from 5 to 6, or from 6 to 5, change base layers
 					if (m.coordinate.zoom >= 6 && currentZoomLevel < 6 ||
 						m.coordinate.zoom <= 5 && currentZoomLevel > 5) {
+						refreshMap(constructMapUrl(m.coordinate.zoom));
+						currentZoomLevel = m.coordinate.zoom;
+						displayTooltipForCenterOfMap();
+					}
+
+					// TODO: get rid of duplication 
+					if (m.coordinate.zoom >= 10 && currentZoomLevel < 10 ||
+						m.coordinate.zoom <= 9 && currentZoomLevel > 9) {
 						refreshMap(constructMapUrl(m.coordinate.zoom));
 						currentZoomLevel = m.coordinate.zoom;
 						displayTooltipForCenterOfMap();
@@ -127,8 +135,13 @@ jQuery(document).ready(function ($) {
 			});
 
 			function constructMapUrl(zoomLevel) {
-				var baseLayer = zoomLevel > 5 ? 'mapbox.world-borders-dark' : 'mapbox.world-bank-borders-en';
-				return 'http://api.tiles.mapbox.com/v3/mapbox.world-blank-light,velir.acapuma,' + baseLayer + '.jsonp';
+
+				if (zoomLevel > 9) {
+					return 'http://api.tiles.mapbox.com/v3/mapbox.mapbox-streets,velir.kff_aca_v2_z10_z11.jsonp';
+				} else {
+					var baseLayer = zoomLevel > 5 ? 'mapbox.world-borders-dark' : 'mapbox.world-bank-borders-en';
+					return 'http://api.tiles.mapbox.com/v3/mapbox.world-blank-light,velir.acapuma,' + baseLayer + '.jsonp';
+				}
 			}
 
 			function setZoomLimits(tilejson) {
@@ -169,24 +182,6 @@ jQuery(document).ready(function ($) {
 					$(this).animate({top:(100 - (thisAmount * 10)) + '%'}, 0);
 				});
 
-				var thePuma = pumas.filter(function(element, index, array) {
-					var keyState = element.key.split('|||')[0];
-					var keyPuma = element.key.split('|||')[1];
-					return (keyState == Number(acapuma.state) && keyPuma == Number(acapuma.puma))
-				});
-
-				if (thePuma && thePuma[0]) {
-					var parts = thePuma[0].values.map(function(element, index, array) {
-						return element.CONTAINS;
-					});
-					$('#tooltip .places').text(parts.join(', '));
-				} else {
-					$('#tooltip .places').text('');
-				}
-
-				$('#tooltip .explanation .state').text(stateNames.filter(function(element, index, array) {
-					return Number(element.code) == Number(acapuma.state);
-				})[0].name);
 				$('#tooltip .numberAndPeople .number').text(acapuma.data + '%');
 				$('#tooltip').css('visibility', 'visible');
 
@@ -196,7 +191,7 @@ jQuery(document).ready(function ($) {
 
 			// setup the search input
 			var input = $('#panelOne input'),
-				inputTitle = 'enter your address';
+				inputTitle = 'enter your address or zip code';
 				input.val(inputTitle);
 
 			input.blur(function() {
@@ -227,7 +222,7 @@ jQuery(document).ready(function ($) {
 						interaction.getCenterFeature(pos, function(feature) {
 							displayTooltip(feature);
 						});
-					}, 500);
+					}, 1000);
 			}
 
 			function geocode(query, tooltipCallback) {
