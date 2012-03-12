@@ -8,6 +8,12 @@ from flask import render_template, send_from_directory
 def home():
     return render_template('index.html')
 
+@app.route('/water')
+def water():
+    return render_template('d3/water.html', vars=dict(
+        version=versioning()
+        ))
+
 @app.route('/counties')
 def counties():
     return render_template('d3/counties.html', vars=dict(
