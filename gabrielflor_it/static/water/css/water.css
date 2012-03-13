@@ -1,4 +1,24 @@
 body {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: #222;
+}
+
+#page {
+	position: absolute;
+	height: 80%;
+	width: 90%;
+	top: 10%;
+	left: 5%;
+	border: solid #8C8C8C 1px;
+	border: solid white 1px;
+	-moz-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	-webkit-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
 }
 
 #display {
@@ -6,6 +26,7 @@ body {
 	left: 0;
 	height: 100%;
 	width: 50%;
+	background: white;
 }
 
 #code {
@@ -14,8 +35,5 @@ body {
 	height: 100%;
 	width: 50%;
 	font-size: 1em;
-}
-
-#footer {
-	clear: both;
+	overflow: hidden;
 }
