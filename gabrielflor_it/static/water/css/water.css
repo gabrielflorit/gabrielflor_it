@@ -1,0 +1,35 @@
+body {
+}
+
+#display {
+	position: absolute;
+	left: 0;
+	height: 100%;
+	width: 50%;
+	float: left;
+}
+
+#code {
+	position: absolute;
+	right: 0;
+	height: 100%;
+	width: 50%;
+	background: blue;
+	font-family: 'Ubuntu Mono', sans-serif;
+	color: white;
+	background: #222;
+}
+
+#code #inner {
+	padding: 1em;
+}
+
+#footer {
+	clear: both;
+}
+
+svg {
+	background: #FFF;
+}
+
+
