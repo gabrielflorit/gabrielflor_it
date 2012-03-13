@@ -1,56 +1,31 @@
-$('#code').on('click', function(e) {
-	this.contentEditable = true;
-})
+var demo = "var data = ['one', 'two', 'three'];\n\n"
++ "d3.select('svg').selectAll('circle')\n"
++ "\t.data(data)\n"
++ "\t.enter()\n"
++ "\t.append('circle')\n"
++ "\t.attr('cx', function (d, i) {\n"
++ "\t\treturn (i * 50) + 40;\n"
++ "\t})\n"
++ "\t.attr('cy', 40)\n"
++ "\t.attr('r', function (d) {\n"
++ "\t\treturn d.length * 5;\n"
++ "\t})\n"
++ "\t.style('fill', 'blue');";
 
-$('#code').on('keyup', function(e) {
+window.onload = function() {
+	window.aceEditor = ace.edit("code");
+	window.aceEditor.setTheme("ace/theme/twilight");
+	var JavaScriptMode = require("ace/mode/javascript").Mode;
+	window.aceEditor.getSession().setMode(new JavaScriptMode());
+	window.aceEditor.getSession().on('change', function (a, b, c, d) {
 
-	$('svg').empty();
+		$('svg').empty();
 
-	try {
-		eval($(this).text());
-	}
-	catch (error) {}
-	finally {};
-})
-
-// var data = ['one', 'two', 'three', 'four'];
-
-// var svg = d3.select('#display')
-// 	.append('svg')
-// 	.style('width', '100%')
-// 	.style('height', '99%');
-
-// svg.selectAll('circle')
-// 	.data(data)
-//   .enter()
-// 	.append('circle')
-// 	.attr('cx', function (d, i) {
-// 		return (i * 50) + 10;
-// 	})
-// 	.attr('cy', 10)
-// 	.attr('r', function (d) {
-// 		return d.length;
-// 	})
-// 	.style('fill', 'red');
-
-// $('a').on('click', function(e) {
-// 	e.preventDefault();
-
-// 	var circles = svg.selectAll('circle')
-// 		.data(data)
-// 	  .transition()
-// 	  	.duration(1000)
-// 		.attr('cx', function (d, i) {
-// 			return (i * 60) + 10;
-// 		})
-// 		.attr('cy', 10)
-// 		.attr('r', function (d) {
-// 			return d.length;
-// 		});
-// });
-
-
-
-
-
-
+		try {
+			eval(window.aceEditor.getSession().getValue());
+		}
+		catch (error) {}
+		finally {};
+	});
+	window.aceEditor.getSession().setValue(demo);
+};
