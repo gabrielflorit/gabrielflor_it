@@ -49,4 +49,8 @@ window.onload = function() {
 
 	// turn off horizontal scrollbar
 	window.aceEditor.renderer.setHScrollBarAlwaysVisible(false);
+
+		// turn off horizontal scrollbar
+//	window.aceEditor.renderer.showGutter = false;
+
 };

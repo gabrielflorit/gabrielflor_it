@@ -11,6 +11,7 @@ body {
 	width: 90%;
 	top: 10%;
 	left: 5%;
+/*
 	border: solid #8C8C8C 1px;
 	border: solid white 1px;
 	-moz-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
@@ -19,21 +20,62 @@ body {
 	border-radius: 4px;
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
-}
+*/}
 
 #display {
 	position: absolute;
 	left: 0;
+	top: -1px;
 	height: 100%;
 	width: 50%;
 	background: white;
+	border: solid #8C8C8C 1px;
+	border: solid white 1px;
+	-moz-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	-webkit-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-top-right-radius: 40px 10px;
+	border-bottom-right-radius: 40px 10px;
 }
 
 #code {
 	position: absolute;
+	top: -1px;
 	right: 0;
 	height: 100%;
 	width: 50%;
 	font-size: 1em;
-	overflow: hidden;
 }
+
+#code .ace_scroller {
+	border: solid #8C8C8C 1px;
+	border: solid white 1px;
+	border-right: none;
+	-moz-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	-webkit-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-top-left-radius: 40px 10px;
+	border-bottom-left-radius: 40px 10px;
+}
+
+#code .ace_gutter {
+	border: solid #8C8C8C 1px;
+	border: solid white 1px;
+	border-right: none;
+	-moz-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	-webkit-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+	border-top-left-radius: 40px 10px;
+	border-bottom-left-radius: 40px 10px;
+}
+
+#code .ace_sb {
+	display: none;
+}
+
