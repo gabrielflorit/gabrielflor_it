@@ -77,30 +77,33 @@ svg {
 #font-controls {
 	position: absolute;
 	top: 0;
-	right: 0.25em;
+	right: 0;
 }
 
 .font-control {
-	padding: 0 0.5em 0 0;
+	position: absolute;
+	top: 0;
+	right: 0em;
+	padding: 0em 1em 0em 0;
 	background-position: 50% 50%;
 	background-repeat: no-repeat;
 	text-decoration: none;
+	cursor: pointer;
 }
 
 .increase.font-control {
+	right: 1.25em;
 	background-image: url('../img/plus_alt.png');
-}
-
-.increase.font-control:active,
-.increase.font-control:hover {
-	background-image: url('../img/plus.png');
 }
 
 .decrease.font-control {
 	background-image: url('../img/minus_alt.png');
 }
 
-.decrease.font-control:active,
+.increase.font-control:hover {
+	background-image: url('../img/plus.png');
+}
+
 .decrease.font-control:hover {
 	background-image: url('../img/minus.png');
 }
