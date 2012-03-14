@@ -31,13 +31,12 @@ body {
 	border-bottom-right-radius: 40px 10px;
 }
 
-#code {
+#editor {
 	position: absolute;
 	top: -1px;
 	right: 0;
 	height: 100%;
 	width: 50%;
-	font-size: 1em;
 	border: solid #FFF 1px;
 	border-left: none;
 	background: white;
@@ -51,7 +50,7 @@ body {
 	background: #141414;
 }
 
-#code .ace_gutter {
+#editor .ace_gutter {
 	top: -1px;
 	border: solid #FFF 1px;
 	border-top-right-radius: 0px;
@@ -60,7 +59,7 @@ body {
 	border-bottom-left-radius: 40px 10px;
 }
 
-#code .ace_sb {
+#editor .ace_sb {
 	display: none;
 }
 
@@ -75,3 +74,33 @@ svg {
 	box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
 }
 
+#font-controls {
+	position: absolute;
+	top: 0;
+	right: 0.25em;
+}
+
+.font-control {
+	padding: 0 0.5em 0 0;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	text-decoration: none;
+}
+
+.increase.font-control {
+	background-image: url('../img/plus_alt.png');
+}
+
+.increase.font-control:active,
+.increase.font-control:hover {
+	background-image: url('../img/plus.png');
+}
+
+.decrease.font-control {
+	background-image: url('../img/minus_alt.png');
+}
+
+.decrease.font-control:active,
+.decrease.font-control:hover {
+	background-image: url('../img/minus.png');
+}

@@ -13,7 +13,7 @@ var demo = "var data = ['one', 'two', 'three'];\n\n"
 + "\t.style('fill', 'blue');";
 
 window.onload = function() {
-	window.aceEditor = ace.edit("code");
+	window.aceEditor = ace.edit("editor");
 
 	// set the theme
 	window.aceEditor.setTheme("ace/theme/twilight");
@@ -49,4 +49,14 @@ window.onload = function() {
 
 	// turn off horizontal scrollbar
 	window.aceEditor.renderer.setHScrollBarAlwaysVisible(false);
+
+	// turn off print margin visibility
+	window.aceEditor.setShowPrintMargin(false);
 };
+
+$('.font-control').on('click', function(e) {
+		e.preventDefault();
+
+		// increase/decrease font
+		$('#editor').css('font-size', $(this).attr('class').indexOf('decrease') != -1 ? '-=1' : '+=1');
+});
