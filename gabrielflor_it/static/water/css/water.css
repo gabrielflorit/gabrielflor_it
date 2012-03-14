@@ -14,7 +14,6 @@ body {
 }
 
 #display {
-	visibility: hidden;
 	position: absolute;
 	left: 0;
 	top: -1px;
@@ -110,7 +109,7 @@ svg {
 
 #slider {
 	visibility: hidden;
-	width: 15%;
+	width: 20%;
 	z-index: 1;
 	-moz-box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.4);
 	-webkit-box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.4);
