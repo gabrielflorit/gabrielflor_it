@@ -1,4 +1,4 @@
-var demo = "var data = ['one', 'two', 'three'];\n\n"
+var demo = "var data = ['one', 'two', 'three', 'cuatro', 'cinco', 'seis'];\n\n"
 + "d3.select('svg').selectAll('circle')\n"
 + "\t.data(data)\n"
 + "\t.enter()\n"
@@ -10,7 +10,10 @@ var demo = "var data = ['one', 'two', 'three'];\n\n"
 + "\t.attr('r', function(d) {\n"
 + "\t\treturn d.length * 5;\n"
 + "\t})\n"
-+ "\t.style('fill', 'blue');";
++ "\t.style('stroke', 'maroon')\n"
++ "\t.style('stroke-width', 1)\n"
++ "\t.style('fill', 'tan');";
+
 
 window.onload = function() {
 	window.aceEditor = ace.edit("editor");
