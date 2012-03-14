@@ -22,9 +22,9 @@ body {
 	background: white;
 	border: solid #FFF 1px;
 	border-right: none;
-	-moz-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
-	-webkit-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
-	box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	-moz-box-shadow: 0 0 50px 5px rgba(255, 255, 255, 0.4);
+	-webkit-box-shadow: 0 0 50px 5px rgba(255, 255, 255, 0.4);
+	box-shadow: 0 0 50px 5px rgba(255, 255, 255, 0.4);
 	border-top-left-radius: 5px;
 	border-bottom-left-radius: 5px;
 	border-top-right-radius: 40px 10px;
@@ -62,5 +62,16 @@ body {
 
 #code .ace_sb {
 	display: none;
+}
+
+svg {
+	background: #FFF;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	border-top-right-radius: 40px 10px;
+	border-bottom-right-radius: 40px 10px;
+	-moz-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	-webkit-box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
+	box-shadow: 0 0 50px 10px rgba(255, 255, 255, 0.4);
 }
 
