@@ -1,3 +1,5 @@
+$(function() {
+
 var demo = "var data = ['one', 'two', 'three', 'cuatro', 'cinco', 'seis'];\n\n"
 + "d3.select('svg').selectAll('circle')\n"
 + "\t.data(data)\n"
@@ -14,52 +16,94 @@ var demo = "var data = ['one', 'two', 'three', 'cuatro', 'cinco', 'seis'];\n\n"
 + "\t.style('stroke-width', 1)\n"
 + "\t.style('fill', 'tan');";
 
+window.aceEditor = ace.edit("editor");
 
-window.onload = function() {
-	window.aceEditor = ace.edit("editor");
+// set the theme
+window.aceEditor.setTheme("ace/theme/twilight");
 
-	// set the theme
-	window.aceEditor.setTheme("ace/theme/twilight");
+// set mode to javascript
+var JavaScriptMode = require("ace/mode/javascript").Mode;
+window.aceEditor.getSession().setMode(new JavaScriptMode());
 
-	// set mode to javascript
-	var JavaScriptMode = require("ace/mode/javascript").Mode;
-	window.aceEditor.getSession().setMode(new JavaScriptMode());
+// redraw svg when we update our code
+window.aceEditor.getSession().on('change', function() {
 
-	// redraw svg when we update our code
-	window.aceEditor.getSession().on('change', function() {
+	$('svg').empty();
 
-		$('svg').empty();
+	try {
+		eval(window.aceEditor.getSession().getValue());
+	}
+	catch (error) {}
+	finally {};
+});
 
-		try {
-			eval(window.aceEditor.getSession().getValue());
-		}
-		catch (error) {}
-		finally {};
-	});
+// set the demo code
+window.aceEditor.getSession().setValue(demo);
 
-	// set the demo code
-	window.aceEditor.getSession().setValue(demo);
+// work in progress - this is the beginning of token selectors
+window.aceEditor.on("click", function(e) {
+	var editor = e.editor;
+	var pos = editor.getCursorPosition();
+	var token = editor.session.getTokenAt(pos.row, pos.column);
+	if (token && /\bconstant.numeric\b/.test(token.type)) {
+		console.log(token.value, 'is a constant.numeric');
+		console.log([editor.renderer.$cursorLayer.pixelPos.left,editor.renderer.$cursorLayer.pixelPos.top].join(','));
 
-	// work in progress - this is the beginning of token selectors
-	window.aceEditor.on("click", function(e) {
-		var editor = e.editor;
-		var pos = editor.getCursorPosition();
-		var token = editor.session.getTokenAt(pos.row, pos.column);
-		if (/\bconstant.numeric\b/.test(token.type)) {
-			console.log(token.value, 'is a constant.numeric');
-		}
-	});
+		// position slider centered above the cursor
+		var scrollerOffset = $('.ace_scroller').offset();
+		var cursorOffset = editor.renderer.$cursorLayer.pixelPos;
+		var sliderTop = scrollerOffset.top + cursorOffset.top - Number($('#editor').css('font-size').replace('px', ''))*0.8;
+		var sliderLeft = scrollerOffset.left + cursorOffset.left - $('#slider').width()/2;
 
-	// turn off horizontal scrollbar
-	window.aceEditor.renderer.setHScrollBarAlwaysVisible(false);
+		// sync the slider size with the editor size
+		$('#slider').css('font-size', $('#editor').css('font-size'));
+		$('#slider').css('font-size', '-=4');
+		$('#slider').offset({top: sliderTop, left: sliderLeft});
 
-	// turn off print margin visibility
-	window.aceEditor.setShowPrintMargin(false);
-};
+		// show the slider
+		$('#slider').css('visibility', 'visible');
 
+		// prevent click event from bubbling up to body, which
+		// would then trigger an event to hide the slider
+		e.stopPropagation();
+	}
+});
+
+// turn off horizontal scrollbar
+window.aceEditor.renderer.setHScrollBarAlwaysVisible(false);
+
+// turn off print margin visibility
+window.aceEditor.setShowPrintMargin(false);
+
+// increase/decrease font
+// increase/decrease slider
 $('.font-control').on('click', function(e) {
-		e.preventDefault();
+	e.preventDefault();
 
-		// increase/decrease font
-		$('#editor').css('font-size', $(this).attr('class').indexOf('decrease') != -1 ? '-=1' : '+=1');
+	if ($(this).attr('class').indexOf('decrease') != -1) {
+		$('#editor').css('font-size', '-=1');
+	} else {
+		$('#editor').css('font-size', '+=1');
+	}
+});
+
+// create slider
+$( "#slider" ).slider({
+	value: 50,
+	min: 0,
+	max: 100,
+	slide: function(event, ui) {
+	}
+});
+
+// hide slider if we click anywhere else
+$('body').on('focus click', function(e) {
+	if ($('#slider').css('visibility') == 'visible') {
+		if ($(e.target).closest("#slider").length === 0) { 
+			$('#slider').css('visibility', 'hidden'); 
+		}; 
+	}
+});
+
+
 });
