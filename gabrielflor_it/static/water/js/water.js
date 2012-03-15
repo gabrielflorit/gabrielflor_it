@@ -6,7 +6,7 @@ var demo = "var data = ['one', 'two', 'three', 'cuatro', 'cinco', 'seis'];\n\n"
 + "\t.enter()\n"
 + "\t.append('circle')\n"
 + "\t.attr('cx', function(d, i) {\n"
-+ "\t\treturn (i * 50) + 40;\n"
++ "\t\treturn (i * 40) + 40;\n"
 + "\t})\n"
 + "\t.attr('cy', 40)\n"
 + "\t.attr('r', function(d) {\n"
@@ -41,15 +41,12 @@ window.aceEditor.getSession().on('change', function() {
 window.aceEditor.getSession().setValue(demo);
 
 // work in progress - this is the beginning of token selectors
-var currentPosition, currentToken;
+var chosenRow, chosenColumn;
 window.aceEditor.on("click", function(e) {
+
 	var editor = e.editor;
 	var pos = editor.getCursorPosition();
 	var token = editor.session.getTokenAt(pos.row, pos.column);
-
-	if (token && token.index && token.start) {
-		console.log([token.index, token.start].join(','));
-	}
 
 	// did we click on a number?
 	if (token && /\bconstant.numeric\b/.test(token.type)) {
@@ -71,8 +68,8 @@ window.aceEditor.on("click", function(e) {
 		// show the slider
 		$('#slider').css('visibility', 'visible');
 
-		currentToken = token;
-		currentPosition = pos;
+		chosenRow = pos.row;
+		chosenColumn = token.start;
 
 		// prevent click event from bubbling up to body, which
 		// would then trigger an event to hide the slider
@@ -98,6 +95,30 @@ $('.font-control').on('click', function(e) {
 	}
 });
 
+this.replace = function(replacement) {
+	var range = this.getSelectionRange();
+	if (range !== null) {
+		this.$tryReplace(range, replacement);
+		if (range !== null) {
+			this.selection.setSelectionRange(range);
+		}
+	}
+}
+
+// from https://github.com/ajaxorg/ace/issues/305
+// this replaces the current replace functionality
+// replace just replaces the current selection with the replacement text,
+// and highlights the replacement text
+// it does not go to the next selection (which the default version does)
+window.aceEditor.replace = function(replacement) {
+	var range = this.getSelectionRange();
+	if (range !== null) {
+		this.$tryReplace(range, replacement);
+		if (range !== null)
+			this.selection.setSelectionRange(range);
+	}
+}
+
 // create slider
 $( "#slider" ).slider({
 	value: 50,
@@ -105,23 +126,21 @@ $( "#slider" ).slider({
 	max: 100,
 	slide: function(event, ui) {
 
-		// var currentSelectionRange = window.aceEditor.getSelectionRange();
-		// var pos = window.aceEditor.getCursorPosition();
-		// var token = window.aceEditor.session.getTokenAt(pos.row, pos.column);
-		// var tokenLength = token.value.length;
-		// var tokenStart = token.start;
-		// currentSelectionRange.start.column = tokenStart;
-		// currentSelectionRange.end.column = currentSelectionRange.start.column + tokenLength;
-		// window.aceEditor.selection.setSelectionRange(currentSelectionRange);
-		// window.aceEditor.$tryReplace(currentSelectionRange, 'test');
-		// alert(window.aceEditor.getSession().getValue());
+		// set the cursor to desired location
+		var cursorPosition = window.aceEditor.getCursorPosition();
+		if (!(cursorPosition.row == chosenRow && cursorPosition.column == chosenColumn)) {
+			window.aceEditor.getSelection().moveCursorTo(chosenRow, chosenColumn);
 
-		window.aceEditor.moveCursorTo(currentPosition.row, currentToken.start);
-		// console.log([pos.row, tokenStart].join(','));
+			// clear selection
+			window.aceEditor.clearSelection();
+		}
 
+		// get token
+		var token = window.aceEditor.session.getTokenAt(chosenRow, chosenColumn + 1);
 
-
-
+		// find and replace
+		window.aceEditor.find(String(token.value));
+		window.aceEditor.replace(String(ui.value));
 	}
 });
 
@@ -133,6 +152,5 @@ $('body').on('focus click', function(e) {
 		}; 
 	}
 });
-
 
 });
