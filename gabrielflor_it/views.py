@@ -10,13 +10,7 @@ def home():
 
 @app.route('/water')
 def water():
-    return render_template('d3/water.html', vars=dict(
-        version=versioning()
-        ))
-
-@app.route('/waterdemo')
-def waterdemo():
-    return render_template('d3/waterdemo.html', vars=dict(
+    return render_template('submodule/water/water.html', vars=dict(
         version=versioning()
         ))
 
