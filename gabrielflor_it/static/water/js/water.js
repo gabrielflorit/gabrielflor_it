@@ -41,13 +41,18 @@ window.aceEditor.getSession().on('change', function() {
 window.aceEditor.getSession().setValue(demo);
 
 // work in progress - this is the beginning of token selectors
+var currentPosition, currentToken;
 window.aceEditor.on("click", function(e) {
 	var editor = e.editor;
 	var pos = editor.getCursorPosition();
 	var token = editor.session.getTokenAt(pos.row, pos.column);
+
+	if (token && token.index && token.start) {
+		console.log([token.index, token.start].join(','));
+	}
+
+	// did we click on a number?
 	if (token && /\bconstant.numeric\b/.test(token.type)) {
-		console.log(token.value, 'is a constant.numeric');
-		console.log([editor.renderer.$cursorLayer.pixelPos.left,editor.renderer.$cursorLayer.pixelPos.top].join(','));
 
 		// position slider centered above the cursor
 		var scrollerOffset = $('.ace_scroller').offset();
@@ -60,8 +65,14 @@ window.aceEditor.on("click", function(e) {
 		$('#slider').css('font-size', '-=4');
 		$('#slider').offset({top: sliderTop, left: sliderLeft});
 
+		// center slider handle
+		$('#slider').slider('option', 'value', 50);
+
 		// show the slider
 		$('#slider').css('visibility', 'visible');
+
+		currentToken = token;
+		currentPosition = pos;
 
 		// prevent click event from bubbling up to body, which
 		// would then trigger an event to hide the slider
@@ -93,6 +104,24 @@ $( "#slider" ).slider({
 	min: 0,
 	max: 100,
 	slide: function(event, ui) {
+
+		// var currentSelectionRange = window.aceEditor.getSelectionRange();
+		// var pos = window.aceEditor.getCursorPosition();
+		// var token = window.aceEditor.session.getTokenAt(pos.row, pos.column);
+		// var tokenLength = token.value.length;
+		// var tokenStart = token.start;
+		// currentSelectionRange.start.column = tokenStart;
+		// currentSelectionRange.end.column = currentSelectionRange.start.column + tokenLength;
+		// window.aceEditor.selection.setSelectionRange(currentSelectionRange);
+		// window.aceEditor.$tryReplace(currentSelectionRange, 'test');
+		// alert(window.aceEditor.getSession().getValue());
+
+		window.aceEditor.moveCursorTo(currentPosition.row, currentToken.start);
+		// console.log([pos.row, tokenStart].join(','));
+
+
+
+
 	}
 });
 

@@ -14,6 +14,12 @@ def water():
         version=versioning()
         ))
 
+@app.route('/waterdemo')
+def waterdemo():
+    return render_template('d3/waterdemo.html', vars=dict(
+        version=versioning()
+        ))
+
 @app.route('/counties')
 def counties():
     return render_template('d3/counties.html', vars=dict(
