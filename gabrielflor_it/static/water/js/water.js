@@ -40,7 +40,7 @@ window.aceEditor.getSession().on('change', function() {
 // set the demo code
 window.aceEditor.getSession().setValue(demo);
 
-// work in progress - this is the beginning of token selectors
+// if we click on a numeric constant, select the token and show the slider
 var chosenRow, chosenColumn;
 window.aceEditor.on("click", function(e) {
 
@@ -51,6 +51,26 @@ window.aceEditor.on("click", function(e) {
 	// did we click on a number?
 	if (token && /\bconstant.numeric\b/.test(token.type)) {
 
+		var slider = $('#slider');
+
+		// set the slider params based on the token's numeric value
+		if (token.value > 0) {
+			slider.slider('option', 'max', token.value * 4);
+			slider.slider('option', 'min', 0);
+		}
+
+		if (token.value < 0) {
+			slider.slider('option', 'max', 0);
+			slider.slider('option', 'min', token.value * 4);
+		}
+
+		if (token.value == 0) {
+			slider.slider('option', 'max', 50);
+			slider.slider('option', 'min', -50);
+		}
+
+		slider.slider('option', 'value', token.value);
+
 		// position slider centered above the cursor
 		var scrollerOffset = $('.ace_scroller').offset();
 		var cursorOffset = editor.renderer.$cursorLayer.pixelPos;
@@ -58,16 +78,14 @@ window.aceEditor.on("click", function(e) {
 		var sliderLeft = scrollerOffset.left + cursorOffset.left - $('#slider').width()/2;
 
 		// sync the slider size with the editor size
-		$('#slider').css('font-size', $('#editor').css('font-size'));
-		$('#slider').css('font-size', '-=4');
-		$('#slider').offset({top: sliderTop, left: sliderLeft});
-
-		// center slider handle
-		$('#slider').slider('option', 'value', 50);
+		slider.css('font-size', $('#editor').css('font-size'));
+		slider.css('font-size', '-=4');
+		slider.offset({top: sliderTop, left: sliderLeft});
 
 		// show the slider
-		$('#slider').css('visibility', 'visible');
+		slider.css('visibility', 'visible');
 
+		// make this position globally scoped
 		chosenRow = pos.row;
 		chosenColumn = token.start;
 
@@ -95,16 +113,6 @@ $('.font-control').on('click', function(e) {
 	}
 });
 
-this.replace = function(replacement) {
-	var range = this.getSelectionRange();
-	if (range !== null) {
-		this.$tryReplace(range, replacement);
-		if (range !== null) {
-			this.selection.setSelectionRange(range);
-		}
-	}
-}
-
 // from https://github.com/ajaxorg/ace/issues/305
 // this replaces the current replace functionality
 // replace just replaces the current selection with the replacement text,
@@ -121,10 +129,12 @@ window.aceEditor.replace = function(replacement) {
 
 // create slider
 $( "#slider" ).slider({
-	value: 50,
-	min: 0,
-	max: 100,
 	slide: function(event, ui) {
+
+		// if we're at the edge, increase slider width and range
+		// if (ui.value == ui.max) {
+		// 	console.log('true');
+		// }
 
 		// set the cursor to desired location
 		var cursorPosition = window.aceEditor.getCursorPosition();
