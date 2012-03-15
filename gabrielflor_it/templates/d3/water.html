@@ -4,7 +4,7 @@
     <meta charset='utf-8' />
     <title>water</title>
     <link rel='stylesheet' type='text/css' href='http://yui.yahooapis.com/2.9.0/build/reset/reset-min.css' />
-    <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="water/css/water.css") }}' />
+    <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="water/css/water.css") }}?v={{vars.version}}' />
     <link rel='stylesheet' type='text/css' href='{{ url_for("static", filename="water/slider/css/humanity/jquery-ui-slider.css") }}' />
     <link rel="shortcut icon" href="static/img/favicon.ico">
     <script type="text/javascript">
@@ -35,9 +35,9 @@
         <div id="slider"></div>
     </div>
     <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
-    <script src='{{ url_for("static", filename="water/slider/js/ui/jquery.ui.slider.js") }}'></script>
+    <script src='{{ url_for("static", filename="water/slider/js/jquery.ui.slider.js") }}'></script>
     <script src='{{ url_for("static", filename="water/js/d3.v2.min.js") }}'></script>
-    <script src='{{ url_for("static", filename="water/js/water.js") }}'></script>
+    <script src='{{ url_for("static", filename="water/js/water.js") }}?v={{vars.version}}'></script>
     <script src='{{ url_for("static", filename="water/js/ace/ace.js") }}' type="text/javascript" charset="utf-8"></script>
     <script src='{{ url_for("static", filename="water/js/ace/theme-twilight.js") }}' type="text/javascript" charset="utf-8"></script>
     <script src='{{ url_for("static", filename="water/js/ace/mode-javascript.js") }}' type="text/javascript" charset="utf-8"></script>
