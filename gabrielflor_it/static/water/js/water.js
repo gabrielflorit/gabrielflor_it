@@ -53,10 +53,10 @@ window.aceEditor.on("click", function(e) {
 
 		// set the slider params based on the token's numeric value
 		if (token.value == 0) {
-			slider.slider('option', 'max', 50);
-			slider.slider('option', 'min', -50);
+			slider.slider('option', 'max', 100);
+			slider.slider('option', 'min', -100);
 		} else {
-			var sliderRange = [0, token.value * 4];
+			var sliderRange = [-token.value * 2, token.value * 4];
 			slider.slider('option', 'max', d3.max(sliderRange));
 			slider.slider('option', 'min', d3.min(sliderRange));
 		}
@@ -123,14 +123,6 @@ window.aceEditor.replace = function(replacement) {
 var slider = $('#slider');
 slider.slider({
 	slide: function(event, ui) {
-
-		// if we're at the edge, increase slider width and range
-		// if (ui.value == slider.slider('option', 'max')) {
-		// 	console.log('true. width: ' + slider.width());
-		// 	slider.animate({width: '+=' + slider.width()});
-		// 	// var width = $(this).width();
-		// 	// $(this).animate('width', 2 * width);
-		// }
 
 		// set the cursor to desired location
 		var cursorPosition = window.aceEditor.getCursorPosition();
