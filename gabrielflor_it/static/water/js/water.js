@@ -51,22 +51,14 @@ window.aceEditor.on("click", function(e) {
 	// did we click on a number?
 	if (token && /\bconstant.numeric\b/.test(token.type)) {
 
-		var slider = $('#slider');
-
 		// set the slider params based on the token's numeric value
-		if (token.value > 0) {
-			slider.slider('option', 'max', token.value * 4);
-			slider.slider('option', 'min', 0);
-		}
-
-		if (token.value < 0) {
-			slider.slider('option', 'max', 0);
-			slider.slider('option', 'min', token.value * 4);
-		}
-
 		if (token.value == 0) {
 			slider.slider('option', 'max', 50);
 			slider.slider('option', 'min', -50);
+		} else {
+			var sliderRange = [0, token.value * 4];
+			slider.slider('option', 'max', d3.max(sliderRange));
+			slider.slider('option', 'min', d3.min(sliderRange));
 		}
 
 		slider.slider('option', 'value', token.value);
@@ -75,7 +67,7 @@ window.aceEditor.on("click", function(e) {
 		var scrollerOffset = $('.ace_scroller').offset();
 		var cursorOffset = editor.renderer.$cursorLayer.pixelPos;
 		var sliderTop = scrollerOffset.top + cursorOffset.top - Number($('#editor').css('font-size').replace('px', ''))*0.8;
-		var sliderLeft = scrollerOffset.left + cursorOffset.left - $('#slider').width()/2;
+		var sliderLeft = scrollerOffset.left + cursorOffset.left - slider.width()/2;
 
 		// sync the slider size with the editor size
 		slider.css('font-size', $('#editor').css('font-size'));
@@ -128,12 +120,16 @@ window.aceEditor.replace = function(replacement) {
 }
 
 // create slider
-$( "#slider" ).slider({
+var slider = $('#slider');
+slider.slider({
 	slide: function(event, ui) {
 
 		// if we're at the edge, increase slider width and range
-		// if (ui.value == ui.max) {
-		// 	console.log('true');
+		// if (ui.value == slider.slider('option', 'max')) {
+		// 	console.log('true. width: ' + slider.width());
+		// 	slider.animate({width: '+=' + slider.width()});
+		// 	// var width = $(this).width();
+		// 	// $(this).animate('width', 2 * width);
 		// }
 
 		// set the cursor to desired location
@@ -156,9 +152,9 @@ $( "#slider" ).slider({
 
 // hide slider if we click anywhere else
 $('body').on('focus click', function(e) {
-	if ($('#slider').css('visibility') == 'visible') {
-		if ($(e.target).closest("#slider").length === 0) { 
-			$('#slider').css('visibility', 'hidden'); 
+	if (slider.css('visibility') == 'visible') {
+		if ($(e.target).closest(slider).length === 0) { 
+			slider.css('visibility', 'hidden'); 
 		}; 
 	}
 });
