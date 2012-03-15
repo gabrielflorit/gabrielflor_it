@@ -31,24 +31,29 @@ window.aceEditor.getSession().on('change', function() {
 	$('svg').empty();
 
 	try {
-		eval(window.aceEditor.getSession().getValue());
+		var thisCode = window.aceEditor.getSession().getValue();
+		eval(thisCode);
+		setLocalStorageValue('code', thisCode);
 	}
 	catch (error) {}
 	finally {};
 });
 
-// set the demo code
-window.aceEditor.getSession().setValue(demo);
+// do we have stored code? if not, set the demo code
+window.aceEditor.getSession().setValue(getLocalStorageValue('code') ? getLocalStorageValue('code') : demo);
+
+function getLocalStorageValue(key) {
+	var localStorageKey = 'gabrielflor.it/water';
+	return localStorage.getItem([localStorageKey, key].join('/'));
+}
+function setLocalStorageValue(key, value) {
+	var localStorageKey = 'gabrielflor.it/water';
+	localStorage.setItem([localStorageKey, key].join('/'), value);
+}
 
 // if we click on a numeric constant, select the token and show the slider
 var chosenRow, chosenColumn;
 window.aceEditor.on("click", function(e) {
-
-	// stop pulsing numerics
-	if (pulseNumerics) {
-		window.clearInterval(pulse);
-		pulseNumerics = false;
-	}
 
 	var editor = e.editor;
 	var pos = editor.getCursorPosition();
@@ -56,6 +61,12 @@ window.aceEditor.on("click", function(e) {
 
 	// did we click on a number?
 	if (token && /\bconstant.numeric\b/.test(token.type)) {
+
+		// stop pulsing numerics
+		if (pulseNumerics) {
+			window.clearInterval(pulse);
+			pulseNumerics = false;
+		}
 
 		// set the slider params based on the token's numeric value
 		if (token.value == 0) {
@@ -99,6 +110,10 @@ window.aceEditor.renderer.setHScrollBarAlwaysVisible(false);
 // turn off print margin visibility
 window.aceEditor.setShowPrintMargin(false);
 
+if (getLocalStorageValue('font-size')) {
+	$('#editor').css('font-size', getLocalStorageValue('font-size'));
+}
+
 // increase/decrease font
 // increase/decrease slider
 $('.font-control').on('click', function(e) {
@@ -109,6 +124,8 @@ $('.font-control').on('click', function(e) {
 	} else {
 		$('#editor').css('font-size', '+=1');
 	}
+
+	setLocalStorageValue('font-size', $('#editor').css('font-size'));
 });
 
 // from https://github.com/ajaxorg/ace/issues/305
