@@ -28,11 +28,17 @@ window.aceEditor.getSession().setMode(new JavaScriptMode());
 // redraw svg when we update our code
 window.aceEditor.getSession().on('change', function() {
 
+	// clear the window
 	$('svg').empty();
 
 	try {
+		// get the ide code
 		var thisCode = window.aceEditor.getSession().getValue();
+
+		// run it
 		eval(thisCode);
+
+		// save it in local storage
 		setLocalStorageValue('code', thisCode);
 	}
 	catch (error) {}
@@ -42,6 +48,7 @@ window.aceEditor.getSession().on('change', function() {
 // do we have stored code? if not, set the demo code
 window.aceEditor.getSession().setValue(getLocalStorageValue('code') ? getLocalStorageValue('code') : demo);
 
+// local storage getter/setter
 function getLocalStorageValue(key) {
 	var localStorageKey = 'gabrielflor.it/water';
 	return localStorage.getItem([localStorageKey, key].join('/'));
@@ -77,7 +84,6 @@ window.aceEditor.on("click", function(e) {
 			slider.slider('option', 'max', d3.max(sliderRange));
 			slider.slider('option', 'min', d3.min(sliderRange));
 		}
-
 		slider.slider('option', 'value', token.value);
 
 		// position slider centered above the cursor
@@ -110,12 +116,12 @@ window.aceEditor.renderer.setHScrollBarAlwaysVisible(false);
 // turn off print margin visibility
 window.aceEditor.setShowPrintMargin(false);
 
+// load font-size from local storage
 if (getLocalStorageValue('font-size')) {
 	$('#editor').css('font-size', getLocalStorageValue('font-size'));
 }
 
 // increase/decrease font
-// increase/decrease slider
 $('.font-control').on('click', function(e) {
 	e.preventDefault();
 
