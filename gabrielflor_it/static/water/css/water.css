@@ -109,7 +109,7 @@ svg {
 
 #slider {
 	visibility: hidden;
-	z-index: 1;
+	z-index: 10;
 	width: 25%;
 	-moz-box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.4);
 	-webkit-box-shadow: 0 0 10px 4px rgba(255, 255, 255, 0.4);
