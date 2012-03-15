@@ -56,7 +56,7 @@ window.aceEditor.on("click", function(e) {
 			slider.slider('option', 'max', 100);
 			slider.slider('option', 'min', -100);
 		} else {
-			var sliderRange = [-token.value * 2, token.value * 4];
+			var sliderRange = [-token.value * 3, token.value * 5];
 			slider.slider('option', 'max', d3.max(sliderRange));
 			slider.slider('option', 'min', d3.min(sliderRange));
 		}
