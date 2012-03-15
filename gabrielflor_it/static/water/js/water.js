@@ -44,6 +44,12 @@ window.aceEditor.getSession().setValue(demo);
 var chosenRow, chosenColumn;
 window.aceEditor.on("click", function(e) {
 
+	// stop pulsing numerics
+	if (pulseNumerics) {
+		window.clearInterval(pulse);
+		pulseNumerics = false;
+	}
+
 	var editor = e.editor;
 	var pos = editor.getCursorPosition();
 	var token = editor.session.getTokenAt(pos.row, pos.column);
@@ -150,5 +156,11 @@ $('body').on('focus click', function(e) {
 		}; 
 	}
 });
+
+// pulse numeric constants (until user clicks on them)
+var pulseNumerics = true;
+var pulse = setInterval(function() {
+	$('.ace_numeric').animate({opacity: 0.5}).animate({opacity: 1});
+}, 1000);
 
 });
