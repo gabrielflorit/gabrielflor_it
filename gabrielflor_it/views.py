@@ -14,15 +14,15 @@ def water():
         version=versioning()
         ))
 
-@app.route('/counties')
-def counties():
-    return render_template('d3/counties.html', vars=dict(
+@app.route('/blog-water')
+def blog_water():
+    return render_template('blog/water.html', vars=dict(
         version=versioning()
         ))
 
-@app.route('/blog-choropleth-classification-systems')
-def blog_choropleth_classification_systems():
-    return render_template('blog/choropleth-classification-systems.html', vars=dict(
+@app.route('/counties')
+def counties():
+    return render_template('d3/counties.html', vars=dict(
         version=versioning()
         ))
 
