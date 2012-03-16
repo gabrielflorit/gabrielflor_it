@@ -20,6 +20,22 @@
       })();
 
     </script>
+    <style>
+        #about {
+            position: absolute;
+            bottom: -2em;
+            right: 0;
+            color: white;
+            text-decoration: none;
+            font-family: Arial, sans-serif;
+        }
+
+        #about:active,
+        #about:hover {
+            color: white;
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <div id='page'>
@@ -33,6 +49,7 @@
             <a class='decrease font-control' href='#'>-</a>
         </div>
         <div id="slider"></div>
+        <a id='about' href='#'>what is this?</a>
     </div>
     <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
     <script src='{{ url_for("static", filename="submodule/water/slider/js/jquery.ui.slider.js") }}'></script>
