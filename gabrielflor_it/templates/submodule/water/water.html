@@ -21,19 +21,30 @@
 
     </script>
     <style>
-        #about {
+        #aboutAndAttribution {
             position: absolute;
-            bottom: -2em;
-            right: 0;
+            bottom: -1em;
+            width: 100%;
+            font-size: 0.9em;
+            line-height: 1.35em;
             color: white;
             text-decoration: none;
             font-family: Arial, sans-serif;
         }
 
-        #about:active,
-        #about:hover {
+        #aboutAndAttribution a {
             color: white;
             text-decoration: underline;
+        }
+
+        #attribution {
+            position: absolute;
+            left: 0;
+        }
+
+        #about {
+            position: absolute;
+            right: 0;
         }
     </style>
 </head>
@@ -49,7 +60,13 @@
             <a class='decrease font-control' href='#'>-</a>
         </div>
         <div id="slider"></div>
-        <a id='about' href='#'>what is this?</a>
+        <div id='aboutAndAttribution'>
+            <a id='about' href='blog-water'>what is this?</a>
+            <div id='attribution'>
+                <p>100% totally lifted from Bret Victor's genius <a href='http://vimeo.com/36579366'>Inventing on Principle</a> talk<p>
+                <p><a href='https://github.com/gabrielflorit/water'>source code</a> on github</p>
+            </div>
+        </div>
     </div>
     <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
     <script src='{{ url_for("static", filename="submodule/water/slider/js/jquery.ui.slider.js") }}'></script>
