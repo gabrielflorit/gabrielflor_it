@@ -2,15 +2,16 @@ import os
 import datetime
 from gabrielflor_it import app
 from util.crossdomain import crossdomain
-from flask import render_template, send_from_directory, redirect
+from flask import render_template, send_from_directory
 
 @app.route('/')
 def home():
     return render_template('index.html')
 
-@app.route('/water')
 def water():
-    return redirect('static/submodule/water/water.html')
+    return render_template('submodule/water/water.html', vars=dict(
+        version=versioning()
+        ))
 
 @app.route('/blog-water')
 def blog_water():
