@@ -8,6 +8,7 @@ from flask import render_template, send_from_directory
 def home():
     return render_template('index.html')
 
+@app.route('/water')
 def water():
     return render_template('submodule/water/water.html', vars=dict(
         version=versioning()
