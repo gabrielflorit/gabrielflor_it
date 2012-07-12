@@ -53,9 +53,10 @@ def blair():
 @app.route('/aca-puma')
 @crossdomain(origin='*')
 def aca_puma():
-    return render_template('aca-puma.html', vars=dict(
-        version=versioning()
-        ))
+    return render_template('blank.html')
+    # return render_template('aca-puma.html', vars=dict(
+    #     version=versioning()
+    #     ))
 
 @app.route('/favicon.ico')
 def favicon():
