@@ -10,9 +10,7 @@ def home():
 
 @app.route('/water')
 def water():
-    return render_template('submodule/water/water.html', vars=dict(
-        version=versioning()
-        ))
+    return redirect('http://livecoding.gabrielflor.it')
 
 @app.route('/blog-water')
 def blog_water():
