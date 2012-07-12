@@ -2,7 +2,7 @@ import os
 import datetime
 from gabrielflor_it import app
 from util.crossdomain import crossdomain
-from flask import render_template, send_from_directory
+from flask import render_template, send_from_directory, redirect
 
 @app.route('/')
 def home():
