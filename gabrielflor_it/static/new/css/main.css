@@ -1,0 +1,94 @@
+body {
+	font-family: 'PT Sans', serif;
+	margin: 2em 2em 0 2em;
+}
+
+* {
+	color: #222;
+}
+
+h6 {
+	font-weight: normal;
+}
+
+a {
+	text-decoration: none;
+	color: #222;
+	font-family: 'PT Sans', sans-serif;
+}
+
+a:hover {
+	text-decoration: underline;
+	color: #000;
+}
+
+header,
+.projects,
+footer {
+	max-width: 720px;
+	margin: 0 auto;
+}
+
+header {
+	overflow: hidden;
+	margin-bottom: 2em;
+	text-align: left;
+}
+
+header h1 {
+	font-family: 'PT Sans Narrow', sans-serif;
+	font-size: 3em;
+	margin: 0;
+}
+
+header ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	overflow: hidden;
+	font-size: 0.8em;
+}
+
+header ul li {
+	float: left;
+	margin: 0 1em 0 0;
+}
+
+header ul a {
+	font-family: 'PT Sans', sans-serif;
+}
+
+article {
+	width: 100%;
+	overflow: hidden;
+	margin: 0 0 4em 0;
+}
+
+article .images {
+	width: 100%;
+	overflow: hidden;
+}
+
+article img {
+	float: left;
+	border: solid #EEE 1px;
+	position: relative;
+}
+
+article img:hover {
+	border: solid #ccc 1px;
+}
+
+article img.ipad {
+	float: right;
+}
+
+article h3 {
+	margin: 0 0 0.75em 0;
+}
+
+article h6 {
+	margin: 0 0 0.5em 0;
+}
+
