@@ -77,7 +77,7 @@ $(function() {
 
 	var projectsHtml = '';
 	var project;
-	for (var i = 0; i < projects.length; i++) {
+	for (var i = 0; i < 1; i++) {
 		project = projects[i];
 
 		projectsHtml += '<article>';

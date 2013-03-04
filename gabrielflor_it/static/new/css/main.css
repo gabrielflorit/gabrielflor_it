@@ -23,7 +23,7 @@ a:hover {
 }
 
 header,
-.projects,
+section,
 footer {
 	max-width: 720px;
 	margin: 0 auto;
@@ -65,6 +65,20 @@ article {
 	margin: 0 0 4em 0;
 }
 
+article p {
+	font-weight: normal;
+	font-size: 0.9em;
+}
+
+article p a {
+	border-bottom: dotted #222 1px;
+}
+
+article p a:hover {
+	text-decoration: none;
+	border-bottom: solid #000 1px;
+}
+
 article .images {
 	width: 100%;
 	overflow: hidden;
@@ -74,6 +88,10 @@ article img {
 	float: left;
 	border: solid #EEE 1px;
 	position: relative;
+}
+
+article img.other {
+	width: 100%;
 }
 
 article img:hover {

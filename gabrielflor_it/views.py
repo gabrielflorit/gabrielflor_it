@@ -24,11 +24,9 @@ def water():
 #         version=versioning()
 #         ))
 
-# @app.route('/a-half-decade-of-rising-poverty')
-# def a_half_decade_of_rising_poverty():
-#     return render_template('d3/poverty-by-county.html', vars=dict(
-#         version=versioning()
-#         ))
+@app.route('/a-half-decade-of-rising-poverty')
+def a_half_decade_of_rising_poverty():
+    return render_template('d3/poverty-by-county.html')
 
 # @app.route('/blog-a-half-decade-of-rising-poverty')
 # def blog_a_half_decade_of_rising_poverty():
