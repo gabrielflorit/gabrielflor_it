@@ -13,6 +13,8 @@ def water():
     return redirect('http://livecoding.io')
 
 @app.route('/blog-water')
+@app.route('/blog-a-half-decade-of-rising-poverty')
+@app.route('/blog-choropleth-classification-systems')
 def blog_water():
     return redirect('http://gabrielflor.it')
 
@@ -24,14 +26,6 @@ def counties():
 def a_half_decade_of_rising_poverty():
     return render_template('poverty-by-county.html')
 
-@app.route('/blog-a-half-decade-of-rising-poverty')
-def blog_a_half_decade_of_rising_poverty():
-    return redirect('http://gabrielflor.it')
-
-@app.route('/blog-choropleth-classification-systems')
-def blog_choropleth_classification_systems():
-    return redirect('http://gabrielflor.it')
-    
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static/img'),
