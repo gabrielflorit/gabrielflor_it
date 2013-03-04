@@ -11,6 +11,10 @@ h6 {
 	font-weight: normal;
 }
 
+.bold {
+	font-weight: bold;
+}
+
 a {
 	text-decoration: none;
 	color: #222;
@@ -92,6 +96,7 @@ article img {
 
 article img.other {
 	width: 100%;
+	float:none;
 }
 
 article img:hover {
@@ -103,10 +108,13 @@ article img.ipad {
 }
 
 article h3 {
-	margin: 0 0 0.75em 0;
+	margin: 0.25em 0 0.75em 0;
+}
+
+article h4 {
+	margin: 2em 0 0 0;
 }
 
 article h6 {
-	margin: 0 0 0.5em 0;
+	margin: 0;
 }
-

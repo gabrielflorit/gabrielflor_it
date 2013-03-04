@@ -77,7 +77,7 @@ $(function() {
 
 	var projectsHtml = '';
 	var project;
-	for (var i = 0; i < 1; i++) {
+	for (var i = 0; i < projects.length; i++) {
 		project = projects[i];
 
 		projectsHtml += '<article>';
@@ -85,10 +85,10 @@ $(function() {
 		projectsHtml += '  <h3><a href="' + project.href + '">' + project.title + '</a></h3>';
 		projectsHtml += '  <div class="images">';
 		projectsHtml += '    <a href="' + project.href + '">';
-		projectsHtml += '      <img class="iphone" src="../static/new/img/' + project.img + '-iphone.png"></img>';
+		projectsHtml += '      <img class="iphone lazy" src="../static/new/img/blank.gif" data-src="../static/new/img/' + project.img + '-iphone.png"></img>';
 		projectsHtml += '    </a>';
 		projectsHtml += '    <a href="' + project.href + '">';
-		projectsHtml += '      <img class="ipad" src="../static/new/img/' + project.img + '-ipad.png"></img>';
+		projectsHtml += '      <img class="ipad lazy" src="../static/new/img/blank.gif" data-src="../static/new/img/' + project.img + '-ipad.png"></img>';
 		projectsHtml += '    </a>';
 		projectsHtml += '  </div>';
 		projectsHtml += '</article>';
@@ -112,6 +112,9 @@ $(function() {
 	$(window).resize(function() {
 		projectsResize();
 	});
+
+	$('img.lazy').jail();
+
 
 });
 

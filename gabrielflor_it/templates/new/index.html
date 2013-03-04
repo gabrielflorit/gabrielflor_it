@@ -44,7 +44,7 @@
 					The default code is Mike Bostock's beautiful <a href="http://mbostock.github.com/d3/ex/chord.html">chord diagram</a>, tweaked to fit the <a href="https://github.com/ajaxorg/ace/blob/master/build/src/theme-twilight-uncompressed.js">Twilight theme</a>. And remember, click the pulsing red numbers and hold down the alt key!
 				</p>
 				<a href='http://livecoding.io'>
-					<img class='other' src="{{ url_for('static', filename='new/img/water.png') }}"></img>
+					<img class='other lazy' src="../static/new/img/blank.gif" data-src="{{ url_for('static', filename='new/img/water.jpg') }}"></img>
 				</a>
 			</article>
 
@@ -54,11 +54,90 @@
 					<a href='/a-half-decade-of-rising-poverty'>A half-decade of rising poverty</a>
 				</h3>
 				<p>
-					I put together a more polished version of my previous work on mapping poverty by county, adding a bit more interactivity including a sparkline showing historical poverty rate change. The <a href="/blog-choropleth-classification-systems">continuous scale</a> does a great job of highlighting spatial patterns.
+					I put together a more polished version of my previous work on mapping poverty by county, adding a bit more interactivity including a sparkline showing historical poverty rate change. The continuous scale does a great job of highlighting spatial patterns.
 				</p>
 				<a href='/a-half-decade-of-rising-poverty'>
-					<img class='other' src="{{ url_for('static', filename='new/img/a-half-decade-of-rising-poverty.png') }}"></img>
+					<img class='other lazy' src="../static/new/img/blank.gif" data-src="{{ url_for('static', filename='new/img/a-half-decade-of-rising-poverty.jpg') }}"></img>
 				</a>
+			</article>
+
+			<article>
+				<h6>Dec. 14, 2011</h6>
+				<h3>
+					<a href='/counties'>Choropleth classification systems</a>
+				</h3>
+				<p>
+					Data classification is a critical component of choropleths. The number of classes and our choice of classification system can turn the same data into seemingly different maps. I'll illustrate with a number of examples - of maps, of course. We'll look at total percentage of people living in poverty by county (data courtesy of the <a href="http://www.census.gov/did/www/saipe/">U.S. Census Bureau</a>).
+				</p>
+
+				<h4>Equal intervals</h4>
+				<p>
+					Let's start with equal intervals. In this classification system, the entire range of values is divided equally into the desired number of intervals.
+				</p>
+				<p>
+					<a href="counties?class=0&amp;year=5&amp;breaks=4&amp;hue=230">4 equal intervals:</a>
+				</p>
+				<a href="counties?class=0&amp;year=5&amp;breaks=4&amp;hue=230">
+					<img class='other lazy' src="../static/new/img/blank.gif" data-src="{{ url_for('static', filename='new/img/maps/interval-4.jpg') }}" />
+				</a>
+				<p>
+					<a href="counties?class=0&amp;year=5&amp;breaks=8&amp;hue=230">8 equal intervals:</a>
+				</p>
+				<a href="counties?class=0&amp;year=5&amp;breaks=8&amp;hue=230">
+					<img class='other lazy' src="../static/new/img/blank.gif" data-src="{{ url_for('static', filename='new/img/maps/interval-8.jpg') }}" />
+				</a>
+
+				<h4>Quantiles</h4>
+				<p>
+					Now let's switch to quantiles. Here, each class is of equal size - each class has the same number of values.
+				</p>
+				<p>
+					<a href="counties?class=1&amp;year=5&amp;breaks=4&amp;hue=230">4 quantiles (also known as quartiles):</a>
+				</p>
+				<a href="counties?class=1&amp;year=5&amp;breaks=4&amp;hue=230">
+					<img class='other lazy' src="../static/new/img/blank.gif" data-src="{{ url_for('static', filename='new/img/maps/quantile-8.jpg') }}" />
+				</a>
+				<p>
+					<a href="counties?class=1&amp;year=5&amp;breaks=8&amp;hue=230">8 quantiles:</a>
+				</p>
+				<a href="counties?class=1&amp;year=5&amp;breaks=8&amp;hue=230">
+					<img class='other lazy' src="../static/new/img/blank.gif" data-src="{{ url_for('static', filename='new/img/maps/quantile-8.jpg') }}" />
+				</a>
+
+				<h4>k-means clusters</h4>
+				<p>
+					Finally we'll look at k-means clusters. This classification system creates classes of values such that the sum of the squared distance from each value to the center of its respective class is minimized.
+				</p>
+				<p>
+					<a href="counties?class=2&amp;year=5&amp;breaks=4&amp;hue=230">4 classes:</a>
+				</p>
+				<a href="counties?class=2&amp;year=5&amp;breaks=4&amp;hue=230">
+					<img class='other lazy' src="../static/new/img/blank.gif" data-src="{{ url_for('static', filename='new/img/maps/kmeans-4.jpg') }}">
+				</a>
+				<p>
+					<a href="counties?class=2&amp;year=5&amp;breaks=4&amp;hue=230">8 classes:</a>
+				</p>
+				<a href="counties?class=2&amp;year=5&amp;breaks=4&amp;hue=230">
+					<img class='other lazy' src="../static/new/img/blank.gif" data-src="{{ url_for('static', filename='new/img/maps/kmeans-8.jpg') }}">
+				</a>
+
+				<p>
+					If you're still reading, my apologies if you've had enough blue maps for a day. Now, which one do you prefer? Remember, they all show the same data - the only change is the way the data is broken up into classes. I chose equal intervals, quantiles and k-means clustering because they're fairly popular classification systems amongst cartographers.
+				</p>
+				
+				<h4>Continuous classes</h4>
+				<p>
+					<a href="counties?class=3&amp;year=5&amp;hue=230">I have one more map to show you:</a>
+				</p>
+				<a href="counties?class=3&amp;year=5&amp;hue=230">
+					<img class='other lazy' src="../static/new/img/blank.gif" data-src="{{ url_for('static', filename='new/img/maps/continuous.jpg') }}">
+				</a>
+				<p>
+					There is no grouping of values here. Instead, a continuous input domain (the data points, ranging from 0% to 62%) is mapped to a continuous output range (in this case, a color map of bluish hue). This is also equivalent to choosing equal intervals and increasing the number of classes to infinity.
+				</p>
+				<p>
+					I prefer this type of classification system <em>for this particular data set</em> - we have many data points (3,143 counties), most of them exhibiting regular spatial patterns. However, if you have a small number of data points, need a print-friendly map, or are concerned about accessibility, you're probably better off choosing a map with fewer number of classes, ideally between 4 and 7.
+				</p>
 			</article>
 
 		</section>
@@ -67,13 +146,13 @@
 
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 
-		<!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
 		<script>
-			var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+			var _gaq=[['_setAccount','UA-27676826-1'],['_trackPageview']];
 			(function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
 			g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
 			s.parentNode.insertBefore(g,s)}(document,'script'));
 		</script>
 		<script src="{{ url_for('static', filename='new/js/main.js') }}"></script>
+		<script src="{{ url_for('static', filename='new/js/lib/jail.min.js') }}"></script>
 	</body>
 </html>
